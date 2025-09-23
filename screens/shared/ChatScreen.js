@@ -97,8 +97,8 @@ const ChatScreen = ({ route, navigation }) => {
             styles.messageTime,
             isOwnMessage ? styles.ownMessageTime : styles.otherMessageTime
           ]}>
-            {item.timestamp?.toDate ? 
-              new Date(item.timestamp.toDate()).toLocaleTimeString([], { 
+            {item.timestamp ? 
+              new Date(item.timestamp).toLocaleTimeString([], { 
                 hour: '2-digit', 
                 minute: '2-digit' 
               }) : 

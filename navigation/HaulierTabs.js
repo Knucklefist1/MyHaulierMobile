@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '../styles/designSystem';
 
 import JobsScreen from '../screens/haulier/JobsScreen';
 import ApplicationsScreen from '../screens/haulier/ApplicationsScreen';
@@ -46,7 +47,7 @@ const ChatStack = () => (
       options={{ title: 'Messages' }}
     />
     <Stack.Screen 
-      name="Chat" 
+      name="ChatConversation" 
       component={ChatScreen}
       options={{ title: 'Chat' }}
     />
@@ -82,8 +83,8 @@ const HaulierTabs = () => {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#3498db',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.mediumGray,
         headerShown: false,
       })}
     >

@@ -9,6 +9,7 @@ import {
   Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors, typography, spacing, borderRadius, shadows, textStyles, components } from '../../styles/designSystem';
 
 const JobsScreen = ({ navigation }) => {
   const [jobs, setJobs] = useState([]);
@@ -27,7 +28,7 @@ const JobsScreen = ({ navigation }) => {
         deliveryDate: '2024-01-15',
         companyName: 'TechCorp Denmark',
         status: 'active',
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
         requirements: ['Valid driver license', 'Experience with fragile goods', 'Insurance coverage']
       },
       {
@@ -39,7 +40,7 @@ const JobsScreen = ({ navigation }) => {
         deliveryDate: '2024-01-18',
         companyName: 'Nordic Furniture',
         status: 'active',
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
         requirements: ['Large vehicle', 'Furniture handling experience']
       },
       {
@@ -51,7 +52,7 @@ const JobsScreen = ({ navigation }) => {
         deliveryDate: '2024-01-20',
         companyName: 'Fresh Foods A/S',
         status: 'active',
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
         requirements: ['Refrigerated vehicle', 'Food safety certificate']
       }
     ];
@@ -105,7 +106,10 @@ const JobsScreen = ({ navigation }) => {
       <View style={styles.jobFooter}>
         <Text style={styles.companyName}>{item.companyName}</Text>
         <Text style={styles.postedDate}>
-          Posted {new Date(item.createdAt?.toDate()).toLocaleDateString()}
+          Posted {item.createdAt ? 
+            new Date(item.createdAt).toLocaleDateString() : 
+            'Recently'
+          }
         </Text>
       </View>
     </TouchableOpacity>
@@ -141,107 +145,87 @@ const JobsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.lightGray,
   },
   listContainer: {
-    padding: 16,
+    padding: spacing[4],
     flexGrow: 1,
   },
   jobCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    ...components.card,
+    marginBottom: spacing[3],
   },
   jobHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 8,
+    marginBottom: spacing[2],
   },
   jobTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2c3e50',
+    ...textStyles.h3,
     flex: 1,
-    marginRight: 8,
+    marginRight: spacing[2],
   },
   jobStatus: {
-    backgroundColor: '#e8f5e8',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    backgroundColor: colors.successLight,
+    paddingHorizontal: spacing[2],
+    paddingVertical: spacing[1],
+    borderRadius: borderRadius.xl,
   },
   statusText: {
-    fontSize: 12,
-    color: '#27ae60',
-    fontWeight: '600',
+    fontSize: typography.sizes.xs,
+    color: colors.success,
+    fontWeight: typography.weights.semibold,
   },
   jobDescription: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    marginBottom: 12,
-    lineHeight: 20,
+    ...textStyles.caption,
+    marginBottom: spacing[3],
   },
   jobDetails: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: 12,
+    marginBottom: spacing[3],
   },
   detailItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 16,
-    marginBottom: 4,
+    marginRight: spacing[4],
+    marginBottom: spacing[1],
   },
   detailText: {
-    fontSize: 12,
-    color: '#7f8c8d',
-    marginLeft: 4,
+    ...textStyles.caption,
+    marginLeft: spacing[1],
   },
   jobFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 8,
+    paddingTop: spacing[2],
     borderTopWidth: 1,
-    borderTopColor: '#ecf0f1',
+    borderTopColor: colors.borderGray,
   },
   companyName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#2c3e50',
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.semibold,
+    color: colors.darkGray,
   },
   postedDate: {
-    fontSize: 12,
-    color: '#95a5a6',
+    ...textStyles.caption,
   },
   emptyState: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 60,
+    paddingVertical: spacing[16],
   },
   emptyTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginTop: 16,
-    marginBottom: 8,
+    ...textStyles.h2,
+    marginTop: spacing[4],
+    marginBottom: spacing[2],
   },
   emptySubtitle: {
-    fontSize: 14,
-    color: '#7f8c8d',
+    ...textStyles.caption,
     textAlign: 'center',
-    lineHeight: 20,
   },
 });
 

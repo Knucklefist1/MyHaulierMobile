@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '../styles/designSystem';
 
 import MyJobsScreen from '../screens/forwarder/MyJobsScreen';
 import PostJobScreen from '../screens/forwarder/PostJobScreen';
@@ -53,7 +54,7 @@ const ChatStack = () => (
       options={{ title: 'Messages' }}
     />
     <Stack.Screen 
-      name="Chat" 
+      name="ChatConversation" 
       component={ChatScreen}
       options={{ title: 'Chat' }}
     />
@@ -94,8 +95,8 @@ const ForwarderTabs = () => {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#e74c3c',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: colors.error,
+        tabBarInactiveTintColor: colors.mediumGray,
         headerShown: false,
       })}
     >

@@ -1,12 +1,33 @@
 # MyHaulier Mobile App
 
-A React Native/Expo mobile application for connecting hauliers and freight forwarders in the logistics industry. Built with Firebase backend services for real-time communication and data management.
+A React Native/Expo mobile application for connecting hauliers and freight forwarders in the logistics industry. Built with Firebase backend services for real-time communication and data management, featuring a professional B2B design system matching the MyHaulier website.
+
+## 🎨 Design System
+
+The app features a comprehensive design system matching the MyHaulier website:
+
+### Colors
+- **Primary**: Deep blue (#1E3A8A) for hauliers
+- **Secondary**: Red (#EF4444) for freight forwarders  
+- **Status Colors**: Green (success), Orange (warning), Red (error)
+- **Neutrals**: Professional grays for text and backgrounds
+
+### Typography
+- **Font**: Inter font family
+- **Sizes**: Responsive from 12px to 32px
+- **Weights**: Normal (400) to Bold (700)
+
+### Components
+- **Cards**: White background with subtle shadows
+- **Buttons**: Primary, secondary, and ghost variants
+- **Forms**: Clean inputs with focus states
+- **Navigation**: Role-specific tab styling
 
 ## 🚛 Features
 
 ### For Hauliers
 - Browse available transport jobs
-- Apply to jobs with cover letters
+- Apply to jobs with cover letters via modal forms
 - Track application status
 - Real-time chat with forwarders
 - Profile management
@@ -19,11 +40,13 @@ A React Native/Expo mobile application for connecting hauliers and freight forwa
 - Analytics dashboard
 
 ### Shared Features
-- Firebase Authentication
-- Real-time chat system
-- Push notifications
-- File sharing capabilities
-- Offline support
+- Firebase Authentication with role selection
+- Real-time chat system with file sharing
+- Push notifications for updates
+- File upload capabilities (images, documents)
+- Offline support with local storage
+- Responsive design for all screen sizes
+- Professional B2B interface
 
 ## 🛠 Tech Stack
 

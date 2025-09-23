@@ -55,7 +55,7 @@ const ChatListScreen = ({ navigation }) => {
     return (
       <TouchableOpacity
         style={styles.chatItem}
-        onPress={() => navigation.navigate('Chat', { 
+        onPress={() => navigation.navigate('ChatConversation', { 
           chatId: item.id,
           otherParticipant: otherParticipant,
           chatTitle: item.title || 'Chat'
@@ -74,8 +74,8 @@ const ChatListScreen = ({ navigation }) => {
               {item.title || 'Chat'}
             </Text>
             <Text style={styles.timestamp}>
-              {item.lastMessage?.timestamp?.toDate ? 
-                new Date(item.lastMessage.timestamp.toDate()).toLocaleDateString() : 
+              {item.lastMessage?.timestamp ? 
+                new Date(item.lastMessage.timestamp).toLocaleDateString() : 
                 'Now'
               }
             </Text>

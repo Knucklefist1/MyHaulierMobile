@@ -29,7 +29,7 @@ const MyJobsScreen = ({ navigation }) => {
         companyName: 'TechCorp Denmark',
         status: 'active',
         applicationsCount: 3,
-        createdAt: new Date()
+        createdAt: new Date().toISOString()
       },
       {
         id: '2',
@@ -41,7 +41,7 @@ const MyJobsScreen = ({ navigation }) => {
         companyName: 'Nordic Furniture',
         status: 'completed',
         applicationsCount: 5,
-        createdAt: new Date()
+        createdAt: new Date().toISOString()
       }
     ];
 
@@ -103,7 +103,10 @@ const MyJobsScreen = ({ navigation }) => {
           {item.applicationsCount || 0} applications
         </Text>
         <Text style={styles.postedDate}>
-          Posted {new Date(item.createdAt?.toDate()).toLocaleDateString()}
+          Posted {item.createdAt ? 
+            new Date(item.createdAt).toLocaleDateString() : 
+            'Recently'
+          }
         </Text>
       </View>
     </TouchableOpacity>

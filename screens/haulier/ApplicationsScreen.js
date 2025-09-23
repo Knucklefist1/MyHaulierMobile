@@ -25,7 +25,7 @@ const ApplicationsScreen = ({ navigation }) => {
         companyName: 'TechCorp Denmark',
         coverLetter: 'I have 5 years of experience in handling fragile electronics and have proper insurance coverage.',
         status: 'pending',
-        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago
+        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString() // 2 days ago
       },
       {
         id: '2',
@@ -33,7 +33,7 @@ const ApplicationsScreen = ({ navigation }) => {
         companyName: 'Nordic Furniture',
         coverLetter: 'I specialize in furniture transport with a large van and proper equipment.',
         status: 'accepted',
-        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) // 5 days ago
+        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString() // 5 days ago
       }
     ];
 
@@ -92,8 +92,8 @@ const ApplicationsScreen = ({ navigation }) => {
 
       <View style={styles.applicationFooter}>
         <Text style={styles.appliedDate}>
-          Applied {item.createdAt?.toDate ? 
-            new Date(item.createdAt.toDate()).toLocaleDateString() : 
+          Applied {item.createdAt ? 
+            new Date(item.createdAt).toLocaleDateString() : 
             'Recently'
           }
         </Text>

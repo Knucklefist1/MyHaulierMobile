@@ -132,7 +132,7 @@ const ApplicationsScreen = ({ navigation }) => {
         {item.status === 'accepted' && (
           <TouchableOpacity 
             style={styles.chatButton}
-            onPress={() => navigation.navigate('Chat', { 
+            onPress={() => navigation.navigate('ChatConversation', { 
               chatId: item.chatId,
               otherParticipant: item.haulierId,
               chatTitle: `Chat with ${item.haulierName || 'Haulier'}`

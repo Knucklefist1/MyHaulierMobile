@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { TokenStorage, ProfileStorage, clearAllData } from '../utils/storage';
 
 // Development AuthContext that works without Firebase
 const AuthContext = createContext({});
@@ -72,6 +73,10 @@ export const AuthProvider = ({ children }) => {
       updatedAt: new Date()
     };
     
+    // Save to local storage
+    await TokenStorage.setToken('mock-token');
+    await ProfileStorage.saveProfile(mockProfile);
+    
     setCurrentUser(mockUser);
     setUserProfile(mockProfile);
     
@@ -80,6 +85,11 @@ export const AuthProvider = ({ children }) => {
 
   // Mock sign out function
   const logout = async () => {
+    // Clear local storage
+    await TokenStorage.removeToken();
+    await ProfileStorage.clearProfile();
+    await clearAllData();
+    
     setCurrentUser(null);
     setUserProfile(null);
   };
@@ -87,7 +97,9 @@ export const AuthProvider = ({ children }) => {
   // Mock update user profile
   const updateUserProfile = async (updates) => {
     if (userProfile) {
-      setUserProfile(prev => ({ ...prev, ...updates }));
+      const updatedProfile = { ...userProfile, ...updates };
+      setUserProfile(updatedProfile);
+      await ProfileStorage.saveProfile(updatedProfile);
     }
   };
 
@@ -97,13 +109,25 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Simulate loading
-    setLoading(true);
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    // Check for existing session
+    const checkExistingSession = async () => {
+      setLoading(true);
+      try {
+        const token = await TokenStorage.getToken();
+        const profile = await ProfileStorage.getProfile();
+        
+        if (token && profile) {
+          setCurrentUser({ uid: profile.uid, email: profile.email, displayName: profile.name });
+          setUserProfile(profile);
+        }
+      } catch (error) {
+        console.error('Error checking existing session:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    return () => clearTimeout(timer);
+    checkExistingSession();
   }, []);
 
   const value = {
