@@ -8,13 +8,15 @@ import {
   Image
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/FallbackAuthContext';
 
 const ChatListScreen = ({ navigation }) => {
   const [chats, setChats] = useState([]);
   const { currentUser, userProfile } = useAuth();
 
   useEffect(() => {
+    if (!currentUser?.uid) return; // Wait for currentUser to be available
+    
     // Mock chats data for development
     const mockChats = [
       {
@@ -46,9 +48,11 @@ const ChatListScreen = ({ navigation }) => {
     ];
 
     setChats(mockChats);
-  }, [currentUser.uid]);
+  }, [currentUser?.uid]);
 
   const renderChatItem = ({ item }) => {
+    if (!currentUser?.uid) return null; // Don't render if no currentUser
+    
     const otherParticipant = item.participants.find(id => id !== currentUser.uid);
     const isUnread = item.unreadCount && item.unreadCount[currentUser.uid] > 0;
 
@@ -109,6 +113,17 @@ const ChatListScreen = ({ navigation }) => {
       </Text>
     </View>
   );
+
+  // Show loading state if currentUser is not available yet
+  if (!currentUser?.uid) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyTitle}>Loading...</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

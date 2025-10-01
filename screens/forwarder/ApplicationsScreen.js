@@ -9,9 +9,7 @@ import {
   Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { collection, query, where, orderBy, onSnapshot, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../config/firebase';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/FallbackAuthContext';
 
 const ApplicationsScreen = ({ navigation }) => {
   const [applications, setApplications] = useState([]);
@@ -158,6 +156,17 @@ const ApplicationsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Applications</Text>
+        <TouchableOpacity 
+          style={styles.findButton}
+          onPress={() => navigation.navigate('Find')}
+        >
+          <Ionicons name="search" size={20} color="#ffffff" />
+          <Text style={styles.findButtonText}>Find Hauliers</Text>
+        </TouchableOpacity>
+      </View>
+      
       <FlatList
         data={applications}
         renderItem={renderApplicationItem}
@@ -177,6 +186,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e7eb',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+  },
+  findButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#e74c3c',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  findButtonText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 4,
   },
   listContainer: {
     padding: 16,

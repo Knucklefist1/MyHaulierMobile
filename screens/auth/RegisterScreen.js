@@ -11,7 +11,7 @@ import {
   ScrollView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/FallbackAuthContext';
 
 const RegisterScreen = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -79,6 +79,8 @@ const RegisterScreen = ({ navigation }) => {
               value={formData.name}
               onChangeText={(value) => handleInputChange('name', value)}
               autoCapitalize="words"
+              autoComplete="off"
+              textContentType="none"
             />
           </View>
 
@@ -92,6 +94,8 @@ const RegisterScreen = ({ navigation }) => {
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
+              autoComplete="off"
+              textContentType="none"
             />
           </View>
 
@@ -103,6 +107,11 @@ const RegisterScreen = ({ navigation }) => {
               value={formData.password}
               onChangeText={(value) => handleInputChange('password', value)}
               secureTextEntry={!showPassword}
+              autoComplete="off"
+              autoCorrect={false}
+              autoCapitalize="none"
+              textContentType="none"
+              passwordRules=""
             />
             <TouchableOpacity
               onPress={() => setShowPassword(!showPassword)}

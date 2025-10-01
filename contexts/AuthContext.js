@@ -51,21 +51,27 @@ export const AuthProvider = ({ children }) => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     
+    // Determine user type based on email
+    const isForwarder = email === 'forwarder@example.com';
+    const userType = isForwarder ? 'forwarder' : 'haulier';
+    const displayName = isForwarder ? 'Demo Forwarder' : 'Demo Haulier';
+    const company = isForwarder ? 'Demo Freight Forwarder' : 'Demo Transport Company';
+    
     // Mock user login
     const mockUser = {
       uid: 'mock-user-id',
       email: email,
-      displayName: 'Demo User'
+      displayName: displayName
     };
     
     const mockProfile = {
       uid: 'mock-user-id',
       email: email,
-      name: 'Demo User',
-      userType: 'haulier', // Default to haulier for demo
+      name: displayName,
+      userType: userType,
       phone: '+45 12 34 56 78',
-      company: 'Demo Transport Company',
-      licenseNumber: 'DL123456789',
+      company: company,
+      licenseNumber: isForwarder ? 'FF123456789' : 'DL123456789',
       experience: '5 years',
       profileImage: '',
       isVerified: true,

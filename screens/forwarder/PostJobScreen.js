@@ -11,9 +11,8 @@ import {
   Platform
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../../config/firebase';
-import { useAuth } from '../../contexts/AuthContext';
+// Firebase imports removed for development
+import { useAuth } from '../../contexts/FallbackAuthContext';
 
 const PostJobScreen = ({ navigation }) => {
   const { currentUser, userProfile } = useAuth();

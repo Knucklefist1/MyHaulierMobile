@@ -9,7 +9,7 @@ import {
   TextInput
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/FallbackAuthContext';
 
 const JobDetailsScreen = ({ route, navigation }) => {
   const { job } = route.params;

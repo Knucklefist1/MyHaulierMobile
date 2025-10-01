@@ -1,3 +1,6 @@
 {
-  "urlRandomness": "0USobFk"
+  "urlRandomness": "0USobFk",
+  "dev": true,
+  "minify": false,
+  "https": false
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/FallbackAuthContext';
 
 const RoleSelectionScreen = ({ navigation }) => {
   const [selectedRole, setSelectedRole] = useState(null);

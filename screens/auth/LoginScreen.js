@@ -11,7 +11,7 @@ import {
   ScrollView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/FallbackAuthContext';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -37,6 +37,7 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
+
   return (
     <KeyboardAvoidingView 
       style={styles.container}
@@ -59,6 +60,8 @@ const LoginScreen = ({ navigation }) => {
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
+              autoComplete="off"
+              textContentType="none"
             />
           </View>
 
@@ -70,6 +73,11 @@ const LoginScreen = ({ navigation }) => {
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
+              autoComplete="off"
+              autoCorrect={false}
+              autoCapitalize="none"
+              textContentType="none"
+              passwordRules=""
             />
             <TouchableOpacity
               onPress={() => setShowPassword(!showPassword)}
@@ -185,6 +193,25 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  googleButton: {
+    backgroundColor: 'white',
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 8,
+    borderWidth: 1,
+    borderColor: '#e9ecef',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  googleIcon: {
+    marginRight: 8,
+  },
+  googleButtonText: {
+    color: '#333',
+    fontSize: 16,
+    fontWeight: '500',
   },
   divider: {
     flexDirection: 'row',

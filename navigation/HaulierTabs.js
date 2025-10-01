@@ -6,6 +6,7 @@ import { colors } from '../styles/designSystem';
 
 import JobsScreen from '../screens/haulier/JobsScreen';
 import ApplicationsScreen from '../screens/haulier/ApplicationsScreen';
+import AvailabilityScreen from '../screens/haulier/AvailabilityScreen';
 import ChatListScreen from '../screens/shared/ChatListScreen';
 import ProfileScreen from '../screens/shared/ProfileScreen';
 import JobDetailsScreen from '../screens/haulier/JobDetailsScreen';
@@ -64,6 +65,16 @@ const ProfileStack = () => (
   </Stack.Navigator>
 );
 
+const AvailabilityStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="AvailabilityMain" 
+      component={AvailabilityScreen}
+      options={{ title: 'My Availability' }}
+    />
+  </Stack.Navigator>
+);
+
 const HaulierTabs = () => {
   return (
     <Tab.Navigator
@@ -75,6 +86,8 @@ const HaulierTabs = () => {
             iconName = focused ? 'briefcase' : 'briefcase-outline';
           } else if (route.name === 'Applications') {
             iconName = focused ? 'list' : 'list-outline';
+          } else if (route.name === 'Availability') {
+            iconName = focused ? 'calendar' : 'calendar-outline';
           } else if (route.name === 'Chat') {
             iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
           } else if (route.name === 'Profile') {
@@ -90,6 +103,7 @@ const HaulierTabs = () => {
     >
       <Tab.Screen name="Jobs" component={JobsStack} />
       <Tab.Screen name="Applications" component={ApplicationsStack} />
+      <Tab.Screen name="Availability" component={AvailabilityStack} />
       <Tab.Screen name="Chat" component={ChatStack} />
       <Tab.Screen name="Profile" component={ProfileStack} />
     </Tab.Navigator>

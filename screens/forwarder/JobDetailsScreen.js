@@ -8,9 +8,8 @@ import {
   Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { doc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../../config/firebase';
-import { useAuth } from '../../contexts/AuthContext';
+// Firebase imports removed for development
+import { useAuth } from '../../contexts/FallbackAuthContext';
 
 const JobDetailsScreen = ({ route, navigation }) => {
   const { job } = route.params;

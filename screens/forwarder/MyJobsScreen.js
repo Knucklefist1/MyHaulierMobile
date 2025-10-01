@@ -8,7 +8,7 @@ import {
   RefreshControl
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/FallbackAuthContext';
 
 const MyJobsScreen = ({ navigation }) => {
   const [jobs, setJobs] = useState([]);
@@ -130,6 +130,17 @@ const MyJobsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>My Jobs</Text>
+        <TouchableOpacity 
+          style={styles.findButton}
+          onPress={() => navigation.navigate('Find')}
+        >
+          <Ionicons name="search" size={20} color="#ffffff" />
+          <Text style={styles.findButtonText}>Find Hauliers</Text>
+        </TouchableOpacity>
+      </View>
+      
       <FlatList
         data={jobs}
         renderItem={renderJobItem}
@@ -149,6 +160,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e7eb',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+  },
+  findButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#e74c3c',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  findButtonText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 4,
   },
   listContainer: {
     padding: 16,

@@ -7,11 +7,13 @@ import { colors } from '../styles/designSystem';
 import MyJobsScreen from '../screens/forwarder/MyJobsScreen';
 import PostJobScreen from '../screens/forwarder/PostJobScreen';
 import ApplicationsScreen from '../screens/forwarder/ApplicationsScreen';
+import MatchingScreen from '../screens/forwarder/MatchingScreen';
 import ChatListScreen from '../screens/shared/ChatListScreen';
 import ProfileScreen from '../screens/shared/ProfileScreen';
 import JobDetailsScreen from '../screens/forwarder/JobDetailsScreen';
 import ChatScreen from '../screens/shared/ChatScreen';
 import AnalyticsScreen from '../screens/forwarder/AnalyticsScreen';
+import HaulierProfileScreen from '../screens/shared/HaulierProfileScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -43,6 +45,16 @@ const ApplicationsStack = () => (
       component={ApplicationsScreen}
       options={{ title: 'Applications' }}
     />
+    <Stack.Screen 
+      name="Matching" 
+      component={MatchingScreen}
+      options={{ title: 'Find Hauliers' }}
+    />
+    <Stack.Screen 
+      name="HaulierProfile" 
+      component={HaulierProfileScreen}
+      options={{ title: 'Haulier Profile' }}
+    />
   </Stack.Navigator>
 );
 
@@ -61,17 +73,47 @@ const ChatStack = () => (
   </Stack.Navigator>
 );
 
+const PostStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="PostJob" 
+      component={PostJobScreen}
+      options={{ title: 'Post New Job' }}
+    />
+  </Stack.Navigator>
+);
+
+const AnalyticsStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="AnalyticsMain" 
+      component={AnalyticsScreen}
+      options={{ title: 'Analytics' }}
+    />
+  </Stack.Navigator>
+);
+
+const FindStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="MatchingMain" 
+      component={MatchingScreen}
+      options={{ title: 'Find Hauliers' }}
+    />
+    <Stack.Screen 
+      name="HaulierProfile" 
+      component={HaulierProfileScreen}
+      options={{ title: 'Haulier Profile' }}
+    />
+  </Stack.Navigator>
+);
+
 const ProfileStack = () => (
   <Stack.Navigator>
     <Stack.Screen 
       name="ProfileMain" 
       component={ProfileScreen}
       options={{ title: 'Profile' }}
-    />
-    <Stack.Screen 
-      name="Analytics" 
-      component={AnalyticsScreen}
-      options={{ title: 'Analytics' }}
     />
   </Stack.Navigator>
 );
@@ -85,8 +127,12 @@ const ForwarderTabs = () => {
 
           if (route.name === 'Jobs') {
             iconName = focused ? 'briefcase' : 'briefcase-outline';
-          } else if (route.name === 'Applications') {
-            iconName = focused ? 'list' : 'list-outline';
+          } else if (route.name === 'Find') {
+            iconName = focused ? 'search' : 'search-outline';
+          } else if (route.name === 'Post') {
+            iconName = focused ? 'add-circle' : 'add-circle-outline';
+          } else if (route.name === 'Analytics') {
+            iconName = focused ? 'analytics' : 'analytics-outline';
           } else if (route.name === 'Chat') {
             iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
           } else if (route.name === 'Profile') {
@@ -101,7 +147,9 @@ const ForwarderTabs = () => {
       })}
     >
       <Tab.Screen name="Jobs" component={JobsStack} />
-      <Tab.Screen name="Applications" component={ApplicationsStack} />
+      <Tab.Screen name="Find" component={FindStack} />
+      <Tab.Screen name="Post" component={PostStack} />
+      <Tab.Screen name="Analytics" component={AnalyticsStack} />
       <Tab.Screen name="Chat" component={ChatStack} />
       <Tab.Screen name="Profile" component={ProfileStack} />
     </Tab.Navigator>

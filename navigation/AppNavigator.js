@@ -1,8 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/FallbackAuthContext';
 import AuthStack from './AuthStack';
 import HaulierTabs from './HaulierTabs';
 import ForwarderTabs from './ForwarderTabs';
@@ -11,7 +10,7 @@ import LoadingScreen from '../screens/LoadingScreen';
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
-  const { currentUser, userProfile, loading, signin } = useAuth();
+  const { currentUser, userProfile, loading } = useAuth();
 
   if (loading) {
     return <LoadingScreen />;
@@ -19,16 +18,11 @@ const AppNavigator = () => {
 
   if (!currentUser) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>MyHaulier</Text>
-        <Text style={styles.subtitle}>Welcome to MyHaulier Mobile</Text>
-        <TouchableOpacity 
-          style={styles.button}
-          onPress={() => signin('demo@example.com', 'password')}
-        >
-          <Text style={styles.buttonText}>Sign In (Demo)</Text>
-        </TouchableOpacity>
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Auth" component={AuthStack} />
+        </Stack.Navigator>
+      </NavigationContainer>
     );
   }
 
@@ -45,38 +39,6 @@ const AppNavigator = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 20,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#7f8c8d',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  button: {
-    backgroundColor: '#3498db',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginTop: 20,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
+// Styles removed - using real auth flow now
 
 export default AppNavigator;
