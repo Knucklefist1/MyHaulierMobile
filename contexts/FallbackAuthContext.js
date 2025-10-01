@@ -60,26 +60,83 @@ export const AuthProvider = ({ children }) => {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
+      // Check for demo accounts
+      const isForwarder = email === 'forwarder@example.com';
+      const isHaulier = email === 'haulier@example.com';
+      
+      if (!isForwarder && !isHaulier) {
+        throw new Error('Invalid credentials. Use forwarder@example.com or haulier@example.com');
+      }
+      
+      const userType = isForwarder ? 'forwarder' : 'haulier';
+      const displayName = isForwarder ? 'Demo Forwarder' : 'Demo Haulier';
+      const company = isForwarder ? 'Demo Freight Forwarder' : 'Demo Transport Company';
+      const licenseNumber = isForwarder ? 'FF123456789' : 'DL123456789';
+      
       // Mock user login
       const mockUser = {
         uid: 'mock-user-' + Date.now(),
         email: email,
-        displayName: 'Demo User'
+        displayName: displayName
       };
       
       const mockProfile = {
         uid: mockUser.uid,
         email: email,
-        name: 'Demo User',
-        userType: 'haulier', // Default to haulier for demo
+        name: displayName,
+        userType: userType,
         phone: '+45 12 34 56 78',
-        company: 'Demo Transport Company',
-        licenseNumber: 'DL123456789',
+        company: company,
+        licenseNumber: licenseNumber,
         experience: '5 years',
         profileImage: '',
         isVerified: true,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
+        // Add haulier-specific fields
+        fleet: {
+          totalTrucks: 0,
+          availableTrucks: 0,
+          truckTypes: [],
+          trailerTypes: [],
+          maxWeight: 0,
+          maxLength: 0,
+          maxHeight: 0,
+          specialEquipment: []
+        },
+        operatingRegions: {
+          countries: [],
+          regions: [],
+          specificRoutes: []
+        },
+        capabilities: {
+          cargoTypes: [],
+          industries: [],
+          certifications: [],
+          languages: []
+        },
+        availability: {
+          isAvailable: false,
+          availableTrucks: 0,
+          workingDays: [],
+          workingHours: { start: '', end: '' },
+          emergencyAvailable: false,
+          weekendWork: false,
+          lastUpdated: new Date().toISOString()
+        },
+        performance: {
+          rating: 0,
+          totalJobs: 0,
+          completedJobs: 0,
+          onTimeDelivery: 0,
+          customerSatisfaction: 0
+        },
+        pricing: {
+          baseRate: 0,
+          currency: '',
+          fuelSurcharge: 0,
+          tollIncluded: false
+        }
       };
       
       setCurrentUser(mockUser);

@@ -113,6 +113,19 @@ const LoginScreen = ({ navigation }) => {
           >
             <Text style={styles.registerButtonText}>Create New Account</Text>
           </TouchableOpacity>
+
+          <View style={styles.demoCredentials}>
+            <Text style={styles.demoTitle}>Demo Credentials:</Text>
+            <View style={styles.demoAccount}>
+              <Text style={styles.demoLabel}>Freight Forwarder:</Text>
+              <Text style={styles.demoText}>forwarder@example.com</Text>
+            </View>
+            <View style={styles.demoAccount}>
+              <Text style={styles.demoLabel}>Haulier:</Text>
+              <Text style={styles.demoText}>haulier@example.com</Text>
+            </View>
+            <Text style={styles.demoPassword}>Password: password123</Text>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -236,6 +249,39 @@ const styles = StyleSheet.create({
     color: '#3498db',
     fontSize: 16,
     fontWeight: '600',
+  },
+  demoCredentials: {
+    marginTop: 24,
+    padding: 16,
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e9ecef',
+  },
+  demoTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: 12,
+  },
+  demoAccount: {
+    marginBottom: 8,
+  },
+  demoLabel: {
+    fontSize: 12,
+    color: '#7f8c8d',
+    marginBottom: 2,
+  },
+  demoText: {
+    fontSize: 14,
+    color: '#2c3e50',
+    fontWeight: '500',
+  },
+  demoPassword: {
+    fontSize: 12,
+    color: '#7f8c8d',
+    marginTop: 8,
+    fontStyle: 'italic',
   },
 });
 

@@ -6,10 +6,12 @@ import { colors } from '../styles/designSystem';
 
 import JobsScreen from '../screens/haulier/JobsScreen';
 import ApplicationsScreen from '../screens/haulier/ApplicationsScreen';
+import OffersScreen from '../screens/haulier/OffersScreen';
 import AvailabilityScreen from '../screens/haulier/AvailabilityScreen';
 import ChatListScreen from '../screens/shared/ChatListScreen';
 import ProfileScreen from '../screens/shared/ProfileScreen';
 import JobDetailsScreen from '../screens/haulier/JobDetailsScreen';
+import OfferDetailsScreen from '../screens/haulier/OfferDetailsScreen';
 import ChatScreen from '../screens/shared/ChatScreen';
 
 const Tab = createBottomTabNavigator();
@@ -36,6 +38,21 @@ const ApplicationsStack = () => (
       name="ApplicationsList" 
       component={ApplicationsScreen}
       options={{ title: 'My Applications' }}
+    />
+  </Stack.Navigator>
+);
+
+const OffersStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="OffersList" 
+      component={OffersScreen}
+      options={{ title: 'Partnership Offers' }}
+    />
+    <Stack.Screen 
+      name="OfferDetails" 
+      component={OfferDetailsScreen}
+      options={{ title: 'Offer Details' }}
     />
   </Stack.Navigator>
 );
@@ -82,10 +99,12 @@ const HaulierTabs = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === 'Jobs') {
-            iconName = focused ? 'briefcase' : 'briefcase-outline';
-          } else if (route.name === 'Applications') {
-            iconName = focused ? 'list' : 'list-outline';
+          if (route.name === 'Find') {
+            iconName = focused ? 'search' : 'search-outline';
+          } else if (route.name === 'Connections') {
+            iconName = focused ? 'handshake' : 'handshake-outline';
+          } else if (route.name === 'Offers') {
+            iconName = focused ? 'document-text' : 'document-text-outline';
           } else if (route.name === 'Availability') {
             iconName = focused ? 'calendar' : 'calendar-outline';
           } else if (route.name === 'Chat') {
@@ -101,8 +120,9 @@ const HaulierTabs = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Jobs" component={JobsStack} />
-      <Tab.Screen name="Applications" component={ApplicationsStack} />
+      <Tab.Screen name="Find" component={JobsStack} />
+      <Tab.Screen name="Connections" component={ApplicationsStack} />
+      <Tab.Screen name="Offers" component={OffersStack} />
       <Tab.Screen name="Availability" component={AvailabilityStack} />
       <Tab.Screen name="Chat" component={ChatStack} />
       <Tab.Screen name="Profile" component={ProfileStack} />

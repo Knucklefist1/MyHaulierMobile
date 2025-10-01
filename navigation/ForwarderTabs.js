@@ -8,6 +8,7 @@ import MyJobsScreen from '../screens/forwarder/MyJobsScreen';
 import PostJobScreen from '../screens/forwarder/PostJobScreen';
 import ApplicationsScreen from '../screens/forwarder/ApplicationsScreen';
 import MatchingScreen from '../screens/forwarder/MatchingScreen';
+import CreateOfferScreen from '../screens/forwarder/CreateOfferScreen';
 import ChatListScreen from '../screens/shared/ChatListScreen';
 import ProfileScreen from '../screens/shared/ProfileScreen';
 import JobDetailsScreen from '../screens/forwarder/JobDetailsScreen';
@@ -105,6 +106,11 @@ const FindStack = () => (
       component={HaulierProfileScreen}
       options={{ title: 'Haulier Profile' }}
     />
+    <Stack.Screen 
+      name="CreateOffer" 
+      component={CreateOfferScreen}
+      options={{ title: 'Create Partnership Offer' }}
+    />
   </Stack.Navigator>
 );
 
@@ -125,8 +131,8 @@ const ForwarderTabs = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === 'Jobs') {
-            iconName = focused ? 'briefcase' : 'briefcase-outline';
+          if (route.name === 'Partnerships') {
+            iconName = focused ? 'handshake' : 'handshake-outline';
           } else if (route.name === 'Find') {
             iconName = focused ? 'search' : 'search-outline';
           } else if (route.name === 'Post') {
@@ -146,7 +152,7 @@ const ForwarderTabs = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Jobs" component={JobsStack} />
+      <Tab.Screen name="Partnerships" component={JobsStack} />
       <Tab.Screen name="Find" component={FindStack} />
       <Tab.Screen name="Post" component={PostStack} />
       <Tab.Screen name="Analytics" component={AnalyticsStack} />

@@ -5,130 +5,216 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  RefreshControl
+  RefreshControl,
+  Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../../contexts/FallbackAuthContext';
+import { colors, typography, spacing, borderRadius, shadows, textStyles, components } from '../../styles/designSystem';
 
 const ApplicationsScreen = ({ navigation }) => {
-  const [applications, setApplications] = useState([]);
+  const [connections, setConnections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const { currentUser } = useAuth();
 
   useEffect(() => {
-    // Mock applications data for development
-    const mockApplications = [
+    // Mock data for haulier's connection requests and partnerships
+    const mockConnections = [
       {
         id: '1',
-        jobTitle: 'Transport Electronics from Copenhagen to Aarhus',
-        companyName: 'TechCorp Denmark',
-        coverLetter: 'I have 5 years of experience in handling fragile electronics and have proper insurance coverage.',
+        forwarderName: 'TechCorp Denmark',
+        forwarderCompany: 'TechCorp Denmark A/S',
+        industry: 'Electronics',
+        partnershipType: 'Regular Routes',
         status: 'pending',
-        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString() // 2 days ago
+        message: 'We are interested in establishing a long-term partnership for our regular Copenhagen-Aarhus route.',
+        createdAt: new Date('2024-01-15T10:00:00Z').toISOString(),
+        forwarderId: 'forwarder-1',
+        partnershipBenefits: [
+          'Monthly guaranteed volume',
+          'Competitive rates',
+          'Priority booking',
+          'Long-term contract'
+        ]
       },
       {
         id: '2',
-        jobTitle: 'Furniture Delivery - Odense to Aalborg',
-        companyName: 'Nordic Furniture',
-        coverLetter: 'I specialize in furniture transport with a large van and proper equipment.',
+        forwarderName: 'Nordic Furniture',
+        forwarderCompany: 'Nordic Furniture Group',
+        industry: 'Furniture',
+        partnershipType: 'Dedicated Partnership',
         status: 'accepted',
-        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString() // 5 days ago
+        message: 'Partnership established! Welcome to our network of trusted hauliers.',
+        createdAt: new Date('2024-01-12T14:30:00Z').toISOString(),
+        forwarderId: 'forwarder-2',
+        partnershipBenefits: [
+          'Exclusive partnership',
+          'Flexible scheduling',
+          'Premium rates',
+          'Growth opportunities'
+        ]
+      },
+      {
+        id: '3',
+        forwarderName: 'Scandinavian Logistics',
+        forwarderCompany: 'Scandinavian Logistics AB',
+        industry: 'Logistics',
+        partnershipType: 'International Routes',
+        status: 'rejected',
+        message: 'Thank you for your interest. We have decided to work with another partner for this route.',
+        createdAt: new Date('2024-01-10T09:15:00Z').toISOString(),
+        forwarderId: 'forwarder-3',
+        partnershipBenefits: []
       }
     ];
 
     // Simulate loading delay
     setTimeout(() => {
-      setApplications(mockApplications);
+      setConnections(mockConnections);
       setLoading(false);
     }, 1000);
   }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 1000);
+    // Simulate fetching new data
+    setTimeout(() => {
+      setConnections(mockConnections); // In a real app, this would fetch from Firebase
+      setRefreshing(false);
+    }, 1000);
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'accepted': return '#27ae60';
-      case 'rejected': return '#e74c3c';
-      case 'pending': return '#f39c12';
-      default: return '#7f8c8d';
-    }
+  const handleViewForwarderProfile = (forwarderId) => {
+    // In a real app, fetch forwarder profile by ID
+    const forwarder = {
+      uid: forwarderId,
+      name: 'TechCorp Denmark',
+      company: 'TechCorp Denmark A/S',
+      industry: 'Electronics',
+      location: 'Copenhagen, Denmark',
+      companySize: 'Large (500+ employees)',
+      partnershipType: 'Regular Routes',
+      description: 'Leading electronics distributor with 20+ years of experience.',
+      requirements: {
+        truckTypes: ['dry_van', 'reefer'],
+        specialEquipment: ['temperature_control'],
+        certifications: ['ADR'],
+        experience: '2+ years'
+      },
+      partnershipBenefits: [
+        'Regular monthly contracts',
+        'Competitive rates',
+        'Long-term relationship',
+        'Priority booking'
+      ]
+    };
+    // Navigate to forwarder profile screen
+    navigation.navigate('ForwarderProfile', { forwarder });
   };
 
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'accepted': return 'checkmark-circle';
-      case 'rejected': return 'close-circle';
-      case 'pending': return 'time';
-      default: return 'help-circle';
-    }
+  const handleContactForwarder = (connection) => {
+    Alert.alert(
+      'Contact Forwarder',
+      `Would you like to contact ${connection.forwarderName}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Message',
+          onPress: () => {
+            navigation.navigate('Chat', {
+              screen: 'ChatConversation',
+              params: {
+                chatId: `chat_${connection.forwarderId}`,
+                otherParticipant: connection.forwarderId,
+                chatTitle: `Chat with ${connection.forwarderName}`
+              }
+            });
+          }
+        }
+      ]
+    );
   };
 
-  const renderApplicationItem = ({ item }) => (
-    <TouchableOpacity style={styles.applicationCard}>
-      <View style={styles.applicationHeader}>
-        <View style={styles.jobInfo}>
-          <Text style={styles.jobTitle}>{item.jobTitle || 'Job Application'}</Text>
-          <Text style={styles.companyName}>{item.companyName || 'Company'}</Text>
-        </View>
-        <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) + '20' }]}>
-          <Ionicons 
-            name={getStatusIcon(item.status)} 
-            size={16} 
-            color={getStatusColor(item.status)} 
-          />
-          <Text style={[styles.statusText, { color: getStatusColor(item.status) }]}>
-            {item.status.toUpperCase()}
-          </Text>
+  const renderConnectionItem = ({ item }) => (
+    <View style={styles.connectionCard}>
+      <View style={styles.connectionHeader}>
+        <Text style={styles.forwarderName}>{item.forwarderName}</Text>
+        <View style={[styles.statusBadge, styles[item.status]]}>
+          <Text style={styles.statusText}>{item.status}</Text>
         </View>
       </View>
+      
+      <Text style={styles.forwarderCompany}>{item.forwarderCompany}</Text>
+      <Text style={styles.industry}>{item.industry} • {item.partnershipType}</Text>
+      <Text style={styles.message} numberOfLines={2}>{item.message}</Text>
+      <Text style={styles.date}>Requested: {new Date(item.createdAt).toLocaleDateString()}</Text>
 
-      <Text style={styles.coverLetter} numberOfLines={3}>
-        {item.coverLetter}
-      </Text>
+      {item.partnershipBenefits.length > 0 && (
+        <View style={styles.benefitsContainer}>
+          <Text style={styles.benefitsTitle}>Partnership Benefits:</Text>
+          <View style={styles.benefitsList}>
+            {item.partnershipBenefits.map((benefit, index) => (
+              <Text key={index} style={styles.benefitItem}>• {benefit}</Text>
+            ))}
+          </View>
+        </View>
+      )}
 
-      <View style={styles.applicationFooter}>
-        <Text style={styles.appliedDate}>
-          Applied {item.createdAt ? 
-            new Date(item.createdAt).toLocaleDateString() : 
-            'Recently'
-          }
-        </Text>
+      <View style={styles.actionsContainer}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => handleViewForwarderProfile(item.forwarderId)}
+        >
+          <Text style={styles.actionButtonText}>View Profile</Text>
+        </TouchableOpacity>
+        
         {item.status === 'accepted' && (
-          <TouchableOpacity style={styles.chatButton}>
-            <Ionicons name="chatbubble" size={16} color="#3498db" />
-            <Text style={styles.chatButtonText}>Start Chat</Text>
+          <TouchableOpacity
+            style={[styles.actionButton, styles.primaryButton]}
+            onPress={() => handleContactForwarder(item)}
+          >
+            <Text style={[styles.actionButtonText, styles.primaryButtonText]}>Contact</Text>
           </TouchableOpacity>
         )}
       </View>
-    </TouchableOpacity>
-  );
-
-  const renderEmptyState = () => (
-    <View style={styles.emptyState}>
-      <Ionicons name="document-outline" size={64} color="#bdc3c7" />
-      <Text style={styles.emptyTitle}>No Applications Yet</Text>
-      <Text style={styles.emptySubtitle}>
-        Apply to jobs to see your applications here
-      </Text>
     </View>
   );
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Loading Partnership Connections...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Partnership Connections</Text>
+        <Text style={styles.headerSubtitle}>Manage your forwarder partnerships and connection requests</Text>
+      </View>
+      
       <FlatList
-        data={applications}
-        renderItem={renderApplicationItem}
+        data={connections}
+        renderItem={renderConnectionItem}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[colors.primary]}
+          />
         }
-        ListEmptyComponent={renderEmptyState}
-        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <View style={styles.emptyState}>
+            <Ionicons name="handshake-outline" size={64} color={colors.mediumGray} />
+            <Text style={styles.emptyTitle}>No Connections Yet</Text>
+            <Text style={styles.emptySubtitle}>
+              Start connecting with forwarders to build your partnership network.
+            </Text>
+          </View>
+        }
       />
     </View>
   );
@@ -137,109 +223,141 @@ const ApplicationsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.lightGray,
+  },
+  header: {
+    padding: spacing[4],
+    backgroundColor: colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderGray,
+  },
+  headerTitle: {
+    ...textStyles.h2,
+    color: colors.textBlack,
+    marginBottom: spacing[1],
+  },
+  headerSubtitle: {
+    ...textStyles.caption,
+    color: colors.mediumGray,
   },
   listContainer: {
-    padding: 16,
-    flexGrow: 1,
+    padding: spacing[4],
   },
-  applicationCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+  connectionCard: {
+    ...components.card,
+    marginBottom: spacing[4],
   },
-  applicationHeader: {
+  connectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 12,
+    marginBottom: spacing[2],
   },
-  jobInfo: {
+  forwarderName: {
+    ...textStyles.h3,
     flex: 1,
-    marginRight: 12,
-  },
-  jobTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 4,
-  },
-  companyName: {
-    fontSize: 14,
-    color: '#7f8c8d',
+    marginRight: spacing[2],
   },
   statusBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: spacing[2],
+    paddingVertical: spacing[1],
+    borderRadius: borderRadius.sm,
   },
   statusText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginLeft: 4,
+    ...textStyles.caption,
+    color: colors.white,
+    textTransform: 'capitalize',
   },
-  coverLetter: {
-    fontSize: 14,
-    color: '#34495e',
-    lineHeight: 20,
-    marginBottom: 12,
+  pending: {
+    backgroundColor: colors.warning,
   },
-  applicationFooter: {
+  accepted: {
+    backgroundColor: colors.success,
+  },
+  rejected: {
+    backgroundColor: colors.error,
+  },
+  forwarderCompany: {
+    ...textStyles.body,
+    color: colors.darkGray,
+    marginBottom: spacing[1],
+  },
+  industry: {
+    ...textStyles.caption,
+    color: colors.primary,
+    marginBottom: spacing[2],
+  },
+  message: {
+    ...textStyles.caption,
+    color: colors.mediumGray,
+    marginBottom: spacing[2],
+  },
+  date: {
+    ...textStyles.caption,
+    color: colors.mediumGray,
+    marginBottom: spacing[3],
+  },
+  benefitsContainer: {
+    marginBottom: spacing[3],
+  },
+  benefitsTitle: {
+    ...textStyles.label,
+    marginBottom: spacing[1],
+  },
+  benefitsList: {
+    marginLeft: spacing[2],
+  },
+  benefitItem: {
+    ...textStyles.caption,
+    color: colors.success,
+    marginBottom: spacing[1],
+  },
+  actionsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#ecf0f1',
+    borderTopColor: colors.borderGray,
+    paddingTop: spacing[3],
   },
-  appliedDate: {
-    fontSize: 12,
-    color: '#95a5a6',
+  actionButton: {
+    ...components.button.secondary,
+    flex: 1,
+    marginHorizontal: spacing[1],
   },
-  chatButton: {
-    flexDirection: 'row',
+  primaryButton: {
+    backgroundColor: colors.primary,
+  },
+  actionButtonText: {
+    ...textStyles.label,
+    color: colors.darkGray,
+  },
+  primaryButtonText: {
+    color: colors.white,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#e3f2fd',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+    backgroundColor: colors.lightGray,
   },
-  chatButtonText: {
-    fontSize: 12,
-    color: '#3498db',
-    fontWeight: 'bold',
-    marginLeft: 4,
+  loadingText: {
+    ...textStyles.h3,
+    color: colors.mediumGray,
   },
   emptyState: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 60,
+    paddingVertical: spacing[16],
   },
   emptyTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginTop: 16,
-    marginBottom: 8,
+    ...textStyles.h2,
+    marginTop: spacing[4],
+    marginBottom: spacing[2],
   },
   emptySubtitle: {
-    fontSize: 14,
-    color: '#7f8c8d',
+    ...textStyles.caption,
     textAlign: 'center',
-    lineHeight: 20,
-    paddingHorizontal: 40,
   },
 });
 

@@ -2,189 +2,336 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  ScrollView,
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
   Alert,
   KeyboardAvoidingView,
   Platform
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-// Firebase imports removed for development
+import { colors, typography, spacing, borderRadius, shadows, textStyles, components } from '../../styles/designSystem';
 import { useAuth } from '../../contexts/FallbackAuthContext';
 
 const PostJobScreen = ({ navigation }) => {
   const { currentUser, userProfile } = useAuth();
   const [formData, setFormData] = useState({
-    title: '',
+    companyName: '',
+    industry: '',
+    partnershipType: '',
     description: '',
     location: '',
-    budget: '',
-    deliveryDate: '',
-    duration: '',
-    requirements: []
+    requirements: {
+      truckTypes: [],
+      specialEquipment: [],
+      certifications: [],
+      experience: '',
+      routes: []
+    },
+    partnershipBenefits: [],
+    contactInfo: {
+      email: '',
+      phone: '',
+      website: ''
+    }
   });
-  const [requirement, setRequirement] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
-  const addRequirement = () => {
-    if (requirement.trim()) {
+    if (field.includes('.')) {
+      const [parent, child] = field.split('.');
       setFormData(prev => ({
         ...prev,
-        requirements: [...prev.requirements, requirement.trim()]
+        [parent]: {
+          ...prev[parent],
+          [child]: value
+        }
       }));
-      setRequirement('');
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [field]: value
+      }));
     }
   };
 
-  const removeRequirement = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      requirements: prev.requirements.filter((_, i) => i !== index)
-    }));
-  };
-
   const handleSubmit = async () => {
-    if (!formData.title || !formData.description || !formData.location || !formData.budget) {
+    if (!formData.companyName || !formData.industry || !formData.partnershipType || !formData.description) {
       Alert.alert('Error', 'Please fill in all required fields');
       return;
     }
 
     setLoading(true);
     try {
-      const jobData = {
-        ...formData,
-        forwarderId: currentUser.uid,
-        companyName: userProfile?.company || 'Unknown Company',
-        status: 'active',
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      };
-
-      await addDoc(collection(db, 'jobs'), jobData);
+      // In a real app, this would save to Firebase
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       Alert.alert(
-        'Job Posted Successfully!',
-        'Your job has been posted and is now visible to hauliers.',
-        [{ text: 'OK', onPress: () => navigation.goBack() }]
+        'Partnership Opportunity Posted',
+        'Your partnership opportunity has been posted successfully! Hauliers can now find and connect with you.',
+        [
+          {
+            text: 'OK',
+            onPress: () => navigation.goBack()
+          }
+        ]
       );
     } catch (error) {
-      Alert.alert('Error', 'Failed to post job');
+      Alert.alert('Error', 'Failed to post partnership opportunity');
     } finally {
       setLoading(false);
     }
   };
+
+  const partnershipTypes = [
+    'Regular Routes',
+    'Dedicated Partnership',
+    'International Routes',
+    'Seasonal Partnership',
+    'Emergency Backup',
+    'Specialized Transport'
+  ];
+
+  const industries = [
+    'Electronics',
+    'Furniture',
+    'Food & Beverage',
+    'Automotive',
+    'Pharmaceuticals',
+    'Textiles',
+    'Machinery',
+    'Other'
+  ];
+
+  const truckTypes = [
+    'Dry Van',
+    'Reefer',
+    'Flatbed',
+    'Container',
+    'Tanker',
+    'Car Carrier'
+  ];
+
+  const specialEquipment = [
+    'Temperature Control',
+    'Crane',
+    'Forklift',
+    'Heavy Lifting',
+    'Furniture Handling',
+    'ADR Certified',
+    'GPS Tracking',
+    'Security Features'
+  ];
+
+  const certifications = [
+    'ADR',
+    'ISO 9001',
+    'GDP',
+    'HACCP',
+    'TAPA',
+    'C-TPAT',
+    'Other'
+  ];
+
+  const renderMultiSelect = (title, options, selectedItems, onToggle) => (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      <View style={styles.optionsContainer}>
+        {options.map((option, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              styles.optionButton,
+              selectedItems.includes(option) && styles.selectedOption
+            ]}
+            onPress={() => onToggle(option)}
+          >
+            <Text style={[
+              styles.optionText,
+              selectedItems.includes(option) && styles.selectedOptionText
+            ]}>
+              {option}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
+  );
 
   return (
     <KeyboardAvoidingView 
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <Text style={styles.title}>Post New Job</Text>
-          <Text style={styles.subtitle}>Fill in the details to find the right haulier</Text>
+          <Text style={styles.headerTitle}>Post Partnership Opportunity</Text>
+          <Text style={styles.headerSubtitle}>
+            Find reliable haulier partners for your business needs
+          </Text>
         </View>
 
         <View style={styles.form}>
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Job Title *</Text>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Company Information *</Text>
             <TextInput
               style={styles.input}
-              placeholder="e.g., Transport goods from A to B"
-              value={formData.title}
-              onChangeText={(value) => handleInputChange('title', value)}
+              placeholder="Company Name"
+              value={formData.companyName}
+              onChangeText={(value) => handleInputChange('companyName', value)}
             />
           </View>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Description *</Text>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Industry *</Text>
+            <View style={styles.optionsContainer}>
+              {industries.map((industry, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.optionButton,
+                    formData.industry === industry && styles.selectedOption
+                  ]}
+                  onPress={() => handleInputChange('industry', industry)}
+                >
+                  <Text style={[
+                    styles.optionText,
+                    formData.industry === industry && styles.selectedOptionText
+                  ]}>
+                    {industry}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Partnership Type *</Text>
+            <View style={styles.optionsContainer}>
+              {partnershipTypes.map((type, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.optionButton,
+                    formData.partnershipType === type && styles.selectedOption
+                  ]}
+                  onPress={() => handleInputChange('partnershipType', type)}
+                >
+                  <Text style={[
+                    styles.optionText,
+                    formData.partnershipType === type && styles.selectedOptionText
+                  ]}>
+                    {type}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Description *</Text>
             <TextInput
               style={[styles.input, styles.textArea]}
-              placeholder="Describe the job requirements, cargo details, and any special instructions..."
+              placeholder="Describe your partnership opportunity, routes, and requirements..."
               value={formData.description}
               onChangeText={(value) => handleInputChange('description', value)}
               multiline
               numberOfLines={4}
-              textAlignVertical="top"
             />
           </View>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Location *</Text>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Location</Text>
             <TextInput
               style={styles.input}
-              placeholder="e.g., Copenhagen, Denmark"
+              placeholder="City, Country"
               value={formData.location}
               onChangeText={(value) => handleInputChange('location', value)}
             />
           </View>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Budget *</Text>
+          {renderMultiSelect(
+            'Required Truck Types',
+            truckTypes,
+            formData.requirements.truckTypes,
+            (option) => {
+              const newTruckTypes = formData.requirements.truckTypes.includes(option)
+                ? formData.requirements.truckTypes.filter(item => item !== option)
+                : [...formData.requirements.truckTypes, option];
+              handleInputChange('requirements.truckTypes', newTruckTypes);
+            }
+          )}
+
+          {renderMultiSelect(
+            'Special Equipment',
+            specialEquipment,
+            formData.requirements.specialEquipment,
+            (option) => {
+              const newEquipment = formData.requirements.specialEquipment.includes(option)
+                ? formData.requirements.specialEquipment.filter(item => item !== option)
+                : [...formData.requirements.specialEquipment, option];
+              handleInputChange('requirements.specialEquipment', newEquipment);
+            }
+          )}
+
+          {renderMultiSelect(
+            'Required Certifications',
+            certifications,
+            formData.requirements.certifications,
+            (option) => {
+              const newCertifications = formData.requirements.certifications.includes(option)
+                ? formData.requirements.certifications.filter(item => item !== option)
+                : [...formData.requirements.certifications, option];
+              handleInputChange('requirements.certifications', newCertifications);
+            }
+          )}
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Experience Required</Text>
             <TextInput
               style={styles.input}
-              placeholder="e.g., 500"
-              value={formData.budget}
-              onChangeText={(value) => handleInputChange('budget', value)}
-              keyboardType="numeric"
+              placeholder="e.g., 2+ years, 5+ years, etc."
+              value={formData.requirements.experience}
+              onChangeText={(value) => handleInputChange('requirements.experience', value)}
             />
           </View>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Delivery Date</Text>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Partnership Benefits</Text>
             <TextInput
-              style={styles.input}
-              placeholder="e.g., 2024-01-15"
-              value={formData.deliveryDate}
-              onChangeText={(value) => handleInputChange('deliveryDate', value)}
+              style={[styles.input, styles.textArea]}
+              placeholder="List the benefits of partnering with your company (e.g., Regular contracts, Competitive rates, Growth opportunities...)"
+              value={formData.partnershipBenefits.join(', ')}
+              onChangeText={(value) => handleInputChange('partnershipBenefits', value.split(', ').filter(item => item.trim()))}
+              multiline
+              numberOfLines={3}
             />
           </View>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Duration</Text>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Contact Information</Text>
             <TextInput
               style={styles.input}
-              placeholder="e.g., 2 days"
-              value={formData.duration}
-              onChangeText={(value) => handleInputChange('duration', value)}
+              placeholder="Email"
+              value={formData.contactInfo.email}
+              onChangeText={(value) => handleInputChange('contactInfo.email', value)}
+              keyboardType="email-address"
             />
-          </View>
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Requirements</Text>
-            <View style={styles.requirementInput}>
-              <TextInput
-                style={styles.requirementTextInput}
-                placeholder="Add a requirement..."
-                value={requirement}
-                onChangeText={setRequirement}
-                onSubmitEditing={addRequirement}
-              />
-              <TouchableOpacity
-                style={styles.addButton}
-                onPress={addRequirement}
-              >
-                <Ionicons name="add" size={20} color="#3498db" />
-              </TouchableOpacity>
-            </View>
-            
-            {formData.requirements.map((req, index) => (
-              <View key={index} style={styles.requirementItem}>
-                <Text style={styles.requirementText}>{req}</Text>
-                <TouchableOpacity
-                  style={styles.removeButton}
-                  onPress={() => removeRequirement(index)}
-                >
-                  <Ionicons name="close" size={16} color="#e74c3c" />
-                </TouchableOpacity>
-              </View>
-            ))}
+            <TextInput
+              style={styles.input}
+              placeholder="Phone"
+              value={formData.contactInfo.phone}
+              onChangeText={(value) => handleInputChange('contactInfo.phone', value)}
+              keyboardType="phone-pad"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Website (optional)"
+              value={formData.contactInfo.website}
+              onChangeText={(value) => handleInputChange('contactInfo.website', value)}
+              keyboardType="url"
+            />
           </View>
 
           <TouchableOpacity
@@ -193,7 +340,7 @@ const PostJobScreen = ({ navigation }) => {
             disabled={loading}
           >
             <Text style={styles.submitButtonText}>
-              {loading ? 'Posting Job...' : 'Post Job'}
+              {loading ? 'Posting...' : 'Post Partnership Opportunity'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -205,122 +352,80 @@ const PostJobScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.lightGray,
   },
-  scrollContainer: {
-    flexGrow: 1,
-    padding: 20,
+  scrollView: {
+    flex: 1,
   },
   header: {
-    alignItems: 'center',
-    marginBottom: 30,
+    padding: spacing[4],
+    backgroundColor: colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderGray,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 8,
+  headerTitle: {
+    ...textStyles.h2,
+    color: colors.textBlack,
+    marginBottom: spacing[1],
   },
-  subtitle: {
-    fontSize: 16,
-    color: '#7f8c8d',
-    textAlign: 'center',
-    lineHeight: 22,
+  headerSubtitle: {
+    ...textStyles.caption,
+    color: colors.mediumGray,
   },
   form: {
-    backgroundColor: 'white',
-    borderRadius: 16,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 8,
+    padding: spacing[4],
   },
-  inputGroup: {
-    marginBottom: 20,
+  section: {
+    marginBottom: spacing[6],
   },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 8,
+  sectionTitle: {
+    ...textStyles.h4,
+    marginBottom: spacing[3],
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#e9ecef',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    fontSize: 16,
-    color: '#2c3e50',
-    backgroundColor: '#f8f9fa',
+    ...components.input,
+    marginBottom: spacing[3],
   },
   textArea: {
     height: 100,
     textAlignVertical: 'top',
   },
-  requirementInput: {
+  optionsContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
+    flexWrap: 'wrap',
+    marginBottom: spacing[3],
   },
-  requirementTextInput: {
-    flex: 1,
+  optionButton: {
+    paddingHorizontal: spacing[3],
+    paddingVertical: spacing[2],
+    marginRight: spacing[2],
+    marginBottom: spacing[2],
+    borderRadius: borderRadius.md,
     borderWidth: 1,
-    borderColor: '#e9ecef',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    fontSize: 16,
-    color: '#2c3e50',
-    backgroundColor: '#f8f9fa',
-    marginRight: 8,
+    borderColor: colors.borderGray,
+    backgroundColor: colors.white,
   },
-  addButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#f8f9fa',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#e9ecef',
+  selectedOption: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
-  requirementItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f8f9fa',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-    marginBottom: 8,
+  optionText: {
+    ...textStyles.caption,
+    color: colors.darkGray,
   },
-  requirementText: {
-    flex: 1,
-    fontSize: 14,
-    color: '#2c3e50',
-  },
-  removeButton: {
-    padding: 4,
+  selectedOptionText: {
+    color: colors.white,
   },
   submitButton: {
-    backgroundColor: '#e74c3c',
-    paddingVertical: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 20,
+    ...components.button.primary,
+    marginTop: spacing[4],
   },
   disabledButton: {
-    backgroundColor: '#bdc3c7',
+    backgroundColor: colors.mediumGray,
   },
   submitButtonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
+    ...textStyles.button,
+    color: colors.white,
   },
 });
 

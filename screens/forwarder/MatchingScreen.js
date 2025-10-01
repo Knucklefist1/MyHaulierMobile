@@ -7,7 +7,10 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  RefreshControl
+  RefreshControl,
+  Modal,
+  ScrollView,
+  Switch
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, spacing, borderRadius, shadows, textStyles, components } from '../../styles/designSystem';
@@ -20,7 +23,53 @@ const MatchingScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('score'); // 'score', 'rating', 'price', 'distance'
+  const [sortBy, setSortBy] = useState('score');
+  const [showFilters, setShowFilters] = useState(false);
+  
+  // Filter states
+  const [filters, setFilters] = useState({
+    countries: [],
+    truckTypes: [],
+    trailerTypes: [],
+    certifications: [],
+    minTrucks: 0,
+    maxTrucks: 100,
+    minRating: 0,
+    maxRating: 5,
+    minExperience: 0,
+    maxExperience: 20,
+    availability: 'all', // 'all', 'available', 'unavailable'
+    priceRange: { min: 0, max: 1000 },
+    distance: 500, // km
+    languages: [],
+    specialEquipment: []
+  });
+
+  const countries = [
+    'Denmark', 'Sweden', 'Norway', 'Finland', 'Germany', 'Netherlands', 
+    'Belgium', 'Poland', 'France', 'UK', 'Spain', 'Italy'
+  ];
+
+  const truckTypes = [
+    'Dry Van', 'Reefer', 'Flatbed', 'Container', 'Tanker', 'Car Carrier'
+  ];
+
+  const trailerTypes = [
+    'Standard', 'Extendable', 'Curtain Side', 'Skeleton', 'Low Loader', 'Car Carrier'
+  ];
+
+  const certifications = [
+    'ADR', 'ISO 9001', 'GDP', 'HACCP', 'TAPA', 'C-TPAT', 'AEO'
+  ];
+
+  const languages = [
+    'English', 'Danish', 'Swedish', 'Norwegian', 'German', 'Dutch', 'French'
+  ];
+
+  const specialEquipment = [
+    'Temperature Control', 'Crane', 'Forklift', 'Heavy Lifting', 
+    'Furniture Handling', 'GPS Tracking', 'Security Features'
+  ];
 
   useEffect(() => {
     loadMatches();
@@ -32,14 +81,14 @@ const MatchingScreen = ({ navigation, route }) => {
       // Mock job requirements
       const jobRequirements = {
         jobId: jobId || 'job-1',
-        title: 'Transport Electronics from Copenhagen to Aarhus',
-        description: 'Urgent delivery of electronic components',
+        title: 'Find Haulier Partners',
+        description: 'Looking for reliable haulier partners',
         forwarderId: 'forwarder-1',
         transport: {
-          cargoType: 'electronics',
+          cargoType: 'general',
           weight: 2.5,
           dimensions: { length: 6, width: 2.4, height: 2.6 },
-          specialRequirements: ['fragile', 'temperature_controlled'],
+          specialRequirements: ['fragile'],
           handlingRequirements: ['special_equipment']
         },
         route: {
@@ -62,68 +111,118 @@ const MatchingScreen = ({ navigation, route }) => {
           fuelSurcharge: 'included'
         },
         haulierRequirements: {
-          minRating: 4.0,
-          minExperience: 2,
-          requiredCertifications: ['ADR'],
-          requiredLanguages: ['en', 'da'],
-          preferredCountries: ['DK'],
-          maxDistanceFromRoute: 50
+          minRating: filters.minRating,
+          minExperience: filters.minExperience,
+          requiredCertifications: filters.certifications,
+          requiredLanguages: filters.languages,
+          preferredCountries: filters.countries,
+          maxDistanceFromRoute: filters.distance
         }
       };
 
       // Get real haulier availability data
       const haulierProfiles = await availabilityService.getAvailableHauliers();
-      
+
       // Add some mock data for demo purposes if no real data exists
       if (haulierProfiles.length === 0) {
-        haulierProfiles.push({
-          uid: 'haulier-1',
-          name: 'Lars Andersen',
-          company: 'Nordic Transport A/S',
-          phone: '+45 12 34 56 78',
-          fleet: {
-            totalTrucks: 15,
-            availableTrucks: 3,
-            truckTypes: ['dry_van', 'reefer'],
-            trailerTypes: ['standard', 'extendable'],
-            maxWeight: 24,
-            maxLength: 13.6,
-            maxHeight: 4.0,
-            specialEquipment: ['crane', 'forklift']
+        haulierProfiles.push(
+          {
+            uid: 'haulier-1',
+            name: 'Lars Andersen',
+            company: 'Nordic Transport A/S',
+            phone: '+45 12 34 56 78',
+            fleet: {
+              totalTrucks: 15,
+              availableTrucks: 3,
+              truckTypes: ['dry_van', 'reefer'],
+              trailerTypes: ['standard', 'extendable'],
+              maxWeight: 24,
+              maxLength: 13.6,
+              maxHeight: 4.0,
+              specialEquipment: ['crane', 'forklift']
+            },
+            operatingRegions: {
+              countries: ['DK', 'SE', 'NO'],
+              regions: ['Nordic'],
+              specificRoutes: ['Copenhagen-Aarhus', 'Stockholm-Oslo']
+            },
+            capabilities: {
+              cargoTypes: ['general', 'fragile', 'temperature_controlled'],
+              industries: ['electronics', 'automotive'],
+              certifications: ['ADR', 'ISO', 'GDP'],
+              languages: ['en', 'da', 'sv']
+            },
+            availability: {
+              isAvailable: true,
+              availableTrucks: 3,
+              workingDays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
+              workingHours: { start: '08:00', end: '17:00' },
+              emergencyAvailable: true,
+              weekendWork: false
+            },
+            performance: {
+              rating: 4.8,
+              totalJobs: 150,
+              completedJobs: 148,
+              onTimeDelivery: 96,
+              customerSatisfaction: 94
+            },
+            pricing: {
+              baseRate: 8.5,
+              currency: 'DKK',
+              fuelSurcharge: 0.15,
+              tollIncluded: true
+            }
           },
-          operatingRegions: {
-            countries: ['DK', 'SE', 'NO'],
-            regions: ['Nordic'],
-            specificRoutes: ['Copenhagen-Aarhus', 'Stockholm-Oslo']
-          },
-          capabilities: {
-            cargoTypes: ['general', 'fragile', 'temperature_controlled'],
-            industries: ['electronics', 'automotive'],
-            certifications: ['ADR', 'ISO', 'GDP'],
-            languages: ['en', 'da', 'sv']
-          },
-          availability: {
-            isAvailable: true,
-            availableTrucks: 3,
-            workingDays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
-            workingHours: { start: '08:00', end: '17:00' },
-            emergencyAvailable: true,
-            weekendWork: false
-          },
-          performance: {
-            rating: 4.8,
-            totalJobs: 150,
-            completedJobs: 148,
-            onTimeDelivery: 96,
-            customerSatisfaction: 94
-          },
-          pricing: {
-            baseRate: 8.5,
-            currency: 'DKK',
-            fuelSurcharge: 0.15,
-            tollIncluded: true
+          {
+            uid: 'haulier-2',
+            name: 'Erik Hansen',
+            company: 'Danish Logistics',
+            phone: '+45 98 76 54 32',
+            fleet: {
+              totalTrucks: 8,
+              availableTrucks: 2,
+              truckTypes: ['dry_van'],
+              trailerTypes: ['standard'],
+              maxWeight: 20,
+              maxLength: 13.6,
+              maxHeight: 4.0,
+              specialEquipment: []
+            },
+            operatingRegions: {
+              countries: ['DK', 'DE'],
+              regions: ['Nordic', 'Central Europe'],
+              specificRoutes: ['Copenhagen-Hamburg', 'Aarhus-Berlin']
+            },
+            capabilities: {
+              cargoTypes: ['general', 'furniture'],
+              industries: ['furniture', 'textiles'],
+              certifications: ['ADR'],
+              languages: ['en', 'da', 'de']
+            },
+            availability: {
+              isAvailable: true,
+              availableTrucks: 2,
+              workingDays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
+              workingHours: { start: '07:00', end: '18:00' },
+              emergencyAvailable: false,
+              weekendWork: false
+            },
+            performance: {
+              rating: 4.2,
+              totalJobs: 75,
+              completedJobs: 73,
+              onTimeDelivery: 92,
+              customerSatisfaction: 88
+            },
+            pricing: {
+              baseRate: 7.5,
+              currency: 'DKK',
+              fuelSurcharge: 0.12,
+              tollIncluded: false
+            }
           }
-        });
+        );
       }
 
       // Find matches
@@ -147,17 +246,15 @@ const MatchingScreen = ({ navigation, route }) => {
       `Would you like to contact ${haulier.name} at ${haulier.company}?`,
       [
         { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Call', 
+        {
+          text: 'Call',
           onPress: () => {
-            // In a real app, this would initiate a phone call
             Alert.alert('Calling', `Calling ${haulier.phone}`);
           }
         },
-        { 
-          text: 'Message', 
+        {
+          text: 'Message',
           onPress: () => {
-            // Navigate to the Chat tab and then to the conversation
             navigation.getParent()?.navigate('Chat', {
               screen: 'ChatConversation',
               params: {
@@ -172,8 +269,69 @@ const MatchingScreen = ({ navigation, route }) => {
     );
   };
 
+  const handleMakeOffer = (haulier) => {
+    Alert.alert(
+      'Make Partnership Offer',
+      `Would you like to send a partnership offer to ${haulier.name} at ${haulier.company}?\n\nThis will create a formal partnership proposal with your requirements and terms.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Create Offer',
+          onPress: () => {
+            // Navigate to offer creation screen
+            navigation.navigate('CreateOffer', { 
+              haulier,
+              haulierId: haulier.uid 
+            });
+          }
+        }
+      ]
+    );
+  };
+
   const handleViewProfile = (haulier) => {
     navigation.navigate('HaulierProfile', { haulier });
+  };
+
+  const handleFilterChange = (filterType, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: value
+    }));
+  };
+
+  const handleMultiSelectFilter = (filterType, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: prev[filterType].includes(value)
+        ? prev[filterType].filter(item => item !== value)
+        : [...prev[filterType], value]
+    }));
+  };
+
+  const applyFilters = () => {
+    setShowFilters(false);
+    loadMatches();
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      countries: [],
+      truckTypes: [],
+      trailerTypes: [],
+      certifications: [],
+      minTrucks: 0,
+      maxTrucks: 100,
+      minRating: 0,
+      maxRating: 5,
+      minExperience: 0,
+      maxExperience: 20,
+      availability: 'all',
+      priceRange: { min: 0, max: 1000 },
+      distance: 500,
+      languages: [],
+      specialEquipment: []
+    });
   };
 
   const filteredMatches = matches.filter(match => {
@@ -192,11 +350,210 @@ const MatchingScreen = ({ navigation, route }) => {
       case 'price':
         return a.haulier.pricing.baseRate - b.haulier.pricing.baseRate;
       case 'distance':
-        return a.matchScore.totalScore - b.matchScore.totalScore; // Simplified
+        return a.matchScore.totalScore - b.matchScore.totalScore;
       default:
         return b.matchScore.totalScore - a.matchScore.totalScore;
     }
   });
+
+  const renderFilterModal = () => (
+    <Modal
+      visible={showFilters}
+      animationType="slide"
+      presentationStyle="pageSheet"
+    >
+      <View style={styles.modalContainer}>
+        <View style={styles.modalHeader}>
+          <TouchableOpacity onPress={() => setShowFilters(false)}>
+            <Text style={styles.modalCancel}>Cancel</Text>
+          </TouchableOpacity>
+          <Text style={styles.modalTitle}>Filters</Text>
+          <TouchableOpacity onPress={clearFilters}>
+            <Text style={styles.modalClear}>Clear All</Text>
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView style={styles.modalContent}>
+          {/* Countries Filter */}
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Operating Countries</Text>
+            <View style={styles.optionsContainer}>
+              {countries.map((country, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.optionButton,
+                    filters.countries.includes(country) && styles.selectedOption
+                  ]}
+                  onPress={() => handleMultiSelectFilter('countries', country)}
+                >
+                  <Text style={[
+                    styles.optionText,
+                    filters.countries.includes(country) && styles.selectedOptionText
+                  ]}>
+                    {country}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          {/* Truck Types Filter */}
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Truck Types</Text>
+            <View style={styles.optionsContainer}>
+              {truckTypes.map((type, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.optionButton,
+                    filters.truckTypes.includes(type) && styles.selectedOption
+                  ]}
+                  onPress={() => handleMultiSelectFilter('truckTypes', type)}
+                >
+                  <Text style={[
+                    styles.optionText,
+                    filters.truckTypes.includes(type) && styles.selectedOptionText
+                  ]}>
+                    {type}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          {/* Fleet Size Filter */}
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Fleet Size</Text>
+            <View style={styles.rangeContainer}>
+              <Text style={styles.rangeLabel}>Min Trucks: {filters.minTrucks}</Text>
+              <Text style={styles.rangeLabel}>Max Trucks: {filters.maxTrucks}</Text>
+            </View>
+          </View>
+
+          {/* Rating Filter */}
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Rating</Text>
+            <View style={styles.rangeContainer}>
+              <Text style={styles.rangeLabel}>Min Rating: {filters.minRating}</Text>
+              <Text style={styles.rangeLabel}>Max Rating: {filters.maxRating}</Text>
+            </View>
+          </View>
+
+          {/* Experience Filter */}
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Experience (Years)</Text>
+            <View style={styles.rangeContainer}>
+              <Text style={styles.rangeLabel}>Min: {filters.minExperience}</Text>
+              <Text style={styles.rangeLabel}>Max: {filters.maxExperience}</Text>
+            </View>
+          </View>
+
+          {/* Availability Filter */}
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Availability</Text>
+            <View style={styles.radioContainer}>
+              {['all', 'available', 'unavailable'].map((option) => (
+                <TouchableOpacity
+                  key={option}
+                  style={[
+                    styles.radioButton,
+                    filters.availability === option && styles.selectedRadio
+                  ]}
+                  onPress={() => handleFilterChange('availability', option)}
+                >
+                  <Text style={[
+                    styles.radioText,
+                    filters.availability === option && styles.selectedRadioText
+                  ]}>
+                    {option.charAt(0).toUpperCase() + option.slice(1)}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          {/* Certifications Filter */}
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Certifications</Text>
+            <View style={styles.optionsContainer}>
+              {certifications.map((cert, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.optionButton,
+                    filters.certifications.includes(cert) && styles.selectedOption
+                  ]}
+                  onPress={() => handleMultiSelectFilter('certifications', cert)}
+                >
+                  <Text style={[
+                    styles.optionText,
+                    filters.certifications.includes(cert) && styles.selectedOptionText
+                  ]}>
+                    {cert}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          {/* Languages Filter */}
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Languages</Text>
+            <View style={styles.optionsContainer}>
+              {languages.map((lang, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.optionButton,
+                    filters.languages.includes(lang) && styles.selectedOption
+                  ]}
+                  onPress={() => handleMultiSelectFilter('languages', lang)}
+                >
+                  <Text style={[
+                    styles.optionText,
+                    filters.languages.includes(lang) && styles.selectedOptionText
+                  ]}>
+                    {lang}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          {/* Special Equipment Filter */}
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Special Equipment</Text>
+            <View style={styles.optionsContainer}>
+              {specialEquipment.map((equipment, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.optionButton,
+                    filters.specialEquipment.includes(equipment) && styles.selectedOption
+                  ]}
+                  onPress={() => handleMultiSelectFilter('specialEquipment', equipment)}
+                >
+                  <Text style={[
+                    styles.optionText,
+                    filters.specialEquipment.includes(equipment) && styles.selectedOptionText
+                  ]}>
+                    {equipment}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </ScrollView>
+
+        <View style={styles.modalFooter}>
+          <TouchableOpacity style={styles.applyButton} onPress={applyFilters}>
+            <Text style={styles.applyButtonText}>Apply Filters</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
 
   const renderMatchItem = ({ item }) => (
     <View style={styles.matchCard}>
@@ -218,7 +575,7 @@ const MatchingScreen = ({ navigation, route }) => {
             {item.haulier.performance.rating}/5 rating
           </Text>
         </View>
-        
+
         <View style={styles.detailRow}>
           <Ionicons name="car" size={16} color={colors.primary} />
           <Text style={styles.detailText}>
@@ -226,19 +583,51 @@ const MatchingScreen = ({ navigation, route }) => {
             {item.haulier.availability.isAvailable ? ' (Available)' : ' (Not Available)'}
           </Text>
         </View>
-        
+
         <View style={styles.detailRow}>
           <Ionicons name="location" size={16} color={colors.success} />
           <Text style={styles.detailText}>
             {item.haulier.operatingRegions.countries.join(', ')}
           </Text>
         </View>
-        
+
         <View style={styles.detailRow}>
           <Ionicons name="cash" size={16} color={colors.primary} />
           <Text style={styles.detailText}>
             {item.haulier.pricing.baseRate} DKK/km
+            {item.haulier.pricing.fuelSurcharge > 0 && ` + ${(item.haulier.pricing.fuelSurcharge * 100)}% fuel surcharge`}
           </Text>
+        </View>
+
+        {item.haulier.pricing.tollIncluded && (
+          <View style={styles.detailRow}>
+            <Ionicons name="checkmark-circle" size={16} color={colors.success} />
+            <Text style={styles.detailText}>Tolls included</Text>
+          </View>
+        )}
+      </View>
+
+      <View style={styles.rateSection}>
+        <Text style={styles.rateTitle}>Rate Information</Text>
+        <View style={styles.rateDetails}>
+          <View style={styles.rateRow}>
+            <Text style={styles.rateLabel}>Base Rate:</Text>
+            <Text style={styles.rateValue}>{item.haulier.pricing.baseRate} DKK/km</Text>
+          </View>
+          {item.haulier.pricing.fuelSurcharge > 0 && (
+            <View style={styles.rateRow}>
+              <Text style={styles.rateLabel}>Fuel Surcharge:</Text>
+              <Text style={styles.rateValue}>+{(item.haulier.pricing.fuelSurcharge * 100)}%</Text>
+            </View>
+          )}
+          <View style={styles.rateRow}>
+            <Text style={styles.rateLabel}>Tolls:</Text>
+            <Text style={styles.rateValue}>{item.haulier.pricing.tollIncluded ? 'Included' : 'Not included'}</Text>
+          </View>
+          <View style={styles.rateRow}>
+            <Text style={styles.rateLabel}>Currency:</Text>
+            <Text style={styles.rateValue}>{item.haulier.pricing.currency}</Text>
+          </View>
         </View>
       </View>
 
@@ -250,14 +639,21 @@ const MatchingScreen = ({ navigation, route }) => {
       </View>
 
       <View style={styles.matchActions}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.actionButton}
           onPress={() => handleViewProfile(item.haulier)}
         >
           <Text style={styles.actionButtonText}>View Profile</Text>
         </TouchableOpacity>
-        
-        <TouchableOpacity 
+
+        <TouchableOpacity
+          style={[styles.actionButton, styles.offerButton]}
+          onPress={() => handleMakeOffer(item.haulier)}
+        >
+          <Text style={[styles.actionButtonText, styles.offerButtonText]}>Make Offer</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           style={[styles.actionButton, styles.primaryButton]}
           onPress={() => handleContactHaulier(item.haulier)}
         >
@@ -272,7 +668,7 @@ const MatchingScreen = ({ navigation, route }) => {
       <Ionicons name="search" size={64} color={colors.mediumGray} />
       <Text style={styles.emptyTitle}>No Matches Found</Text>
       <Text style={styles.emptySubtitle}>
-        Try adjusting your job requirements or search criteria
+        Try adjusting your filters or search criteria
       </Text>
     </View>
   );
@@ -286,9 +682,13 @@ const MatchingScreen = ({ navigation, route }) => {
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
-        
-        <TouchableOpacity style={styles.sortButton}>
+
+        <TouchableOpacity 
+          style={styles.filterButton}
+          onPress={() => setShowFilters(true)}
+        >
           <Ionicons name="funnel" size={20} color={colors.primary} />
+          <Text style={styles.filterButtonText}>Filters</Text>
         </TouchableOpacity>
       </View>
 
@@ -307,6 +707,8 @@ const MatchingScreen = ({ navigation, route }) => {
         ListEmptyComponent={!loading ? renderEmptyState : null}
         showsVerticalScrollIndicator={false}
       />
+
+      {renderFilterModal()}
     </View>
   );
 };
@@ -329,8 +731,18 @@ const styles = StyleSheet.create({
     ...components.input,
     marginRight: spacing[3],
   },
-  sortButton: {
-    padding: spacing[2],
+  filterButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing[3],
+    paddingVertical: spacing[2],
+    backgroundColor: colors.primaryLight,
+    borderRadius: borderRadius.md,
+  },
+  filterButtonText: {
+    ...textStyles.caption,
+    color: colors.primary,
+    marginLeft: spacing[1],
   },
   listContainer: {
     padding: spacing[4],
@@ -394,6 +806,34 @@ const styles = StyleSheet.create({
     ...textStyles.caption,
     marginBottom: spacing[1],
   },
+  rateSection: {
+    backgroundColor: colors.primaryLight,
+    borderRadius: borderRadius.md,
+    padding: spacing[3],
+    marginBottom: spacing[3],
+  },
+  rateTitle: {
+    ...textStyles.h4,
+    color: colors.primary,
+    marginBottom: spacing[2],
+  },
+  rateDetails: {
+    gap: spacing[1],
+  },
+  rateRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  rateLabel: {
+    ...textStyles.caption,
+    color: colors.darkGray,
+  },
+  rateValue: {
+    ...textStyles.caption,
+    fontWeight: typography.weights.bold,
+    color: colors.primary,
+  },
   matchActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -406,11 +846,17 @@ const styles = StyleSheet.create({
   primaryButton: {
     backgroundColor: colors.primary,
   },
+  offerButton: {
+    backgroundColor: colors.warning,
+  },
   actionButtonText: {
     ...textStyles.label,
     color: colors.darkGray,
   },
   primaryButtonText: {
+    color: colors.white,
+  },
+  offerButtonText: {
     color: colors.white,
   },
   emptyState: {
@@ -427,6 +873,109 @@ const styles = StyleSheet.create({
   emptySubtitle: {
     ...textStyles.caption,
     textAlign: 'center',
+  },
+  // Modal styles
+  modalContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: spacing[4],
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderGray,
+  },
+  modalCancel: {
+    ...textStyles.label,
+    color: colors.primary,
+  },
+  modalTitle: {
+    ...textStyles.h3,
+  },
+  modalClear: {
+    ...textStyles.label,
+    color: colors.error,
+  },
+  modalContent: {
+    flex: 1,
+    padding: spacing[4],
+  },
+  filterSection: {
+    marginBottom: spacing[6],
+  },
+  filterTitle: {
+    ...textStyles.h4,
+    marginBottom: spacing[3],
+  },
+  optionsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  optionButton: {
+    paddingHorizontal: spacing[3],
+    paddingVertical: spacing[2],
+    marginRight: spacing[2],
+    marginBottom: spacing[2],
+    borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: colors.borderGray,
+    backgroundColor: colors.white,
+  },
+  selectedOption: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  optionText: {
+    ...textStyles.caption,
+    color: colors.darkGray,
+  },
+  selectedOptionText: {
+    color: colors.white,
+  },
+  rangeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  rangeLabel: {
+    ...textStyles.caption,
+    color: colors.mediumGray,
+  },
+  radioContainer: {
+    flexDirection: 'row',
+  },
+  radioButton: {
+    paddingHorizontal: spacing[3],
+    paddingVertical: spacing[2],
+    marginRight: spacing[2],
+    borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: colors.borderGray,
+    backgroundColor: colors.white,
+  },
+  selectedRadio: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  radioText: {
+    ...textStyles.caption,
+    color: colors.darkGray,
+  },
+  selectedRadioText: {
+    color: colors.white,
+  },
+  modalFooter: {
+    padding: spacing[4],
+    borderTopWidth: 1,
+    borderTopColor: colors.borderGray,
+  },
+  applyButton: {
+    ...components.button.primary,
+  },
+  applyButtonText: {
+    ...textStyles.button,
+    color: colors.white,
   },
 });
 

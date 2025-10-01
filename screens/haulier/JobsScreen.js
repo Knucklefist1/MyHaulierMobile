@@ -12,131 +12,212 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, spacing, borderRadius, shadows, textStyles, components } from '../../styles/designSystem';
 
 const JobsScreen = ({ navigation }) => {
-  const [jobs, setJobs] = useState([]);
+  const [forwarders, setForwarders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    // Mock data for development
-    const mockJobs = [
+    // Mock data for forwarders looking for haulier partnerships
+    const mockForwarders = [
       {
         id: '1',
-        title: 'Transport Electronics from Copenhagen to Aarhus',
-        description: 'Urgent delivery of electronic components. Must be handled with care.',
-        location: 'Copenhagen to Aarhus',
-        budget: 1200,
-        deliveryDate: '2024-01-15',
-        companyName: 'TechCorp Denmark',
-        status: 'active',
-        createdAt: new Date().toISOString(),
-        requirements: ['Valid driver license', 'Experience with fragile goods', 'Insurance coverage']
+        name: 'TechCorp Denmark',
+        description: 'Leading electronics distributor seeking reliable haulier partners for regular routes.',
+        location: 'Copenhagen, Denmark',
+        industry: 'Electronics',
+        partnershipType: 'Regular Routes',
+        companySize: 'Large (500+ employees)',
+        status: 'seeking_partners',
+        forwarderId: 'forwarder-1',
+        createdAt: new Date('2024-01-10T10:00:00Z').toISOString(),
+        requirements: {
+          truckTypes: ['dry_van', 'reefer'],
+          specialEquipment: ['temperature_control'],
+          certifications: ['ADR'],
+          experience: '2+ years',
+          routes: ['Copenhagen-Aarhus', 'Copenhagen-Odense']
+        },
+        partnershipBenefits: [
+          'Regular monthly contracts',
+          'Competitive rates',
+          'Long-term relationship',
+          'Priority booking'
+        ]
       },
       {
         id: '2',
-        title: 'Furniture Delivery - Odense to Aalborg',
-        description: 'Large furniture items need to be transported safely.',
-        location: 'Odense to Aalborg',
-        budget: 800,
-        deliveryDate: '2024-01-18',
-        companyName: 'Nordic Furniture',
-        status: 'active',
-        createdAt: new Date().toISOString(),
-        requirements: ['Large vehicle', 'Furniture handling experience']
+        name: 'Nordic Furniture',
+        description: 'Premium furniture company looking for dedicated haulier partners.',
+        location: 'Odense, Denmark',
+        industry: 'Furniture',
+        partnershipType: 'Dedicated Partnership',
+        companySize: 'Medium (100-500 employees)',
+        status: 'seeking_partners',
+        forwarderId: 'forwarder-2',
+        createdAt: new Date('2024-01-12T14:30:00Z').toISOString(),
+        requirements: {
+          truckTypes: ['dry_van'],
+          specialEquipment: ['furniture_handling'],
+          certifications: [],
+          experience: '1+ years',
+          routes: ['Odense-Hamburg', 'Odense-Berlin']
+        },
+        partnershipBenefits: [
+          'Exclusive partnership opportunity',
+          'Flexible scheduling',
+          'Premium rates',
+          'Growth potential'
+        ]
       },
       {
         id: '3',
-        title: 'Food Products Transport - Esbjerg to Herning',
-        description: 'Temperature-controlled transport of food products.',
-        location: 'Esbjerg to Herning',
-        budget: 600,
-        deliveryDate: '2024-01-20',
-        companyName: 'Fresh Foods A/S',
-        status: 'active',
-        createdAt: new Date().toISOString(),
-        requirements: ['Refrigerated vehicle', 'Food safety certificate']
+        name: 'Scandinavian Logistics',
+        description: 'International logistics company seeking experienced haulier partners.',
+        location: 'Aarhus, Denmark',
+        industry: 'Logistics',
+        partnershipType: 'International Routes',
+        companySize: 'Large (500+ employees)',
+        status: 'seeking_partners',
+        forwarderId: 'forwarder-3',
+        createdAt: new Date('2024-01-14T09:15:00Z').toISOString(),
+        requirements: {
+          truckTypes: ['flatbed', 'dry_van'],
+          specialEquipment: ['crane', 'heavy_lifting'],
+          certifications: ['ADR', 'Heavy_Transport'],
+          experience: '3+ years',
+          routes: ['Aarhus-Stockholm', 'Aarhus-Oslo']
+        },
+        partnershipBenefits: [
+          'International exposure',
+          'High-value contracts',
+          'Professional development',
+          'Stable income'
+        ]
       }
     ];
 
     // Simulate loading delay
     setTimeout(() => {
-      setJobs(mockJobs);
+      setForwarders(mockForwarders);
       setLoading(false);
     }, 1000);
   }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
-    // The real-time listener will automatically update the data
-    setTimeout(() => setRefreshing(false), 1000);
+    // Simulate fetching new data
+    setTimeout(() => {
+      setForwarders(mockForwarders); // In a real app, this would fetch from Firebase
+      setRefreshing(false);
+    }, 1000);
   };
 
-  const renderJobItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.jobCard}
-      onPress={() => navigation.navigate('JobDetails', { job: item })}
-    >
-      <View style={styles.jobHeader}>
-        <Text style={styles.jobTitle}>{item.title}</Text>
-        <View style={styles.jobStatus}>
-          <Text style={styles.statusText}>{item.status}</Text>
-        </View>
-      </View>
-      
-      <Text style={styles.jobDescription} numberOfLines={2}>
-        {item.description}
-      </Text>
-      
-      <View style={styles.jobDetails}>
-        <View style={styles.detailItem}>
-          <Ionicons name="location-outline" size={16} color="#7f8c8d" />
-          <Text style={styles.detailText}>{item.location}</Text>
-        </View>
-        
-        <View style={styles.detailItem}>
-          <Ionicons name="cash-outline" size={16} color="#7f8c8d" />
-          <Text style={styles.detailText}>${item.budget}</Text>
-        </View>
-        
-        <View style={styles.detailItem}>
-          <Ionicons name="time-outline" size={16} color="#7f8c8d" />
-          <Text style={styles.detailText}>{item.deliveryDate}</Text>
-        </View>
-      </View>
-      
-      <View style={styles.jobFooter}>
-        <Text style={styles.companyName}>{item.companyName}</Text>
-        <Text style={styles.postedDate}>
-          Posted {item.createdAt ? 
-            new Date(item.createdAt).toLocaleDateString() : 
-            'Recently'
+  const handleConnectWithForwarder = (forwarder) => {
+    Alert.alert(
+      'Connect with Forwarder',
+      `Are you interested in partnering with "${forwarder.name}"?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Connect',
+          onPress: () => {
+            // In a real app, this would initiate a connection request
+            Alert.alert('Success', 'Connection request sent! The forwarder will review your profile.');
           }
-        </Text>
+        }
+      ]
+    );
+  };
+
+  const renderForwarderItem = ({ item }) => (
+    <TouchableOpacity style={styles.forwarderCard} onPress={() => handleConnectWithForwarder(item)}>
+      <View style={styles.forwarderHeader}>
+        <Text style={styles.forwarderName}>{item.name}</Text>
+        <View style={[styles.statusBadge, styles[item.status]]}>
+          <Text style={styles.statusText}>Seeking Partners</Text>
+        </View>
       </View>
+      
+      <Text style={styles.industry}>{item.industry}</Text>
+      <Text style={styles.forwarderLocation}>{item.location}</Text>
+      <Text style={styles.forwarderDescription} numberOfLines={2}>{item.description}</Text>
+      
+      <View style={styles.forwarderDetails}>
+        <View style={styles.detailItem}>
+          <Ionicons name="business-outline" size={16} color={colors.primary} />
+          <Text style={styles.detailText}>{item.companySize}</Text>
+        </View>
+        <View style={styles.detailItem}>
+          <Ionicons name="handshake-outline" size={16} color={colors.primary} />
+          <Text style={styles.detailText}>{item.partnershipType}</Text>
+        </View>
+      </View>
+
+      <View style={styles.requirementsContainer}>
+        <Text style={styles.requirementsTitle}>Partnership Requirements:</Text>
+        <View style={styles.requirementsList}>
+          <Text style={styles.requirementItem}>• Truck Types: {item.requirements.truckTypes.join(', ')}</Text>
+          {item.requirements.specialEquipment.length > 0 && (
+            <Text style={styles.requirementItem}>• Equipment: {item.requirements.specialEquipment.join(', ')}</Text>
+          )}
+          {item.requirements.certifications.length > 0 && (
+            <Text style={styles.requirementItem}>• Certifications: {item.requirements.certifications.join(', ')}</Text>
+          )}
+          <Text style={styles.requirementItem}>• Experience: {item.requirements.experience}</Text>
+        </View>
+      </View>
+
+      <View style={styles.benefitsContainer}>
+        <Text style={styles.benefitsTitle}>Partnership Benefits:</Text>
+        <View style={styles.benefitsList}>
+          {item.partnershipBenefits.map((benefit, index) => (
+            <Text key={index} style={styles.benefitItem}>• {benefit}</Text>
+          ))}
+        </View>
+      </View>
+
+      <TouchableOpacity style={styles.connectButton}>
+        <Text style={styles.connectButtonText}>Connect & Partner</Text>
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 
-  const renderEmptyState = () => (
-    <View style={styles.emptyState}>
-      <Ionicons name="briefcase-outline" size={64} color="#bdc3c7" />
-      <Text style={styles.emptyTitle}>No Jobs Available</Text>
-      <Text style={styles.emptySubtitle}>
-        Check back later for new transport opportunities
-      </Text>
-    </View>
-  );
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Finding Forwarder Partners...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Find Forwarder Partners</Text>
+        <Text style={styles.headerSubtitle}>Connect with freight forwarders for long-term partnerships</Text>
+      </View>
+      
       <FlatList
-        data={jobs}
-        renderItem={renderJobItem}
+        data={forwarders}
+        renderItem={renderForwarderItem}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[colors.primary]}
+          />
         }
-        ListEmptyComponent={renderEmptyState}
-        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <View style={styles.emptyState}>
+            <Ionicons name="business-outline" size={64} color={colors.mediumGray} />
+            <Text style={styles.emptyTitle}>No Forwarders Available</Text>
+            <Text style={styles.emptySubtitle}>
+              Check back later for new partnership opportunities.
+            </Text>
+          </View>
+        }
       />
     </View>
   );
@@ -147,70 +228,127 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.lightGray,
   },
+  header: {
+    padding: spacing[4],
+    backgroundColor: colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderGray,
+  },
+  headerTitle: {
+    ...textStyles.h2,
+    color: colors.textBlack,
+    marginBottom: spacing[1],
+  },
+  headerSubtitle: {
+    ...textStyles.caption,
+    color: colors.mediumGray,
+  },
   listContainer: {
     padding: spacing[4],
-    flexGrow: 1,
   },
-  jobCard: {
+  forwarderCard: {
     ...components.card,
-    marginBottom: spacing[3],
+    marginBottom: spacing[4],
   },
-  jobHeader: {
+  forwarderHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginBottom: spacing[2],
   },
-  jobTitle: {
+  forwarderName: {
     ...textStyles.h3,
     flex: 1,
     marginRight: spacing[2],
   },
-  jobStatus: {
-    backgroundColor: colors.successLight,
+  statusBadge: {
     paddingHorizontal: spacing[2],
     paddingVertical: spacing[1],
-    borderRadius: borderRadius.xl,
+    borderRadius: borderRadius.sm,
   },
   statusText: {
-    fontSize: typography.sizes.xs,
-    color: colors.success,
-    fontWeight: typography.weights.semibold,
-  },
-  jobDescription: {
     ...textStyles.caption,
+    color: colors.white,
+    textTransform: 'capitalize',
+  },
+  seeking_partners: {
+    backgroundColor: colors.success,
+  },
+  industry: {
+    ...textStyles.label,
+    color: colors.primary,
+    marginBottom: spacing[1],
+  },
+  forwarderLocation: {
+    ...textStyles.body,
+    color: colors.darkGray,
+    marginBottom: spacing[2],
+  },
+  forwarderDescription: {
+    ...textStyles.caption,
+    color: colors.mediumGray,
     marginBottom: spacing[3],
   },
-  jobDetails: {
+  forwarderDetails: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     marginBottom: spacing[3],
   },
   detailItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: spacing[4],
-    marginBottom: spacing[1],
+    flex: 1,
   },
   detailText: {
     ...textStyles.caption,
     marginLeft: spacing[1],
   },
-  jobFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: spacing[2],
-    borderTopWidth: 1,
-    borderTopColor: colors.borderGray,
+  requirementsContainer: {
+    marginBottom: spacing[3],
   },
-  companyName: {
-    fontSize: typography.sizes.sm,
-    fontWeight: typography.weights.semibold,
-    color: colors.darkGray,
+  requirementsTitle: {
+    ...textStyles.label,
+    marginBottom: spacing[1],
   },
-  postedDate: {
+  requirementsList: {
+    marginLeft: spacing[2],
+  },
+  requirementItem: {
     ...textStyles.caption,
+    marginBottom: spacing[1],
+  },
+  benefitsContainer: {
+    marginBottom: spacing[3],
+  },
+  benefitsTitle: {
+    ...textStyles.label,
+    marginBottom: spacing[1],
+  },
+  benefitsList: {
+    marginLeft: spacing[2],
+  },
+  benefitItem: {
+    ...textStyles.caption,
+    color: colors.success,
+    marginBottom: spacing[1],
+  },
+  connectButton: {
+    ...components.button.primary,
+    marginTop: spacing[2],
+  },
+  connectButtonText: {
+    ...textStyles.button,
+    color: colors.white,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.lightGray,
+  },
+  loadingText: {
+    ...textStyles.h3,
+    color: colors.mediumGray,
   },
   emptyState: {
     flex: 1,
