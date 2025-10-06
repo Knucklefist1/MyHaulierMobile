@@ -34,9 +34,14 @@ const JobsScreen = ({ navigation }) => {
           truckTypes: ['dry_van', 'reefer'],
           specialEquipment: ['temperature_control'],
           certifications: ['ADR'],
-          experience: '2+ years',
-          routes: ['Copenhagen-Aarhus', 'Copenhagen-Odense']
+          experience: '2+ years'
         },
+        trucksNeeded: {
+          types: ['Dry Van', 'Reefer'],
+          quantity: '5-8 trucks',
+          specialRequirements: ['Temperature Control', 'GPS Tracking', 'Security Features']
+        },
+        operatingCountries: ['Denmark', 'Sweden', 'Norway', 'Germany'],
         partnershipBenefits: [
           'Regular monthly contracts',
           'Competitive rates',
@@ -59,9 +64,14 @@ const JobsScreen = ({ navigation }) => {
           truckTypes: ['dry_van'],
           specialEquipment: ['furniture_handling'],
           certifications: [],
-          experience: '1+ years',
-          routes: ['Odense-Hamburg', 'Odense-Berlin']
+          experience: '1+ years'
         },
+        trucksNeeded: {
+          types: ['Dry Van'],
+          quantity: '3-5 trucks',
+          specialRequirements: ['Furniture Handling Equipment', 'Careful Loading Systems']
+        },
+        operatingCountries: ['Denmark', 'Germany', 'Netherlands', 'Belgium'],
         partnershipBenefits: [
           'Exclusive partnership opportunity',
           'Flexible scheduling',
@@ -84,9 +94,14 @@ const JobsScreen = ({ navigation }) => {
           truckTypes: ['flatbed', 'dry_van'],
           specialEquipment: ['crane', 'heavy_lifting'],
           certifications: ['ADR', 'Heavy_Transport'],
-          experience: '3+ years',
-          routes: ['Aarhus-Stockholm', 'Aarhus-Oslo']
+          experience: '3+ years'
         },
+        trucksNeeded: {
+          types: ['Flatbed', 'Dry Van', 'Low Loader'],
+          quantity: '10-15 trucks',
+          specialRequirements: ['Crane Equipment', 'Heavy Lifting', 'International Permits']
+        },
+        operatingCountries: ['Denmark', 'Sweden', 'Norway', 'Germany', 'Poland', 'Netherlands'],
         partnershipBenefits: [
           'International exposure',
           'High-value contracts',
@@ -153,6 +168,47 @@ const JobsScreen = ({ navigation }) => {
         </View>
       </View>
 
+      <View style={styles.trucksNeededContainer}>
+        <Text style={styles.sectionTitle}>Trucks Needed:</Text>
+        <View style={styles.trucksInfo}>
+          <View style={styles.truckTypesContainer}>
+            <Text style={styles.truckTypesLabel}>Types:</Text>
+            <View style={styles.truckTypesList}>
+              {item.trucksNeeded.types.map((type, index) => (
+                <View key={index} style={styles.truckTypeTag}>
+                  <Text style={styles.truckTypeText}>{type}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+          <View style={styles.quantityContainer}>
+            <Text style={styles.quantityLabel}>Quantity:</Text>
+            <Text style={styles.quantityValue}>{item.trucksNeeded.quantity}</Text>
+          </View>
+        </View>
+        {item.trucksNeeded.specialRequirements.length > 0 && (
+          <View style={styles.specialRequirementsContainer}>
+            <Text style={styles.specialRequirementsLabel}>Special Requirements:</Text>
+            <View style={styles.specialRequirementsList}>
+              {item.trucksNeeded.specialRequirements.map((req, index) => (
+                <Text key={index} style={styles.specialRequirementItem}>• {req}</Text>
+              ))}
+            </View>
+          </View>
+        )}
+      </View>
+
+      <View style={styles.operatingCountriesContainer}>
+        <Text style={styles.sectionTitle}>Operating Countries Needed:</Text>
+        <View style={styles.countriesList}>
+          {item.operatingCountries.map((country, index) => (
+            <View key={index} style={styles.countryTag}>
+              <Text style={styles.countryText}>{country}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
       <View style={styles.requirementsContainer}>
         <Text style={styles.requirementsTitle}>Partnership Requirements:</Text>
         <View style={styles.requirementsList}>
@@ -194,7 +250,7 @@ const JobsScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Find Forwarder Partners</Text>
-        <Text style={styles.headerSubtitle}>Connect with freight forwarders for long-term partnerships</Text>
+        <Text style={styles.headerSubtitle}>See what trucks and countries forwarders need for partnerships</Text>
       </View>
       
       <FlatList
@@ -364,6 +420,86 @@ const styles = StyleSheet.create({
   emptySubtitle: {
     ...textStyles.caption,
     textAlign: 'center',
+  },
+  trucksNeededContainer: {
+    marginBottom: spacing[3],
+  },
+  trucksInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: spacing[2],
+  },
+  truckTypesContainer: {
+    flex: 1,
+    marginRight: spacing[3],
+  },
+  truckTypesLabel: {
+    ...textStyles.label,
+    marginBottom: spacing[1],
+  },
+  truckTypesList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  truckTypeTag: {
+    backgroundColor: colors.primaryLight,
+    paddingHorizontal: spacing[2],
+    paddingVertical: spacing[1],
+    borderRadius: borderRadius.sm,
+    marginRight: spacing[1],
+    marginBottom: spacing[1],
+  },
+  truckTypeText: {
+    ...textStyles.caption,
+    color: colors.primary,
+    fontWeight: typography.weights.medium,
+  },
+  quantityContainer: {
+    alignItems: 'flex-end',
+  },
+  quantityLabel: {
+    ...textStyles.label,
+    marginBottom: spacing[1],
+  },
+  quantityValue: {
+    ...textStyles.h4,
+    color: colors.primary,
+    fontWeight: typography.weights.bold,
+  },
+  specialRequirementsContainer: {
+    marginTop: spacing[2],
+  },
+  specialRequirementsLabel: {
+    ...textStyles.label,
+    marginBottom: spacing[1],
+  },
+  specialRequirementsList: {
+    marginLeft: spacing[2],
+  },
+  specialRequirementItem: {
+    ...textStyles.caption,
+    color: colors.warning,
+    marginBottom: spacing[1],
+  },
+  operatingCountriesContainer: {
+    marginBottom: spacing[3],
+  },
+  countriesList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  countryTag: {
+    backgroundColor: colors.successLight,
+    paddingHorizontal: spacing[2],
+    paddingVertical: spacing[1],
+    borderRadius: borderRadius.sm,
+    marginRight: spacing[2],
+    marginBottom: spacing[1],
+  },
+  countryText: {
+    ...textStyles.caption,
+    color: colors.success,
+    fontWeight: typography.weights.medium,
   },
 });
 

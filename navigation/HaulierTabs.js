@@ -10,9 +10,9 @@ import OffersScreen from '../screens/haulier/OffersScreen';
 import AvailabilityScreen from '../screens/haulier/AvailabilityScreen';
 import ChatListScreen from '../screens/shared/ChatListScreen';
 import ProfileScreen from '../screens/shared/ProfileScreen';
-import JobDetailsScreen from '../screens/haulier/JobDetailsScreen';
 import OfferDetailsScreen from '../screens/haulier/OfferDetailsScreen';
 import ChatScreen from '../screens/shared/ChatScreen';
+import MapScreen from '../screens/shared/MapScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -22,12 +22,7 @@ const JobsStack = () => (
     <Stack.Screen 
       name="JobsList" 
       component={JobsScreen}
-      options={{ title: 'Available Jobs' }}
-    />
-    <Stack.Screen 
-      name="JobDetails" 
-      component={JobDetailsScreen}
-      options={{ title: 'Job Details' }}
+      options={{ title: 'Find Partners' }}
     />
   </Stack.Navigator>
 );
@@ -47,7 +42,7 @@ const OffersStack = () => (
     <Stack.Screen 
       name="OffersList" 
       component={OffersScreen}
-      options={{ title: 'Partnership Offers' }}
+      options={{ title: 'Partnership Opportunities' }}
     />
     <Stack.Screen 
       name="OfferDetails" 
@@ -92,6 +87,16 @@ const AvailabilityStack = () => (
   </Stack.Navigator>
 );
 
+const MapStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="MapMain" 
+      component={MapScreen}
+      options={{ title: 'Partnership Map' }}
+    />
+  </Stack.Navigator>
+);
+
 const HaulierTabs = () => {
   return (
     <Tab.Navigator
@@ -101,6 +106,8 @@ const HaulierTabs = () => {
 
           if (route.name === 'Find') {
             iconName = focused ? 'search' : 'search-outline';
+          } else if (route.name === 'Map') {
+            iconName = focused ? 'map' : 'map-outline';
           } else if (route.name === 'Connections') {
             iconName = focused ? 'handshake' : 'handshake-outline';
           } else if (route.name === 'Offers') {
@@ -121,6 +128,7 @@ const HaulierTabs = () => {
       })}
     >
       <Tab.Screen name="Find" component={JobsStack} />
+      <Tab.Screen name="Map" component={MapStack} />
       <Tab.Screen name="Connections" component={ApplicationsStack} />
       <Tab.Screen name="Offers" component={OffersStack} />
       <Tab.Screen name="Availability" component={AvailabilityStack} />

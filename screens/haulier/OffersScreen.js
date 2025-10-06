@@ -41,6 +41,7 @@ const OffersScreen = ({ navigation }) => {
           contractDuration: 12,
           message: 'We are looking for a reliable haulier for our electronics distribution network. We need temperature-controlled transport and high security standards.',
           specialConditions: 'Must have ADR certification and GPS tracking on all vehicles.',
+          operatingCountries: ['Denmark', 'Sweden', 'Norway'],
           status: 'pending', // 'pending', 'accepted', 'rejected', 'expired'
           createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
           expiresAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days from now
@@ -57,8 +58,9 @@ const OffersScreen = ({ navigation }) => {
           minimumCharge: 400,
           paymentTerms: 'net_15',
           contractDuration: 24,
-          message: 'We need a dedicated haulier for furniture deliveries across the Nordic region. Looking for someone with experience in furniture handling.',
+          message: 'We need a dedicated haulier for furniture deliveries. Looking for someone with experience in furniture handling and specialized equipment.',
           specialConditions: 'Must have furniture handling equipment and proof of delivery system.',
+          operatingCountries: ['Denmark', 'Germany', 'Netherlands'],
           status: 'pending',
           createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
           expiresAt: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString(), // 6 days from now
@@ -77,6 +79,7 @@ const OffersScreen = ({ navigation }) => {
           contractDuration: 18,
           message: 'Daily temperature-controlled transport of fresh produce. We need a haulier with HACCP certification and reliable cold chain management.',
           specialConditions: 'HACCP certification required. Daily availability needed. Temperature monitoring system required.',
+          operatingCountries: ['Denmark', 'Sweden', 'Norway', 'Germany', 'Poland'],
           status: 'accepted',
           createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
           expiresAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), // expired
@@ -198,6 +201,12 @@ const OffersScreen = ({ navigation }) => {
             Expires: {new Date(item.expiresAt).toLocaleDateString()}
           </Text>
         </View>
+        <View style={styles.detailRow}>
+          <Ionicons name="globe" size={16} color={colors.mediumGray} />
+          <Text style={styles.detailText}>
+            Countries: {item.operatingCountries.join(', ')}
+          </Text>
+        </View>
       </View>
 
       {item.status === 'pending' && (
@@ -224,7 +233,7 @@ const OffersScreen = ({ navigation }) => {
       <Ionicons name="document-text-outline" size={64} color={colors.mediumGray} />
       <Text style={styles.emptyTitle}>No Partnership Offers</Text>
       <Text style={styles.emptySubtitle}>
-        Partnership offers from forwarders will appear here
+        Partnership opportunities from forwarders will appear here
       </Text>
     </View>
   );

@@ -24,9 +24,9 @@ const ApplicationsScreen = ({ navigation }) => {
         forwarderName: 'TechCorp Denmark',
         forwarderCompany: 'TechCorp Denmark A/S',
         industry: 'Electronics',
-        partnershipType: 'Regular Routes',
+        partnershipType: 'Long-term Partnership',
         status: 'pending',
-        message: 'We are interested in establishing a long-term partnership for our regular Copenhagen-Aarhus route.',
+        message: 'We are interested in establishing a long-term partnership for our electronics transport needs.',
         createdAt: new Date('2024-01-15T10:00:00Z').toISOString(),
         forwarderId: 'forwarder-1',
         partnershipBenefits: [
@@ -34,7 +34,10 @@ const ApplicationsScreen = ({ navigation }) => {
           'Competitive rates',
           'Priority booking',
           'Long-term contract'
-        ]
+        ],
+        operatingCountries: ['Denmark', 'Sweden', 'Norway'],
+        currentRate: 8.5,
+        currency: 'DKK'
       },
       {
         id: '2',
@@ -51,19 +54,25 @@ const ApplicationsScreen = ({ navigation }) => {
           'Flexible scheduling',
           'Premium rates',
           'Growth opportunities'
-        ]
+        ],
+        operatingCountries: ['Denmark', 'Germany', 'Netherlands'],
+        currentRate: 7.2,
+        currency: 'DKK'
       },
       {
         id: '3',
         forwarderName: 'Scandinavian Logistics',
         forwarderCompany: 'Scandinavian Logistics AB',
         industry: 'Logistics',
-        partnershipType: 'International Routes',
+        partnershipType: 'International Partnership',
         status: 'rejected',
-        message: 'Thank you for your interest. We have decided to work with another partner for this route.',
+        message: 'Thank you for your interest. We have decided to work with another partner for our international transport needs.',
         createdAt: new Date('2024-01-10T09:15:00Z').toISOString(),
         forwarderId: 'forwarder-3',
-        partnershipBenefits: []
+        partnershipBenefits: [],
+        operatingCountries: ['Denmark', 'Sweden', 'Norway', 'Germany', 'Poland'],
+        currentRate: 9.0,
+        currency: 'DKK'
       }
     ];
 
@@ -159,6 +168,24 @@ const ApplicationsScreen = ({ navigation }) => {
         </View>
       )}
 
+      <View style={styles.countriesContainer}>
+        <Text style={styles.countriesLabel}>Operating Countries:</Text>
+        <View style={styles.countriesList}>
+          {item.operatingCountries.map((country, index) => (
+            <View key={index} style={styles.countryTag}>
+              <Text style={styles.countryText}>{country}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+      
+      <View style={styles.rateContainer}>
+        <Text style={styles.rateLabel}>Current Rate:</Text>
+        <Text style={styles.rateValue}>
+          {item.currentRate} {item.currency}/km
+        </Text>
+      </View>
+
       <View style={styles.actionsContainer}>
         <TouchableOpacity
           style={styles.actionButton}
@@ -191,7 +218,7 @@ const ApplicationsScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Partnership Connections</Text>
-        <Text style={styles.headerSubtitle}>Manage your forwarder partnerships and connection requests</Text>
+        <Text style={styles.headerSubtitle}>Manage your forwarder connections and partnership opportunities</Text>
       </View>
       
       <FlatList
@@ -211,7 +238,7 @@ const ApplicationsScreen = ({ navigation }) => {
             <Ionicons name="handshake-outline" size={64} color={colors.mediumGray} />
             <Text style={styles.emptyTitle}>No Connections Yet</Text>
             <Text style={styles.emptySubtitle}>
-              Start connecting with forwarders to build your partnership network.
+              Start connecting with forwarders to build your transport partnership network.
             </Text>
           </View>
         }
@@ -358,6 +385,48 @@ const styles = StyleSheet.create({
   emptySubtitle: {
     ...textStyles.caption,
     textAlign: 'center',
+  },
+  countriesContainer: {
+    marginTop: spacing[3],
+  },
+  countriesLabel: {
+    ...textStyles.label,
+    marginBottom: spacing[2],
+  },
+  countriesList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  countryTag: {
+    backgroundColor: colors.successLight,
+    paddingHorizontal: spacing[2],
+    paddingVertical: spacing[1],
+    borderRadius: borderRadius.sm,
+    marginRight: spacing[2],
+    marginBottom: spacing[1],
+  },
+  countryText: {
+    ...textStyles.caption,
+    color: colors.success,
+    fontWeight: typography.weights.medium,
+  },
+  rateContainer: {
+    marginTop: spacing[3],
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: colors.primaryLight,
+    padding: spacing[3],
+    borderRadius: borderRadius.md,
+  },
+  rateLabel: {
+    ...textStyles.label,
+    color: colors.darkGray,
+  },
+  rateValue: {
+    ...textStyles.h4,
+    color: colors.primary,
+    fontWeight: typography.weights.bold,
   },
 });
 

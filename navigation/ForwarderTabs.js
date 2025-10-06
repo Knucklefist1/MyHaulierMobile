@@ -11,10 +11,10 @@ import MatchingScreen from '../screens/forwarder/MatchingScreen';
 import CreateOfferScreen from '../screens/forwarder/CreateOfferScreen';
 import ChatListScreen from '../screens/shared/ChatListScreen';
 import ProfileScreen from '../screens/shared/ProfileScreen';
-import JobDetailsScreen from '../screens/forwarder/JobDetailsScreen';
 import ChatScreen from '../screens/shared/ChatScreen';
 import AnalyticsScreen from '../screens/forwarder/AnalyticsScreen';
 import HaulierProfileScreen from '../screens/shared/HaulierProfileScreen';
+import MapScreen from '../screens/shared/MapScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -24,17 +24,12 @@ const JobsStack = () => (
     <Stack.Screen 
       name="MyJobsList" 
       component={MyJobsScreen}
-      options={{ title: 'My Jobs' }}
-    />
-    <Stack.Screen 
-      name="JobDetails" 
-      component={JobDetailsScreen}
-      options={{ title: 'Job Details' }}
+      options={{ title: 'My Partnerships' }}
     />
     <Stack.Screen 
       name="PostJob" 
       component={PostJobScreen}
-      options={{ title: 'Post New Job' }}
+      options={{ title: 'Post Partnership Opportunity' }}
     />
   </Stack.Navigator>
 );
@@ -79,7 +74,7 @@ const PostStack = () => (
     <Stack.Screen 
       name="PostJob" 
       component={PostJobScreen}
-      options={{ title: 'Post New Job' }}
+      options={{ title: 'Post Partnership Opportunity' }}
     />
   </Stack.Navigator>
 );
@@ -109,7 +104,7 @@ const FindStack = () => (
     <Stack.Screen 
       name="CreateOffer" 
       component={CreateOfferScreen}
-      options={{ title: 'Create Partnership Offer' }}
+      options={{ title: 'Create Partnership Opportunity' }}
     />
   </Stack.Navigator>
 );
@@ -120,6 +115,16 @@ const ProfileStack = () => (
       name="ProfileMain" 
       component={ProfileScreen}
       options={{ title: 'Profile' }}
+    />
+  </Stack.Navigator>
+);
+
+const MapStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="MapMain" 
+      component={MapScreen}
+      options={{ title: 'Partnership Map' }}
     />
   </Stack.Navigator>
 );
@@ -135,6 +140,8 @@ const ForwarderTabs = () => {
             iconName = focused ? 'handshake' : 'handshake-outline';
           } else if (route.name === 'Find') {
             iconName = focused ? 'search' : 'search-outline';
+          } else if (route.name === 'Map') {
+            iconName = focused ? 'map' : 'map-outline';
           } else if (route.name === 'Post') {
             iconName = focused ? 'add-circle' : 'add-circle-outline';
           } else if (route.name === 'Analytics') {
@@ -154,6 +161,7 @@ const ForwarderTabs = () => {
     >
       <Tab.Screen name="Partnerships" component={JobsStack} />
       <Tab.Screen name="Find" component={FindStack} />
+      <Tab.Screen name="Map" component={MapStack} />
       <Tab.Screen name="Post" component={PostStack} />
       <Tab.Screen name="Analytics" component={AnalyticsStack} />
       <Tab.Screen name="Chat" component={ChatStack} />

@@ -24,17 +24,21 @@ const MyJobsScreen = ({ navigation }) => {
         haulierName: 'Lars Andersen',
         haulierCompany: 'Nordic Transport A/S',
         industry: 'Electronics',
-        partnershipType: 'Regular Routes',
+        partnershipType: 'Long-term Partnership',
         status: 'active',
-        message: 'Partnership established for Copenhagen-Aarhus route. Excellent service and reliability.',
+        message: 'Partnership established for electronics transport. Excellent service and reliability.',
         createdAt: new Date('2024-01-10T10:00:00Z').toISOString(),
         haulierId: 'haulier-1',
         partnershipDetails: {
-          routes: ['Copenhagen-Aarhus', 'Copenhagen-Odense'],
-          frequency: 'Weekly',
+          contractType: 'Long-term',
+          frequency: 'Regular',
           volume: 'High',
           reliability: '98%',
-          rating: 4.8
+          rating: 4.8,
+          specialties: ['Electronics', 'Temperature Control', 'Security'],
+          countries: ['Denmark', 'Sweden', 'Norway'],
+          currentRate: 8.5,
+          currency: 'DKK'
         }
       },
       {
@@ -48,11 +52,15 @@ const MyJobsScreen = ({ navigation }) => {
         createdAt: new Date('2024-01-08T14:30:00Z').toISOString(),
         haulierId: 'haulier-2',
         partnershipDetails: {
-          routes: ['Odense-Hamburg', 'Odense-Berlin'],
-          frequency: 'Bi-weekly',
+          contractType: 'Dedicated',
+          frequency: 'Regular',
           volume: 'Medium',
           reliability: '95%',
-          rating: 4.6
+          rating: 4.6,
+          specialties: ['Furniture', 'Specialized Equipment', 'Careful Handling'],
+          countries: ['Denmark', 'Germany', 'Netherlands'],
+          currentRate: 7.2,
+          currency: 'DKK'
         }
       },
       {
@@ -60,17 +68,21 @@ const MyJobsScreen = ({ navigation }) => {
         haulierName: 'Mads Jensen',
         haulierCompany: 'Global Freight',
         industry: 'Logistics',
-        partnershipType: 'International Routes',
+        partnershipType: 'International Partnership',
         status: 'pending',
-        message: 'Partnership request under review for international routes.',
+        message: 'Partnership request under review for international transport capabilities.',
         createdAt: new Date('2024-01-12T09:15:00Z').toISOString(),
         haulierId: 'haulier-3',
         partnershipDetails: {
-          routes: ['Aarhus-Stockholm', 'Aarhus-Oslo'],
-          frequency: 'Monthly',
+          contractType: 'International',
+          frequency: 'On-demand',
           volume: 'High',
           reliability: 'TBD',
-          rating: 4.9
+          rating: 4.9,
+          specialties: ['International', 'Cross-border', 'Customs'],
+          countries: ['Denmark', 'Sweden', 'Norway', 'Germany', 'Poland'],
+          currentRate: 9.0,
+          currency: 'DKK'
         }
       }
     ];
@@ -185,8 +197,8 @@ const MyJobsScreen = ({ navigation }) => {
         <Text style={styles.detailsTitle}>Partnership Details:</Text>
         <View style={styles.detailsGrid}>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>Routes:</Text>
-            <Text style={styles.detailValue}>{item.partnershipDetails.routes.join(', ')}</Text>
+            <Text style={styles.detailLabel}>Contract Type:</Text>
+            <Text style={styles.detailValue}>{item.partnershipDetails.contractType}</Text>
           </View>
           <View style={styles.detailItem}>
             <Text style={styles.detailLabel}>Frequency:</Text>
@@ -204,6 +216,34 @@ const MyJobsScreen = ({ navigation }) => {
             <Text style={styles.detailLabel}>Rating:</Text>
             <Text style={styles.detailValue}>{item.partnershipDetails.rating}/5</Text>
           </View>
+        </View>
+        <View style={styles.specialtiesContainer}>
+          <Text style={styles.specialtiesLabel}>Specialties:</Text>
+          <View style={styles.specialtiesList}>
+            {item.partnershipDetails.specialties.map((specialty, index) => (
+              <View key={index} style={styles.specialtyTag}>
+                <Text style={styles.specialtyText}>{specialty}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+        
+        <View style={styles.countriesContainer}>
+          <Text style={styles.countriesLabel}>Operating Countries:</Text>
+          <View style={styles.countriesList}>
+            {item.partnershipDetails.countries.map((country, index) => (
+              <View key={index} style={styles.countryTag}>
+                <Text style={styles.countryText}>{country}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+        
+        <View style={styles.rateContainer}>
+          <Text style={styles.rateLabel}>Current Rate:</Text>
+          <Text style={styles.rateValue}>
+            {item.partnershipDetails.currentRate} {item.partnershipDetails.currency}/km
+          </Text>
         </View>
       </View>
 
@@ -239,7 +279,7 @@ const MyJobsScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Haulier Partnerships</Text>
-        <Text style={styles.headerSubtitle}>Manage your haulier partnerships and connections</Text>
+        <Text style={styles.headerSubtitle}>Manage your haulier connections and established partnerships</Text>
         <TouchableOpacity
           style={styles.findButton}
           onPress={() => navigation.navigate('Find')}
@@ -266,7 +306,7 @@ const MyJobsScreen = ({ navigation }) => {
             <Ionicons name="handshake-outline" size={64} color={colors.mediumGray} />
             <Text style={styles.emptyTitle}>No Partnerships Yet</Text>
             <Text style={styles.emptySubtitle}>
-              Start building your haulier network by finding and connecting with reliable partners.
+              Start building your haulier network by finding and connecting with reliable transport partners.
             </Text>
             <TouchableOpacity
               style={components.button.primary}
@@ -444,6 +484,72 @@ const styles = StyleSheet.create({
     ...textStyles.caption,
     textAlign: 'center',
     marginBottom: spacing[4],
+  },
+  specialtiesContainer: {
+    marginTop: spacing[3],
+  },
+  specialtiesLabel: {
+    ...textStyles.label,
+    marginBottom: spacing[2],
+  },
+  specialtiesList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  specialtyTag: {
+    backgroundColor: colors.primaryLight,
+    paddingHorizontal: spacing[2],
+    paddingVertical: spacing[1],
+    borderRadius: borderRadius.sm,
+    marginRight: spacing[2],
+    marginBottom: spacing[1],
+  },
+  specialtyText: {
+    ...textStyles.caption,
+    color: colors.primary,
+    fontWeight: typography.weights.medium,
+  },
+  countriesContainer: {
+    marginTop: spacing[3],
+  },
+  countriesLabel: {
+    ...textStyles.label,
+    marginBottom: spacing[2],
+  },
+  countriesList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  countryTag: {
+    backgroundColor: colors.successLight,
+    paddingHorizontal: spacing[2],
+    paddingVertical: spacing[1],
+    borderRadius: borderRadius.sm,
+    marginRight: spacing[2],
+    marginBottom: spacing[1],
+  },
+  countryText: {
+    ...textStyles.caption,
+    color: colors.success,
+    fontWeight: typography.weights.medium,
+  },
+  rateContainer: {
+    marginTop: spacing[3],
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: colors.primaryLight,
+    padding: spacing[3],
+    borderRadius: borderRadius.md,
+  },
+  rateLabel: {
+    ...textStyles.label,
+    color: colors.darkGray,
+  },
+  rateValue: {
+    ...textStyles.h4,
+    color: colors.primary,
+    fontWeight: typography.weights.bold,
   },
 });
 
