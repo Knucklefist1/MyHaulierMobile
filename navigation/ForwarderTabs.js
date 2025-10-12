@@ -15,6 +15,9 @@ import ChatScreen from '../screens/shared/ChatScreen';
 import AnalyticsScreen from '../screens/forwarder/AnalyticsScreen';
 import HaulierProfileScreen from '../screens/shared/HaulierProfileScreen';
 import MapScreen from '../screens/shared/MapScreen';
+// NEW FEATURE: Added for Assignment 2 - New screens for better user experience
+import SettingsScreen from '../screens/shared/SettingsScreen';
+import NotificationsScreen from '../screens/shared/NotificationsScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -115,6 +118,17 @@ const ProfileStack = () => (
       name="ProfileMain" 
       component={ProfileScreen}
       options={{ title: 'Profile' }}
+    />
+    {/* NEW FEATURE: Added for Assignment 2 - New screens accessible from Profile */}
+    <Stack.Screen 
+      name="Settings" 
+      component={SettingsScreen}
+      options={{ title: 'Settings' }}
+    />
+    <Stack.Screen 
+      name="Notifications" 
+      component={NotificationsScreen}
+      options={{ title: 'Notifications' }}
     />
   </Stack.Navigator>
 );

@@ -10,15 +10,29 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, spacing, borderRadius, shadows, textStyles, components } from '../../styles/designSystem';
+// NEW FEATURE: Added for Assignment 2 - AsyncStorage for data persistence
+import { OfflineStorage } from '../../utils/storage';
 
 const JobsScreen = ({ navigation }) => {
   const [forwarders, setForwarders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
+  // NEW FEATURE: Load data from AsyncStorage instead of hardcoded values
   useEffect(() => {
-    // Mock data for forwarders looking for haulier partnerships
-    const mockForwarders = [
+    loadForwarders();
+  }, []);
+
+  const loadForwarders = async () => {
+    try {
+      // Try to load from AsyncStorage first
+      const savedForwarders = await OfflineStorage.getJobs();
+      
+      if (savedForwarders && savedForwarders.length > 0) {
+        setForwarders(savedForwarders);
+      } else {
+        // If no saved data, load mock data and save it
+        const mockForwarders = [
       {
         id: '1',
         name: 'TechCorp Denmark',
@@ -109,22 +123,30 @@ const JobsScreen = ({ navigation }) => {
           'Stable income'
         ]
       }
-    ];
+        ];
 
-    // Simulate loading delay
-    setTimeout(() => {
-      setForwarders(mockForwarders);
+        // Save mock data to AsyncStorage for future use
+        await OfflineStorage.saveJobs(mockForwarders);
+        setForwarders(mockForwarders);
+      }
+    } catch (error) {
+      console.error('Error loading forwarders:', error);
+      Alert.alert('Error', 'Failed to load forwarders data');
+    } finally {
       setLoading(false);
-    }, 1000);
-  }, []);
+    }
+  };
 
-  const onRefresh = () => {
+  // NEW FEATURE: Refresh data from AsyncStorage
+  const onRefresh = async () => {
     setRefreshing(true);
-    // Simulate fetching new data
-    setTimeout(() => {
-      setForwarders(mockForwarders); // In a real app, this would fetch from Firebase
+    try {
+      await loadForwarders();
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    } finally {
       setRefreshing(false);
-    }, 1000);
+    }
   };
 
   const handleConnectWithForwarder = (forwarder) => {

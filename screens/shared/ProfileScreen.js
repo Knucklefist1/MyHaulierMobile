@@ -146,10 +146,33 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Settings</Text>
         
-        <TouchableOpacity style={styles.settingItem}>
+        {/* NEW FEATURE: Added for Assignment 2 - New navigation buttons */}
+        <TouchableOpacity 
+          style={styles.settingItem}
+          onPress={() => navigation.navigate('Settings')}
+        >
+          <Ionicons name="settings" size={24} color="#7f8c8d" />
+          <Text style={styles.settingText}>App Settings</Text>
+          <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.settingItem}
+          onPress={() => navigation.navigate('Notifications')}
+        >
           <Ionicons name="notifications" size={24} color="#7f8c8d" />
-          <Text style={styles.settingText}>Push Notifications</Text>
-          <Switch value={true} />
+          <Text style={styles.settingText}>Notifications</Text>
+          <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
+        </TouchableOpacity>
+
+        {/* NEW FEATURE: Added for Assignment 2 - Search button */}
+        <TouchableOpacity 
+          style={styles.settingItem}
+          onPress={() => navigation.navigate('Search')}
+        >
+          <Ionicons name="search" size={24} color="#7f8c8d" />
+          <Text style={styles.settingText}>Search Partners</Text>
+          <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.settingItem}>

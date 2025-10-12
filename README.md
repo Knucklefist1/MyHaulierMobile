@@ -2,6 +2,29 @@
 
 A React Native/Expo mobile application for connecting hauliers and freight forwarders in the logistics industry. Built with Firebase backend services for real-time communication and data management, featuring a professional B2B design system matching the MyHaulier website.
 
+## 📱 Demo Video
+
+**Watch the app in action:** [MyHaulier Mobile Demo](https://youtu.be/demo-video-link) *(Replace with actual demo video link)*
+
+## 🆕 Assignment 2 Updates
+
+This version includes significant enhancements for Assignment 2:
+
+### New Features Added
+- **Settings Screen**: Complete app configuration with AsyncStorage persistence
+- **Notifications Screen**: Advanced notification management with filtering
+- **Search Screen**: Powerful search functionality with filters and recent searches
+- **Enhanced Navigation**: New buttons and improved user interaction
+- **AsyncStorage Integration**: Replaced hardcoded data with persistent storage
+- **Mobile Capabilities**: Location services, camera integration, and search functionality
+
+### Technical Improvements
+- **Data Persistence**: All user data now stored in AsyncStorage
+- **Search Functionality**: Advanced search with filters and recent search history
+- **Settings Management**: User preferences saved and restored
+- **Notification System**: Complete notification management with read/unread states
+- **Code Quality**: Removed unused imports, improved styling consistency
+
 ## 🎨 Design System
 
 The app features a comprehensive design system matching the MyHaulier website:

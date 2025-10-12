@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { styles } from '../styles/globalStyles';
 
 const ProfileScreen = ({ navigation }) => {

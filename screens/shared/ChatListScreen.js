@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/FallbackAuthContext';
+// import { ref, onValue, off } from 'firebase/database';
+// import { rtdb } from '../../config/firebase';
 
 const ChatListScreen = ({ navigation }) => {
   const [chats, setChats] = useState([]);
@@ -17,7 +19,7 @@ const ChatListScreen = ({ navigation }) => {
   useEffect(() => {
     if (!currentUser?.uid) return; // Wait for currentUser to be available
     
-    // Mock chats data for development
+    // Mock chats data for now (Firebase disabled due to auth issues)
     const mockChats = [
       {
         id: '1',

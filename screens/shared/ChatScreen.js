@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/FallbackAuthContext';
+// import { ref, push, onValue, off } from 'firebase/database';
+// import { rtdb } from '../../config/firebase';
 
 const ChatScreen = ({ route, navigation }) => {
   const { chatId, otherParticipant, chatTitle } = route.params;
@@ -19,12 +21,20 @@ const ChatScreen = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
   const flatListRef = useRef(null);
+
+  // Handle authentication loading
+  useEffect(() => {
+    if (currentUser !== undefined) {
+      setAuthLoading(false);
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     navigation.setOptions({ title: chatTitle });
     
-    // Mock messages data
+    // Mock messages data for now (Firebase disabled due to auth issues)
     const mockMessages = [
       {
         id: '1',
@@ -32,20 +42,20 @@ const ChatScreen = ({ route, navigation }) => {
         senderId: otherParticipant,
         content: 'Hello! Thank you for your interest in the transport job.',
         type: 'text',
-        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
+        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
       },
       {
         id: '2',
         chatId: chatId,
-        senderId: currentUser.uid,
+        senderId: currentUser?.uid || 'current-user',
         content: 'Hi! I have 5 years of experience in transport.',
         type: 'text',
-        timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000) // 1 hour ago
+        timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString() // 1 hour ago
       }
     ];
     
     setMessages(mockMessages);
-  }, [chatId]);
+  }, [chatId, currentUser]);
 
   const markMessagesAsRead = async () => {
     // Mock function - no real implementation needed
@@ -53,22 +63,29 @@ const ChatScreen = ({ route, navigation }) => {
 
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
+    
+    // Check if user is authenticated
+    if (!currentUser || !currentUser.uid) {
+      Alert.alert('Error', 'You must be signed in to send messages');
+      return;
+    }
 
     setLoading(true);
     try {
-      // Mock message sending
+      // Mock message sending (Firebase disabled due to auth issues)
       const newMsg = {
         id: Date.now().toString(),
         chatId,
         senderId: currentUser.uid,
         content: newMessage.trim(),
         type: 'text',
-        timestamp: new Date()
+        timestamp: new Date().toISOString()
       };
       
       setMessages(prev => [...prev, newMsg]);
       setNewMessage('');
     } catch (error) {
+      console.error('Error sending message:', error);
       Alert.alert('Error', 'Failed to send message');
     } finally {
       setLoading(false);
@@ -76,7 +93,7 @@ const ChatScreen = ({ route, navigation }) => {
   };
 
   const renderMessage = ({ item }) => {
-    const isOwnMessage = item.senderId === currentUser.uid;
+    const isOwnMessage = currentUser && item.senderId === currentUser.uid;
     
     return (
       <View style={[
@@ -116,6 +133,28 @@ const ChatScreen = ({ route, navigation }) => {
       <Text style={styles.emptyText}>Start the conversation</Text>
     </View>
   );
+
+  // Show loading while authentication is being checked
+  if (authLoading) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <Text>Loading...</Text>
+        </View>
+      </View>
+    );
+  }
+
+  // Show error if not authenticated
+  if (!currentUser) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <Text>Please sign in to access chat</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView 
@@ -261,6 +300,12 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: '#ecf0f1',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8f9fa',
   },
 });
 
