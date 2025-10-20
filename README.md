@@ -117,7 +117,7 @@ styles/
 - Rasmus Pilemand
   - UI/UX‑forbedringer og styling
   - Vedligeholdt chat‑UI (mock) og profilflow
-  - README (dansk) og krav‑mapping
+  - README 
 
 ## 🧪 Udviklingskørsel
 ```bash
