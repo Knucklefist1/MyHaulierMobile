@@ -4,7 +4,8 @@ En React Native/Expo mobilapp der forbinder vognmænd og speditører. Denne afle
 
 ## 📱 Demovideo
 
-Se appen i brug: [MyHaulier Mobile Demo](https://youtu.be/demo-video-link) 
+Valdemar: https://youtu.be/ZPyvKncEhJ8 
+Rasmus: https://www.youtube.com/watch?v=-r4uQmlC5rY
 
 ## 🆕 Opgave 2: Nye ting i denne iteration
 
@@ -116,9 +117,9 @@ styles/
 
 - Rasmus Pilemand
   - Udviklede Find Hauliers-udvidelsen med “Match %” og filterfunktion,
-  - Refaktorerede navigation,
+  - Refaktorerede navigation
   - Opsatte testbuild
-  - Dokumentation af tænke-højt-forløb.
+  - Dokumentation af tænke-højt-test.
 
 ## 🧪 Udviklingskørsel
 ```bash
