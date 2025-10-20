@@ -111,13 +111,17 @@ styles/
 ## 👥 Ansvarsfordeling
 
 - Valdemar Andersen
-  - Implementeret Analytics‑overblik (AsyncStorage‑data, virksomhedsopgørelse)
-  - Tilføjet Manage Partnerships (Add/Adjust) og fokus‑refresh i Analytics
-  - Ryddet Firebase‑afhængigheder og opdateret navigation
+  - Implementerede ChatScreen
+  - Opdaterede OffersScreen, 
+  - Integration af AsyncStorage i AvailabilityScreen
+  - README-opdatering
+  - Implementering af kamerafunktion til profilbillede
+
 - Rasmus Pilemand
-  - UI/UX‑forbedringer og styling
-  - Vedligeholdt chat‑UI (mock) og profilflow
-  - README 
+  - Udviklede Find Hauliers-udvidelsen med “Match %” og filterfunktion,
+  - Refaktorerede navigation,
+  - Opsatte testbuild
+  - Dokumentation af tænke-højt-forløb.
 
 ## 🧪 Udviklingskørsel
 ```bash
