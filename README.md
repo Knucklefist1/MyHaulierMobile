@@ -64,7 +64,7 @@ Forudsætninger:
 
 1) Klon og installer
 ```bash
-git clone <repository-url>
+git clone https://github.com/Knucklefist1/MyHaulierMobile/
 cd MyHaulierMobile
 npm install
 ```
@@ -93,9 +93,6 @@ AsyncStorage‑nøgler:
 - `user_profile`: serialiseret mock‑profil
 - `app_settings`: indstillinger
 - `partnerships`: objekt‑map, fx `{ ps_123: { forwarderId, status, trucksNeeded: { quantity }, currentRate, ... } }`
-
-## 🔐 Sikkerhed
-Ingen ekstern backend i denne build. Data lagres lokalt via AsyncStorage.
 
 ## 📂 Struktur (uddrag)
 
