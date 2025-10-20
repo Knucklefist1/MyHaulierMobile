@@ -122,14 +122,14 @@ Udfyld med faktiske navne/bidrag. Forslag baseret på denne iteration:
 
 ## 🧪 Udviklingskørsel
 ```bash
-npx expo start
+npx expo start --tunnel
+
+eller
+
+npx expo start --ios
+
+eller
+
+npx expo start --android
 ```
-## 🔧 Konfiguration
-
-### Miljøvariabler
-Ikke påkrævet i denne build.
-
-### Push‑notifikationer
-Ikke i brug i denne build.
-
 
