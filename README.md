@@ -109,7 +109,6 @@ styles/
 ```
 
 ## 👥 Ansvarsfordeling
-Udfyld med faktiske navne/bidrag. Forslag baseret på denne iteration:
 
 - Valdemar Andersen
   - Implementeret Analytics‑overblik (AsyncStorage‑data, virksomhedsopgørelse)
