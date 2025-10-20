@@ -4,7 +4,7 @@ En React Native/Expo mobilapp der forbinder vognmænd og speditører. Denne afle
 
 ## 📱 Demovideo
 
-Se appen i brug: [MyHaulier Mobile Demo](https://youtu.be/demo-video-link) *(indsæt jeres rigtige link)*
+Se appen i brug: [MyHaulier Mobile Demo](https://youtu.be/demo-video-link) 
 
 ## 🆕 Opgave 2: Nye ting i denne iteration
 
