@@ -146,7 +146,6 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Settings</Text>
         
-        {/* NEW FEATURE: Added for Assignment 2 - New navigation buttons */}
         <TouchableOpacity 
           style={styles.settingItem}
           onPress={() => navigation.navigate('Settings')}

@@ -12,8 +12,6 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/FallbackAuthContext';
-// import { ref, push, onValue, off } from 'firebase/database';
-// import { rtdb } from '../../config/firebase';
 
 const ChatScreen = ({ route, navigation }) => {
   const { chatId, otherParticipant, chatTitle } = route.params;

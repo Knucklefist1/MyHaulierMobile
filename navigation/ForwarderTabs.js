@@ -16,7 +16,6 @@ import AnalyticsScreen from '../screens/forwarder/AnalyticsScreen';
 import ManagePartnershipsScreen from '../screens/forwarder/ManagePartnershipsScreen';
 import HaulierProfileScreen from '../screens/shared/HaulierProfileScreen';
 import MapScreen from '../screens/shared/MapScreen';
-// NEW FEATURE: Added for Assignment 2 - New screens for better user experience
 import SettingsScreen from '../screens/shared/SettingsScreen';
 import NotificationsScreen from '../screens/shared/NotificationsScreen';
 
@@ -125,7 +124,6 @@ const ProfileStack = () => (
       component={ProfileScreen}
       options={{ title: 'Profile' }}
     />
-    {/* NEW FEATURE: Added for Assignment 2 - New screens accessible from Profile */}
     <Stack.Screen 
       name="Settings" 
       component={SettingsScreen}

@@ -39,14 +39,14 @@ const AnalyticsScreen = ({ navigation }) => {
 
   const fetchAnalytics = async () => {
     try {
-      // Partnerships: read from AsyncStorage (local cache)
+      
       const raw = await AsyncStorage.getItem('partnerships');
       const partnershipsObj = raw ? JSON.parse(raw) : {};
       const partnerships = Object.values(partnershipsObj || {});
 
       const activePartnerships = partnerships.filter(p => p && p.status === 'active' && p.forwarderId === currentUser.uid);
 
-      // Group by haulier company
+      
       const companyIdToMetrics = {};
       for (const p of activePartnerships) {
         const companyName = p.haulierCompany || p.haulierName || 'Unknown Company';
@@ -78,7 +78,7 @@ const AnalyticsScreen = ({ navigation }) => {
         operatingCountries: Array.from(item.countries),
       }));
 
-      // High-level summary from partnerships
+      
       const totalJobs = 0;
       const activeJobs = 0;
       const completedJobs = 0;

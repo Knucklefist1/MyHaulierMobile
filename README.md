@@ -1,6 +1,6 @@
-# MyHaulier Mobile (dansk README)
+# MyHaulier Mobile
 
-En React Native/Expo mobilapp der forbinder vognmænd og speditører. Denne aflevering fokuserer på lokal persistens via AsyncStorage, et simpelt analyse‑overblik og en letvægts chat‑UI (mock) i et professionelt B2B‑design.
+En React Native/Expo mobilapp der forbinder vognmænd og speditører. Denne aflevering fokuserer på lagring via AsyncStorage, et simpelt analyse‑overblik og en letvægts chat‑UI (mock) i et professionelt B2B‑design.
 
 ## 📱 Demovideo
 

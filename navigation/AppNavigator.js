@@ -39,6 +39,4 @@ const AppNavigator = () => {
   );
 };
 
-// Styles removed - using real auth flow now
-
 export default AppNavigator;
