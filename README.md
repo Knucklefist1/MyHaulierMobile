@@ -1,316 +1,135 @@
-# MyHaulier Mobile App
+# MyHaulier Mobile (dansk README)
 
-A React Native/Expo mobile application for connecting hauliers and freight forwarders in the logistics industry. Built with Firebase backend services for real-time communication and data management, featuring a professional B2B design system matching the MyHaulier website.
+En React Native/Expo mobilapp der forbinder vognmænd og speditører. Denne aflevering fokuserer på lokal persistens via AsyncStorage, et simpelt analyse‑overblik og en letvægts chat‑UI (mock) i et professionelt B2B‑design.
 
-## 📱 Demo Video
+## 📱 Demovideo
 
-**Watch the app in action:** [MyHaulier Mobile Demo](https://youtu.be/demo-video-link) *(Replace with actual demo video link)*
+Se appen i brug: [MyHaulier Mobile Demo](https://youtu.be/demo-video-link) *(indsæt jeres rigtige link)*
 
-## 🆕 Assignment 2 Updates
+## 🆕 Opgave 2: Nye ting i denne iteration
 
-This version includes significant enhancements for Assignment 2:
+### Nye skærme og funktioner
+- Indstillinger og Notifikationer (gemmes i AsyncStorage)
+- Analytics med virksomhedsoverblik (aftalte trucks, gennemsnitsrate m.m.)
+- Manage Partnerships: to knapper i Analytics‑delen, der opretter/justerer partnerskaber (gemmes i AsyncStorage)
+- Forbedret navigation (stack/tab) og bedre brugerflow
 
-### New Features Added
-- **Settings Screen**: Complete app configuration with AsyncStorage persistence
-- **Notifications Screen**: Advanced notification management with filtering
-- **Search Screen**: Powerful search functionality with filters and recent searches
-- **Enhanced Navigation**: New buttons and improved user interaction
-- **AsyncStorage Integration**: Replaced hardcoded data with persistent storage
-- **Mobile Capabilities**: Location services, camera integration, and search functionality
+### Tekniske forbedringer
+- Kerneindstillinger og partnerskaber gemmes i AsyncStorage
+- Strammere struktur på skærme/komponenter
+- Fjernet ubrugte Firebase‑dele, så appen kører uden ekstern backend. Det er dog målet at få etableret firebase 
 
-### Technical Improvements
-- **Data Persistence**: All user data now stored in AsyncStorage
-- **Search Functionality**: Advanced search with filters and recent search history
-- **Settings Management**: User preferences saved and restored
-- **Notification System**: Complete notification management with read/unread states
-- **Code Quality**: Removed unused imports, improved styling consistency
+## 🎨 Designsystem
 
-## 🎨 Design System
+Appen følger et B2B‑design, der matcher MyHaulier:
 
-The app features a comprehensive design system matching the MyHaulier website:
+### Farver
+- Primær: Deep blue (#1E3A8A)
+- Sekundær: Rød (#EF4444)
+- Status: Grøn, Orange, Rød
+- Neutrale gråtoner til tekst/baggrunde
 
-### Colors
-- **Primary**: Deep blue (#1E3A8A) for hauliers
-- **Secondary**: Red (#EF4444) for freight forwarders  
-- **Status Colors**: Green (success), Orange (warning), Red (error)
-- **Neutrals**: Professional grays for text and backgrounds
+### Typografi
+- Inter, responsive størrelser, vægte 400–700
 
-### Typography
-- **Font**: Inter font family
-- **Sizes**: Responsive from 12px to 32px
-- **Weights**: Normal (400) to Bold (700)
+### Komponenter
+- Kort, knapper (primary/secondary/ghost), formularer med fokus‑tilstande, tabs/stacks
 
-### Components
-- **Cards**: White background with subtle shadows
-- **Buttons**: Primary, secondary, and ghost variants
-- **Forms**: Clean inputs with focus states
-- **Navigation**: Role-specific tab styling
+## 🚛 Funktioner
 
-## 🚛 Features
+### For vognmænd
+- Se jobs (mock), ansøg (mock), profil, kort
 
-### For Hauliers
-- Browse available transport jobs
-- Apply to jobs with cover letters via modal forms
-- Track application status
-- Real-time chat with forwarders
-- Profile management
+### For speditører
+- Postings (mock), gennemse ansøgninger (mock), analytics‑overblik
 
-### For Freight Forwarders
-- Post new transport jobs
-- Manage job postings
-- Review haulier applications
-- Real-time chat with hauliers
-- Analytics dashboard
+### Fælles
+- Lokal auth‑mock (FallbackAuthContext)
+- Chat‑UI med mock‑data
+- Offline‑venlig via AsyncStorage
+- Responsivt og B2B‑orienteret UI
 
-### Shared Features
-- Firebase Authentication with role selection
-- Real-time chat system with file sharing
-- Push notifications for updates
-- File upload capabilities (images, documents)
-- Offline support with local storage
-- Responsive design for all screen sizes
-- Professional B2B interface
+## 🛠 Teknologistak
 
-## 🛠 Tech Stack
+- Frontend: React Native (Expo)
+- Navigation: React Navigation v6
+- Persistens: AsyncStorage
+- State: React Context API
 
-- **Frontend**: React Native with Expo
-- **Navigation**: React Navigation v6
-- **Backend**: Firebase
-  - Authentication
-  - Firestore Database
-  - Cloud Storage
-  - Cloud Messaging
-- **State Management**: React Context API
-- **UI Components**: React Native Elements, React Native Paper
+## 📦 Installation
 
-## 📱 Installation & Setup
-
-### Prerequisites
-- Node.js (v16 or higher)
+Forudsætninger:
+- Node.js (v16+)
 - Expo CLI (`npm install -g @expo/cli`)
-- Firebase project setup
 
-### 1. Clone and Install Dependencies
+1) Klon og installer
 ```bash
 git clone <repository-url>
 cd MyHaulierMobile
 npm install
 ```
 
-### 2. Firebase Setup
+2) Data (AsyncStorage)
+Denne build bruger kun AsyncStorage (ingen ekstern backend).
+Moduler:
+- `utils/storage.js` (profil, token, indstillinger)
+- `screens/forwarder/AnalyticsScreen.js` (læser `partnerships`)
+- `screens/forwarder/ManagePartnershipsScreen.js` (opretter/justerer og gemmer `partnerships`)
 
-#### Create Firebase Project
-1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Create a new project
-3. Enable Authentication, Firestore, Storage, and Cloud Messaging
-
-#### Configure Firebase
-1. Update `config/firebase.js` with your Firebase configuration:
-```javascript
-const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "your-sender-id",
-  appId: "your-app-id"
-};
-```
-
-#### Set up Firestore Security Rules
-Deploy the security rules from `firestore.rules` to your Firebase project:
+3) Kør appen
 ```bash
-firebase deploy --only firestore:rules
-```
-
-### 3. Run the Application
-```bash
-# Start the development server
+# Start udviklingsserveren
 npx expo start
 
-# Run on iOS simulator
+# Kør på iOS‑simulator
 npx expo start --ios
 
-# Run on Android emulator
+# Kør på Android‑emulator
 npx expo start --android
 ```
 
-## 🗄 Database Structure
+## 💾 Data (lokal schema)
+AsyncStorage‑nøgler:
+- `user_profile`: serialiseret mock‑profil
+- `app_settings`: indstillinger
+- `partnerships`: objekt‑map, fx `{ ps_123: { forwarderId, status, trucksNeeded: { quantity }, currentRate, ... } }`
 
-### Collections
+## 🔐 Sikkerhed
+Ingen ekstern backend i denne build. Data lagres lokalt via AsyncStorage.
 
-#### Users
-```javascript
-users/{userId} {
-  uid: string,
-  email: string,
-  name: string,
-  userType: 'haulier' | 'forwarder',
-  phone: string,
-  company: string,
-  licenseNumber: string, // for hauliers
-  experience: string, // for hauliers
-  profileImage: string,
-  isVerified: boolean,
-  createdAt: timestamp,
-  updatedAt: timestamp
-}
-```
-
-#### Jobs
-```javascript
-jobs/{jobId} {
-  title: string,
-  description: string,
-  location: string,
-  budget: number,
-  deliveryDate: string,
-  duration: string,
-  requirements: string[],
-  forwarderId: string,
-  companyName: string,
-  status: 'active' | 'completed' | 'cancelled',
-  createdAt: timestamp,
-  updatedAt: timestamp
-}
-```
-
-#### Applications
-```javascript
-applications/{applicationId} {
-  jobId: string,
-  haulierId: string,
-  forwarderId: string,
-  coverLetter: string,
-  status: 'pending' | 'accepted' | 'rejected',
-  createdAt: timestamp,
-  updatedAt: timestamp
-}
-```
-
-#### Chats
-```javascript
-chats/{chatId} {
-  participants: string[],
-  title: string,
-  lastMessage: {
-    content: string,
-    senderId: string,
-    timestamp: timestamp
-  },
-  unreadCount: {
-    [userId]: number
-  },
-  updatedAt: timestamp
-}
-```
-
-#### Messages
-```javascript
-messages/{messageId} {
-  chatId: string,
-  senderId: string,
-  content: string,
-  type: 'text' | 'image' | 'document',
-  timestamp: timestamp
-}
-```
-
-## 🔐 Security Rules
-
-The app includes comprehensive Firestore security rules that ensure:
-- Users can only access their own data
-- Hauliers can only apply to jobs
-- Forwarders can only manage their own jobs
-- Chat participants can only access their conversations
-
-## 📱 App Structure
+## 📂 Struktur (uddrag)
 
 ```
-src/
-├── components/          # Reusable components
-├── contexts/           # React contexts (Auth, etc.)
-├── navigation/         # Navigation configuration
-├── screens/           # Screen components
-│   ├── auth/         # Authentication screens
-│   ├── haulier/      # Haulier-specific screens
-│   ├── forwarder/    # Forwarder-specific screens
-│   └── shared/       # Shared screens
-├── config/            # Configuration files
-└── styles/           # Global styles
+navigation/ForwarderTabs.js
+screens/forwarder/AnalyticsScreen.js
+screens/forwarder/ManagePartnershipsScreen.js
+screens/shared/MapScreen.js
+utils/storage.js
+styles/
 ```
 
-## 🚀 Deployment
+## 👥 Ansvarsfordeling
+Udfyld med faktiske navne/bidrag. Forslag baseret på denne iteration:
 
-### Development
+- Valdemar Andersen
+  - Implementeret Analytics‑overblik (AsyncStorage‑data, virksomhedsopgørelse)
+  - Tilføjet Manage Partnerships (Add/Adjust) og fokus‑refresh i Analytics
+  - Ryddet Firebase‑afhængigheder og opdateret navigation
+- Rasmus Pilemand
+  - UI/UX‑forbedringer og styling
+  - Vedligeholdt chat‑UI (mock) og profilflow
+  - README (dansk) og krav‑mapping
+
+## 🧪 Udviklingskørsel
 ```bash
 npx expo start
 ```
+## 🔧 Konfiguration
 
-### Production Build
-```bash
-# Build for iOS
-npx expo build:ios
+### Miljøvariabler
+Ikke påkrævet i denne build.
 
-# Build for Android
-npx expo build:android
-```
+### Push‑notifikationer
+Ikke i brug i denne build.
 
-### App Store Deployment
-1. Configure app.json with proper bundle identifiers
-2. Build production versions
-3. Submit to App Store and Google Play Store
 
-## 🔧 Configuration
-
-### Environment Variables
-Create a `.env` file for sensitive configuration:
-```
-FIREBASE_API_KEY=your_api_key
-FIREBASE_AUTH_DOMAIN=your_auth_domain
-FIREBASE_PROJECT_ID=your_project_id
-```
-
-### Push Notifications
-Configure push notifications in `app.json`:
-```json
-{
-  "expo": {
-    "notification": {
-      "icon": "./assets/notification-icon.png",
-      "color": "#3498db"
-    }
-  }
-}
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🆘 Support
-
-For support and questions:
-- Create an issue in the repository
-- Contact the development team
-- Check the documentation
-
-## 🔄 Version History
-
-- **v1.0.0** - Initial release with core functionality
-  - Authentication system
-  - Job posting and application
-  - Real-time chat
-  - Basic analytics
-
----
-
-Built with ❤️ for the logistics industry

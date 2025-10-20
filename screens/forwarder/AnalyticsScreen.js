@@ -7,12 +7,12 @@ import {
   Dimensions
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-// Firebase imports removed for development
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../contexts/FallbackAuthContext';
 
 const { width } = Dimensions.get('window');
 
-const AnalyticsScreen = () => {
+const AnalyticsScreen = ({ navigation }) => {
   const [analytics, setAnalytics] = useState({
     totalJobs: 0,
     activeJobs: 0,
@@ -20,38 +20,72 @@ const AnalyticsScreen = () => {
     totalApplications: 0,
     acceptedApplications: 0
   });
+  const [companyStats, setCompanyStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    fetchAnalytics();
-  }, []);
+    if (currentUser && currentUser.uid) {
+      fetchAnalytics();
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    const unsubscribe = navigation?.addListener('focus', () => {
+      if (currentUser && currentUser.uid) fetchAnalytics();
+    });
+    return unsubscribe;
+  }, [navigation, currentUser]);
 
   const fetchAnalytics = async () => {
     try {
-      // Get jobs analytics
-      const jobsQuery = query(
-        collection(db, 'jobs'),
-        where('forwarderId', '==', currentUser.uid)
-      );
-      const jobsSnapshot = await getDocs(jobsQuery);
-      
-      const jobsData = jobsSnapshot.docs.map(doc => doc.data());
-      const totalJobs = jobsData.length;
-      const activeJobs = jobsData.filter(job => job.status === 'active').length;
-      const completedJobs = jobsData.filter(job => job.status === 'completed').length;
+      // Partnerships: read from AsyncStorage (local cache)
+      const raw = await AsyncStorage.getItem('partnerships');
+      const partnershipsObj = raw ? JSON.parse(raw) : {};
+      const partnerships = Object.values(partnershipsObj || {});
 
-      // Get applications analytics
-      const applicationsQuery = query(
-        collection(db, 'applications'),
-        where('forwarderId', '==', currentUser.uid)
-      );
-      const applicationsSnapshot = await getDocs(applicationsQuery);
-      
-      const applicationsData = applicationsSnapshot.docs.map(doc => doc.data());
-      const totalApplications = applicationsData.length;
-      const acceptedApplications = applicationsData.filter(app => app.status === 'accepted').length;
+      const activePartnerships = partnerships.filter(p => p && p.status === 'active' && p.forwarderId === currentUser.uid);
 
+      // Group by haulier company
+      const companyIdToMetrics = {};
+      for (const p of activePartnerships) {
+        const companyName = p.haulierCompany || p.haulierName || 'Unknown Company';
+        const key = companyName;
+        if (!companyIdToMetrics[key]) {
+          companyIdToMetrics[key] = {
+            company: companyName,
+            totalTrucksAgreed: 0,
+            rates: [],
+            contracts: 0,
+            countries: new Set(),
+          };
+        }
+        const bucket = companyIdToMetrics[key];
+        const qty = typeof p?.trucksNeeded?.quantity === 'number' ? p.trucksNeeded.quantity : 0;
+        bucket.totalTrucksAgreed += qty;
+        if (typeof p?.currentRate === 'number') bucket.rates.push(p.currentRate);
+        bucket.contracts += 1;
+        if (Array.isArray(p?.operatingCountries)) {
+          p.operatingCountries.forEach(c => bucket.countries.add(c));
+        }
+      }
+
+      const companies = Object.values(companyIdToMetrics).map(item => ({
+        company: item.company,
+        totalTrucksAgreed: item.totalTrucksAgreed,
+        averageRate: item.rates.length ? (item.rates.reduce((a, b) => a + b, 0) / item.rates.length) : 0,
+        contracts: item.contracts,
+        operatingCountries: Array.from(item.countries),
+      }));
+
+      // High-level summary from partnerships
+      const totalJobs = 0;
+      const activeJobs = 0;
+      const completedJobs = 0;
+      const totalApplications = 0;
+      const acceptedApplications = 0;
+
+      setCompanyStats(companies);
       setAnalytics({
         totalJobs,
         activeJobs,
@@ -90,6 +124,11 @@ const AnalyticsScreen = () => {
       <View style={styles.header}>
         <Text style={styles.title}>Analytics Dashboard</Text>
         <Text style={styles.subtitle}>Track your business performance</Text>
+      </View>
+      <View style={{ paddingHorizontal: 16, marginTop: 8 }}>
+        <View style={{ flexDirection: 'row', gap: 12 }}>
+          <Text onPress={() => navigation.navigate('ManagePartnerships')} style={{ color: '#2980b9', fontWeight: '600' }}>Manage Partnerships</Text>
+        </View>
       </View>
 
       <View style={styles.statsGrid}>
@@ -166,6 +205,27 @@ const AnalyticsScreen = () => {
             }
           </Text>
         </View>
+      </View>
+
+      <View style={styles.insightsSection}>
+        <Text style={styles.sectionTitle}>Company Overview</Text>
+        {companyStats.length === 0 && (
+          <Text style={styles.insightText}>No active contracts yet.</Text>
+        )}
+        {companyStats.map((c) => (
+          <View key={c.company} style={styles.insightCard}>
+            <Ionicons name="briefcase" size={20} color="#2c3e50" />
+            <View style={{ marginLeft: 12, flex: 1 }}>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#2c3e50' }}>{c.company}</Text>
+              <Text style={styles.insightText}>Contracts: {c.contracts}</Text>
+              <Text style={styles.insightText}>Agreed trucks: {c.totalTrucksAgreed}</Text>
+              <Text style={styles.insightText}>Avg rate: {c.averageRate.toFixed(2)}</Text>
+              {c.operatingCountries.length > 0 && (
+                <Text style={styles.insightText}>Countries: {c.operatingCountries.join(', ')}</Text>
+              )}
+            </View>
+          </View>
+        ))}
       </View>
     </ScrollView>
   );

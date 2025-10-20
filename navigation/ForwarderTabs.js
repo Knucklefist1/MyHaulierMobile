@@ -13,6 +13,7 @@ import ChatListScreen from '../screens/shared/ChatListScreen';
 import ProfileScreen from '../screens/shared/ProfileScreen';
 import ChatScreen from '../screens/shared/ChatScreen';
 import AnalyticsScreen from '../screens/forwarder/AnalyticsScreen';
+import ManagePartnershipsScreen from '../screens/forwarder/ManagePartnershipsScreen';
 import HaulierProfileScreen from '../screens/shared/HaulierProfileScreen';
 import MapScreen from '../screens/shared/MapScreen';
 // NEW FEATURE: Added for Assignment 2 - New screens for better user experience
@@ -88,6 +89,11 @@ const AnalyticsStack = () => (
       name="AnalyticsMain" 
       component={AnalyticsScreen}
       options={{ title: 'Analytics' }}
+    />
+    <Stack.Screen 
+      name="ManagePartnerships" 
+      component={ManagePartnershipsScreen}
+      options={{ title: 'Manage Partnerships' }}
     />
   </Stack.Navigator>
 );
