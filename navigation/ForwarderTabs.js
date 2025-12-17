@@ -1,3 +1,4 @@
+// Forwarder navigation - Definerer tab-navigation og stack-navigators for forwarder-brugere
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -22,6 +23,7 @@ import NotificationsScreen from '../screens/shared/NotificationsScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
+// Stack navigator for job-relaterede skærme (partnerskaber)
 const JobsStack = () => (
   <Stack.Navigator>
     <Stack.Screen 
@@ -37,6 +39,7 @@ const JobsStack = () => (
   </Stack.Navigator>
 );
 
+// Stack navigator for ansøgninger og matching
 const ApplicationsStack = () => (
   <Stack.Navigator>
     <Stack.Screen 
@@ -57,6 +60,7 @@ const ApplicationsStack = () => (
   </Stack.Navigator>
 );
 
+// Stack navigator for chat/messaging
 const ChatStack = () => (
   <Stack.Navigator>
     <Stack.Screen 
@@ -72,6 +76,7 @@ const ChatStack = () => (
   </Stack.Navigator>
 );
 
+// Stack navigator for at oprette nye job/partnerskaber
 const PostStack = () => (
   <Stack.Navigator>
     <Stack.Screen 
@@ -82,6 +87,7 @@ const PostStack = () => (
   </Stack.Navigator>
 );
 
+// Stack navigator for analytics og partnerskabsstyring
 const AnalyticsStack = () => (
   <Stack.Navigator>
     <Stack.Screen 
@@ -97,6 +103,7 @@ const AnalyticsStack = () => (
   </Stack.Navigator>
 );
 
+// Stack navigator for at finde og matche med hauliers
 const FindStack = () => (
   <Stack.Navigator>
     <Stack.Screen 
@@ -117,6 +124,7 @@ const FindStack = () => (
   </Stack.Navigator>
 );
 
+// Stack navigator for profil, indstillinger og kort
 const ProfileStack = () => (
   <Stack.Navigator>
     <Stack.Screen 
@@ -142,6 +150,7 @@ const ProfileStack = () => (
   </Stack.Navigator>
 );
 
+// Hovedtab-navigator for forwarder-brugere - 5 hovedtabs
 const ForwarderTabs = () => {
   return (
     <Tab.Navigator

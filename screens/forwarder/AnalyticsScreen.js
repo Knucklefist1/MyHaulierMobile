@@ -1,3 +1,4 @@
+// Analytics-skærm for forwarders - Viser statistikker og indsigt i forretningsperformance
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -34,16 +35,18 @@ const AnalyticsScreen = ({ navigation }) => {
     return unsubscribe;
   }, [navigation, currentUser]);
 
+  // Henter analytics-data fra AsyncStorage og beregner statistikker
   const fetchAnalytics = async () => {
     try {
-      
+      // Henter alle partnerskaber fra lokal lagring
       const raw = await AsyncStorage.getItem('partnerships');
       const partnershipsObj = raw ? JSON.parse(raw) : {};
       const partnerships = Object.values(partnershipsObj || {});
 
+      // Filtrerer kun aktive partnerskaber for denne forwarder
       const activePartnerships = partnerships.filter(p => p && p.status === 'active' && p.forwarderId === currentUser.uid);
 
-      
+      // Beregner metrics pr. virksomhed
       const companyIdToMetrics = {};
       for (const p of activePartnerships) {
         const companyName = p.haulierCompany || p.haulierName || 'Unknown Company';

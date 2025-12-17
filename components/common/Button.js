@@ -1,3 +1,4 @@
+// Genbrugelig Button-komponent - Understøtter primary, secondary og ghost varianter
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { colors, typography, spacing, borderRadius, components } from '../../styles/designSystem';

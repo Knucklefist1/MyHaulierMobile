@@ -1,3 +1,4 @@
+// Matching-skærm - Finder og matcher forwarders med hauliers baseret på kriterier
 import React, { useState, useEffect } from 'react';
 import {
   View,

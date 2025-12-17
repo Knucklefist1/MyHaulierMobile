@@ -1,3 +1,4 @@
+// EmptyState-komponent - Viser tom tilstand med ikon, titel, beskrivelse og valgfri action-knap
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';

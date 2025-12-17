@@ -1,3 +1,4 @@
+// Genbrugelig Input-komponent - Standardiseret tekstinput med design system styling
 import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 import { colors, typography, spacing, borderRadius, components } from '../../styles/designSystem';

@@ -1,3 +1,4 @@
+// Chat-skærm - Viser chat-konversation mellem to brugere
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,

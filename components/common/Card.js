@@ -1,3 +1,4 @@
+// Genbrugelig Card-komponent - Standardiseret kort-container med design system styling
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { colors, spacing, borderRadius, shadows, components } from '../../styles/designSystem';

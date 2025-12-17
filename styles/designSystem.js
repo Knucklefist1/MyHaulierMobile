@@ -1,6 +1,8 @@
 // MyHaulier Design System
-// Matching the website design system
+// Centraliseret design system med farver, typografi, spacing og komponent-styles
+// Matcher website design system
 
+// Farvepalette - Primære farver, status-farver og neutrale farver
 export const colors = {
   // Primary Colors
   primary: '#1E3A8A',        // Deep blue
@@ -26,6 +28,7 @@ export const colors = {
   primaryLight: '#EFF6FF'
 };
 
+// Typografi - Fontstørrelser og vægte
 export const typography = {
   fontFamily: 'Inter',
   sizes: {
@@ -45,6 +48,7 @@ export const typography = {
   }
 };
 
+// Spacing system - Konsistent spacing gennem hele appen (4px grid)
 export const spacing = {
   1: 4,    // 4px
   2: 8,    // 8px
@@ -98,7 +102,7 @@ export const shadows = {
   }
 };
 
-// Component Styles
+// Komponent-styles - Genbrugelige style-definitioner for buttons, cards, inputs osv.
 export const components = {
   // Card styles
   card: {
@@ -174,7 +178,7 @@ export const components = {
   }
 };
 
-// Text styles
+// Tekst-styles - Konsistente tekststilarter (h1, h2, body, caption osv.)
 export const textStyles = {
   h1: {
     fontSize: typography.sizes['3xl'],

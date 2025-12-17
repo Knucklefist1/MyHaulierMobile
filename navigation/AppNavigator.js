@@ -1,3 +1,4 @@
+// Hovednavigator - Styrer routing baseret på brugerens autentificeringsstatus og brugertype
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -12,10 +13,12 @@ const Stack = createStackNavigator();
 const AppNavigator = () => {
   const { currentUser, userProfile, loading } = useAuth();
 
+  // Viser loading-skærm mens autentificering tjekkes
   if (loading) {
     return <LoadingScreen />;
   }
 
+  // Hvis bruger ikke er logget ind, vis autentificeringsskærm
   if (!currentUser) {
     return (
       <NavigationContainer>
@@ -26,6 +29,7 @@ const AppNavigator = () => {
     );
   }
 
+  // Vælger korrekt app-interface baseret på brugerens type (haulier eller forwarder)
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>

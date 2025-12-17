@@ -1,3 +1,4 @@
+// Haulier navigation - Definerer tab-navigation og stack-navigators for haulier-brugere
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';

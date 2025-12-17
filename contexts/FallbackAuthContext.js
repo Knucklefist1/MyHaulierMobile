@@ -1,7 +1,8 @@
+// Autentificeringscontext - Håndterer brugerlogin, signup og profil uden Firebase
+// Bruger AsyncStorage til lokal lagring af brugerdata
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 
-// Fallback AuthContext that works without Firebase
 const AuthContext = createContext({});
 
 export const useAuth = () => {

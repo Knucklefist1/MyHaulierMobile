@@ -1,3 +1,4 @@
+// LoadingSpinner-komponent - Viser loading-indikator med valgfri besked
 import React from 'react';
 import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
 import { colors, textStyles, spacing } from '../../styles/designSystem';
