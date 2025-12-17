@@ -94,25 +94,15 @@ const ProfileStack = () => (
       component={SearchScreen}
       options={{ title: 'Search Partners' }}
     />
-  </Stack.Navigator>
-);
-
-const AvailabilityStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen 
-      name="AvailabilityMain" 
-      component={AvailabilityScreen}
-      options={{ title: 'My Availability' }}
-    />
-  </Stack.Navigator>
-);
-
-const MapStack = () => (
-  <Stack.Navigator>
     <Stack.Screen 
       name="MapMain" 
       component={MapScreen}
       options={{ title: 'Partnership Map' }}
+    />
+    <Stack.Screen 
+      name="AvailabilityMain" 
+      component={AvailabilityScreen}
+      options={{ title: 'My Availability' }}
     />
   </Stack.Navigator>
 );
@@ -126,14 +116,10 @@ const HaulierTabs = () => {
 
           if (route.name === 'Find') {
             iconName = focused ? 'search' : 'search-outline';
-          } else if (route.name === 'Map') {
-            iconName = focused ? 'map' : 'map-outline';
           } else if (route.name === 'Connections') {
             iconName = focused ? 'handshake' : 'handshake-outline';
           } else if (route.name === 'Offers') {
             iconName = focused ? 'document-text' : 'document-text-outline';
-          } else if (route.name === 'Availability') {
-            iconName = focused ? 'calendar' : 'calendar-outline';
           } else if (route.name === 'Chat') {
             iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
           } else if (route.name === 'Profile') {
@@ -148,10 +134,8 @@ const HaulierTabs = () => {
       })}
     >
       <Tab.Screen name="Find" component={JobsStack} />
-      <Tab.Screen name="Map" component={MapStack} />
       <Tab.Screen name="Connections" component={ApplicationsStack} />
       <Tab.Screen name="Offers" component={OffersStack} />
-      <Tab.Screen name="Availability" component={AvailabilityStack} />
       <Tab.Screen name="Chat" component={ChatStack} />
       <Tab.Screen name="Profile" component={ProfileStack} />
     </Tab.Navigator>

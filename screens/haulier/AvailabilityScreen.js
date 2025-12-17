@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
   TextInput,
   Alert,
-  Switch,
-  Modal
+  Switch
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors, typography, spacing, borderRadius, shadows, textStyles, components } from '../../styles/designSystem';
+import { colors } from '../../styles/designSystem';
+import { styles } from '../../styles/screens/AvailabilityScreenStyles';
 import availabilityService from '../../services/AvailabilityService';
+import { SelectionModal, SwitchRow, NumberInput, DaySelector } from '../../components/availability';
 
 const AvailabilityScreen = ({ navigation }) => {
   const [availability, setAvailability] = useState({
@@ -137,132 +137,45 @@ const AvailabilityScreen = ({ navigation }) => {
     }
   };
 
-  const renderCountryModal = () => (
-    <Modal
-      visible={showCountryModal}
-      animationType="slide"
-      presentationStyle="pageSheet"
-    >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalHeader}>
-          <Text style={styles.modalTitle}>Operating Countries</Text>
-          <TouchableOpacity onPress={() => setShowCountryModal(false)}>
-            <Ionicons name="close" size={24} color={colors.darkGray} />
-          </TouchableOpacity>
-        </View>
-        <ScrollView style={styles.modalContent}>
-          {countryOptions.map((country) => (
-            <TouchableOpacity
-              key={country.code}
-              style={styles.optionItem}
-              onPress={() => toggleCountry(country.code)}
-            >
-              <Text style={styles.optionText}>{country.name}</Text>
-              {availability.operatingCountries.includes(country.code) && (
-                <Ionicons name="checkmark" size={20} color={colors.primary} />
-              )}
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-    </Modal>
-  );
-
-  const renderTruckTypeModal = () => (
-    <Modal
-      visible={showTruckTypeModal}
-      animationType="slide"
-      presentationStyle="pageSheet"
-    >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalHeader}>
-          <Text style={styles.modalTitle}>Truck Types</Text>
-          <TouchableOpacity onPress={() => setShowTruckTypeModal(false)}>
-            <Ionicons name="close" size={24} color={colors.darkGray} />
-          </TouchableOpacity>
-        </View>
-        <ScrollView style={styles.modalContent}>
-          {truckTypeOptions.map((type) => (
-            <TouchableOpacity
-              key={type.value}
-              style={styles.optionItem}
-              onPress={() => toggleTruckType(type.value)}
-            >
-              <Text style={styles.optionText}>{type.label}</Text>
-              {availability.truckTypes.includes(type.value) && (
-                <Ionicons name="checkmark" size={20} color={colors.primary} />
-              )}
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-    </Modal>
-  );
-
-  const renderEquipmentModal = () => (
-    <Modal
-      visible={showEquipmentModal}
-      animationType="slide"
-      presentationStyle="pageSheet"
-    >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalHeader}>
-          <Text style={styles.modalTitle}>Special Equipment</Text>
-          <TouchableOpacity onPress={() => setShowEquipmentModal(false)}>
-            <Ionicons name="close" size={24} color={colors.darkGray} />
-          </TouchableOpacity>
-        </View>
-        <ScrollView style={styles.modalContent}>
-          {equipmentOptions.map((equipment) => (
-            <TouchableOpacity
-              key={equipment}
-              style={styles.optionItem}
-              onPress={() => toggleEquipment(equipment)}
-            >
-              <Text style={styles.optionText}>{equipment.replace('_', ' ')}</Text>
-              {availability.specialEquipment.includes(equipment) && (
-                <Ionicons name="checkmark" size={20} color={colors.primary} />
-              )}
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-    </Modal>
-  );
+  const handleToggleDay = (day) => {
+    const currentDays = availability.workingDays;
+    if (currentDays.includes(day)) {
+      setAvailability({
+        ...availability,
+        workingDays: currentDays.filter(d => d !== day)
+      });
+    } else {
+      setAvailability({
+        ...availability,
+        workingDays: [...currentDays, day]
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
       <ScrollView style={styles.content}>
         <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Availability Status</Text>
-            <Switch
-              value={availability.isAvailable}
-              onValueChange={(value) => setAvailability({ ...availability, isAvailable: value })}
-              trackColor={{ false: colors.borderGray, true: colors.primaryLight }}
-              thumbColor={availability.isAvailable ? colors.primary : colors.mediumGray}
-            />
-          </View>
-          <Text style={styles.sectionSubtitle}>
-            {availability.isAvailable 
+          <Text style={styles.sectionTitle}>Availability Status</Text>
+          <SwitchRow
+            label="Available for Jobs"
+            value={availability.isAvailable}
+            onValueChange={(value) => setAvailability({ ...availability, isAvailable: value })}
+            subtitle={availability.isAvailable 
               ? 'You are currently available for new jobs' 
               : 'You are not available for new jobs'
             }
-          </Text>
+          />
         </View>
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Fleet Information</Text>
           
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Available Trucks</Text>
-            <TextInput
-              style={styles.numberInput}
-              value={availability.availableTrucks.toString()}
-              onChangeText={(text) => setAvailability({ ...availability, availableTrucks: parseInt(text) || 0 })}
-              keyboardType="numeric"
-            />
-          </View>
+          <NumberInput
+            label="Available Trucks"
+            value={availability.availableTrucks}
+            onChangeText={(text) => setAvailability({ ...availability, availableTrucks: parseInt(text) || 0 })}
+          />
 
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>Operating Countries</Text>
@@ -307,129 +220,66 @@ const AvailabilityScreen = ({ navigation }) => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Capacity</Text>
           
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Max Weight (tons)</Text>
-            <TextInput
-              style={styles.numberInput}
-              value={availability.maxWeight.toString()}
-              onChangeText={(text) => setAvailability({ ...availability, maxWeight: parseFloat(text) || 0 })}
-              keyboardType="numeric"
-            />
-          </View>
+          <NumberInput
+            label="Max Weight (tons)"
+            value={availability.maxWeight}
+            onChangeText={(text) => setAvailability({ ...availability, maxWeight: parseFloat(text) || 0 })}
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Max Length (m)</Text>
-            <TextInput
-              style={styles.numberInput}
-              value={availability.maxLength.toString()}
-              onChangeText={(text) => setAvailability({ ...availability, maxLength: parseFloat(text) || 0 })}
-              keyboardType="numeric"
-            />
-          </View>
+          <NumberInput
+            label="Max Length (m)"
+            value={availability.maxLength}
+            onChangeText={(text) => setAvailability({ ...availability, maxLength: parseFloat(text) || 0 })}
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Max Height (m)</Text>
-            <TextInput
-              style={styles.numberInput}
-              value={availability.maxHeight.toString()}
-              onChangeText={(text) => setAvailability({ ...availability, maxHeight: parseFloat(text) || 0 })}
-              keyboardType="numeric"
-            />
-          </View>
+          <NumberInput
+            label="Max Height (m)"
+            value={availability.maxHeight}
+            onChangeText={(text) => setAvailability({ ...availability, maxHeight: parseFloat(text) || 0 })}
+          />
         </View>
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Working Schedule</Text>
           
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Working Days</Text>
-            <View style={styles.daySelector}>
-              {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => (
-                <TouchableOpacity
-                  key={day}
-                  style={[
-                    styles.dayButton,
-                    availability.workingDays.includes(day) && styles.dayButtonActive
-                  ]}
-                  onPress={() => {
-                    const currentDays = availability.workingDays;
-                    if (currentDays.includes(day)) {
-                      setAvailability({
-                        ...availability,
-                        workingDays: currentDays.filter(d => d !== day)
-                      });
-                    } else {
-                      setAvailability({
-                        ...availability,
-                        workingDays: [...currentDays, day]
-                      });
-                    }
-                  }}
-                >
-                  <Text style={[
-                    styles.dayButtonText,
-                    availability.workingDays.includes(day) && styles.dayButtonTextActive
-                  ]}>
-                    {day.charAt(0).toUpperCase()}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
+          <DaySelector
+            selectedDays={availability.workingDays}
+            onToggleDay={handleToggleDay}
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Emergency Available</Text>
-            <Switch
-              value={availability.emergencyAvailable}
-              onValueChange={(value) => setAvailability({ ...availability, emergencyAvailable: value })}
-              trackColor={{ false: colors.borderGray, true: colors.primaryLight }}
-              thumbColor={availability.emergencyAvailable ? colors.primary : colors.mediumGray}
-            />
-          </View>
+          <SwitchRow
+            label="Emergency Available"
+            value={availability.emergencyAvailable}
+            onValueChange={(value) => setAvailability({ ...availability, emergencyAvailable: value })}
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Weekend Work</Text>
-            <Switch
-              value={availability.weekendWork}
-              onValueChange={(value) => setAvailability({ ...availability, weekendWork: value })}
-              trackColor={{ false: colors.borderGray, true: colors.primaryLight }}
-              thumbColor={availability.weekendWork ? colors.primary : colors.mediumGray}
-            />
-          </View>
+          <SwitchRow
+            label="Weekend Work"
+            value={availability.weekendWork}
+            onValueChange={(value) => setAvailability({ ...availability, weekendWork: value })}
+          />
         </View>
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Pricing</Text>
           
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Base Rate (DKK/km)</Text>
-            <TextInput
-              style={styles.numberInput}
-              value={availability.baseRate.toString()}
-              onChangeText={(text) => setAvailability({ ...availability, baseRate: parseFloat(text) || 0 })}
-              keyboardType="numeric"
-            />
-          </View>
+          <NumberInput
+            label="Base Rate (DKK/km)"
+            value={availability.baseRate}
+            onChangeText={(text) => setAvailability({ ...availability, baseRate: parseFloat(text) || 0 })}
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Fuel Surcharge (DKK/km)</Text>
-            <TextInput
-              style={styles.numberInput}
-              value={availability.fuelSurcharge.toString()}
-              onChangeText={(text) => setAvailability({ ...availability, fuelSurcharge: parseFloat(text) || 0 })}
-              keyboardType="numeric"
-            />
-          </View>
+          <NumberInput
+            label="Fuel Surcharge (DKK/km)"
+            value={availability.fuelSurcharge}
+            onChangeText={(text) => setAvailability({ ...availability, fuelSurcharge: parseFloat(text) || 0 })}
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Toll Included</Text>
-            <Switch
-              value={availability.tollIncluded}
-              onValueChange={(value) => setAvailability({ ...availability, tollIncluded: value })}
-              trackColor={{ false: colors.borderGray, true: colors.primaryLight }}
-              thumbColor={availability.tollIncluded ? colors.primary : colors.mediumGray}
-            />
-          </View>
+          <SwitchRow
+            label="Toll Included"
+            value={availability.tollIncluded}
+            onValueChange={(value) => setAvailability({ ...availability, tollIncluded: value })}
+          />
         </View>
 
         <View style={styles.section}>
@@ -451,134 +301,37 @@ const AvailabilityScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {renderCountryModal()}
-      {renderTruckTypeModal()}
-      {renderEquipmentModal()}
+      <SelectionModal
+        visible={showCountryModal}
+        onClose={() => setShowCountryModal(false)}
+        title="Operating Countries"
+        options={countryOptions}
+        selectedValues={availability.operatingCountries}
+        onToggle={toggleCountry}
+        formatLabel={(country) => country.name}
+      />
+
+      <SelectionModal
+        visible={showTruckTypeModal}
+        onClose={() => setShowTruckTypeModal(false)}
+        title="Truck Types"
+        options={truckTypeOptions}
+        selectedValues={availability.truckTypes}
+        onToggle={toggleTruckType}
+        formatLabel={(type) => type.label}
+      />
+
+      <SelectionModal
+        visible={showEquipmentModal}
+        onClose={() => setShowEquipmentModal(false)}
+        title="Special Equipment"
+        options={equipmentOptions}
+        selectedValues={availability.specialEquipment}
+        onToggle={toggleEquipment}
+        formatLabel={(equipment) => equipment.replace('_', ' ')}
+      />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.lightGray,
-  },
-  content: {
-    flex: 1,
-  },
-  section: {
-    backgroundColor: colors.white,
-    marginBottom: spacing[2],
-    padding: spacing[4],
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing[2],
-  },
-  sectionTitle: {
-    ...textStyles.h3,
-    marginBottom: spacing[3],
-  },
-  sectionSubtitle: {
-    ...textStyles.caption,
-    color: colors.mediumGray,
-  },
-  inputGroup: {
-    marginBottom: spacing[4],
-  },
-  inputLabel: {
-    ...textStyles.label,
-    marginBottom: spacing[2],
-  },
-  numberInput: {
-    ...components.input,
-  },
-  textArea: {
-    ...components.input,
-    height: 100,
-    textAlignVertical: 'top',
-  },
-  selectorButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: spacing[3],
-    backgroundColor: colors.lightGray,
-    borderRadius: borderRadius.lg,
-    borderWidth: 1,
-    borderColor: colors.borderGray,
-  },
-  selectorText: {
-    ...textStyles.body,
-  },
-  daySelector: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  dayButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.lightGray,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  dayButtonActive: {
-    backgroundColor: colors.primary,
-  },
-  dayButtonText: {
-    ...textStyles.label,
-    color: colors.mediumGray,
-  },
-  dayButtonTextActive: {
-    color: colors.white,
-  },
-  footer: {
-    padding: spacing[4],
-    backgroundColor: colors.white,
-    borderTopWidth: 1,
-    borderTopColor: colors.borderGray,
-  },
-  saveButton: {
-    ...components.button.primary,
-    paddingVertical: spacing[4],
-  },
-  saveButtonText: {
-    ...textStyles.label,
-    color: colors.white,
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: spacing[4],
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderGray,
-  },
-  modalTitle: {
-    ...textStyles.h3,
-  },
-  modalContent: {
-    flex: 1,
-    padding: spacing[4],
-  },
-  optionItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: spacing[3],
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderGray,
-  },
-  optionText: {
-    ...textStyles.body,
-  },
-});
 
 export default AvailabilityScreen;

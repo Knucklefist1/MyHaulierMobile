@@ -6,12 +6,14 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
-  StyleSheet,
   Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/FallbackAuthContext';
 import { OfflineStorage } from '../../utils/storage';
+import { styles } from '../../styles/screens/NotificationsScreenStyles';
+import { colors } from '../../styles/designSystem';
+import { EmptyState } from '../../components/common';
 
 const NotificationsScreen = ({ navigation }) => {
   const { userProfile } = useAuth();
@@ -150,13 +152,13 @@ const NotificationsScreen = ({ navigation }) => {
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 'high':
-        return '#e74c3c';
+        return colors.error;
       case 'medium':
-        return '#f39c12';
+        return colors.warning;
       case 'low':
-        return '#95a5a6';
+        return colors.mediumGray;
       default:
-        return '#3498db';
+        return colors.primary;
     }
   };
 
@@ -216,7 +218,7 @@ const NotificationsScreen = ({ navigation }) => {
           style={styles.deleteButton}
           onPress={() => deleteNotification(item.id)}
         >
-          <Ionicons name="trash" size={16} color="#e74c3c" />
+          <Ionicons name="trash" size={16} color={colors.error} />
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -261,7 +263,7 @@ const NotificationsScreen = ({ navigation }) => {
           style={styles.actionButton}
           onPress={markAllAsRead}
         >
-          <Ionicons name="checkmark-done" size={16} color="#3498db" />
+          <Ionicons name="checkmark-done" size={16} color={colors.primary} />
           <Text style={styles.actionButtonText}>Mark All Read</Text>
         </TouchableOpacity>
       </View>
@@ -272,157 +274,15 @@ const NotificationsScreen = ({ navigation }) => {
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
         ListEmptyComponent={() => (
-          <View style={styles.emptyState}>
-            <Ionicons name="notifications-off" size={48} color="#bdc3c7" />
-            <Text style={styles.emptyText}>No notifications</Text>
-          </View>
+          <EmptyState
+            icon="notifications-off"
+            title="No notifications"
+            iconSize={48}
+          />
         )}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
-  header: {
-    padding: 20,
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#7f8c8d',
-  },
-  filterContainer: {
-    flexDirection: 'row',
-    padding: 16,
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
-  },
-  filterButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginRight: 8,
-    backgroundColor: '#f1f2f6',
-  },
-  activeFilterButton: {
-    backgroundColor: '#3498db',
-  },
-  filterButtonText: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    fontWeight: '500',
-  },
-  activeFilterButtonText: {
-    color: '#ffffff',
-  },
-  actionsContainer: {
-    flexDirection: 'row',
-    padding: 16,
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
-  },
-  actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-    backgroundColor: '#f8f9fa',
-  },
-  actionButtonText: {
-    marginLeft: 4,
-    fontSize: 14,
-    color: '#3498db',
-    fontWeight: '500',
-  },
-  listContainer: {
-    padding: 16,
-  },
-  notificationItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: '#e9ecef',
-  },
-  unreadNotification: {
-    borderLeftWidth: 4,
-    borderLeftColor: '#3498db',
-    backgroundColor: '#f8f9fa',
-  },
-  notificationLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  notificationContent: {
-    flex: 1,
-  },
-  notificationTitle: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#2c3e50',
-    marginBottom: 4,
-  },
-  unreadText: {
-    fontWeight: 'bold',
-  },
-  notificationMessage: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    marginBottom: 4,
-  },
-  timestamp: {
-    fontSize: 12,
-    color: '#95a5a6',
-  },
-  notificationRight: {
-    alignItems: 'center',
-  },
-  unreadDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#3498db',
-    marginBottom: 8,
-  },
-  deleteButton: {
-    padding: 4,
-  },
-  emptyState: {
-    alignItems: 'center',
-    paddingVertical: 40,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#7f8c8d',
-    marginTop: 8,
-  },
-});
 
 export default NotificationsScreen;

@@ -4,11 +4,12 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  StyleSheet,
   Image
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/FallbackAuthContext';
+import { styles } from '../../styles/screens/ChatListScreenStyles';
+import { EmptyState } from '../../components/common';
 
 const ChatListScreen = ({ navigation }) => {
   const [chats, setChats] = useState([]);
@@ -105,22 +106,23 @@ const ChatListScreen = ({ navigation }) => {
   };
 
   const renderEmptyState = () => (
-    <View style={styles.emptyState}>
-      <Ionicons name="chatbubbles-outline" size={64} color="#bdc3c7" />
-      <Text style={styles.emptyTitle}>No Conversations</Text>
-      <Text style={styles.emptySubtitle}>
-        Start a conversation by applying to jobs or posting new opportunities
-      </Text>
-    </View>
+    <EmptyState
+      icon="chatbubbles-outline"
+      title="No Conversations"
+      subtitle="Start a conversation by applying to jobs or posting new opportunities"
+      iconSize={64}
+    />
   );
 
   // Show loading state if currentUser is not available yet
   if (!currentUser?.uid) {
     return (
       <View style={styles.container}>
-        <View style={styles.emptyState}>
-          <Text style={styles.emptyTitle}>Loading...</Text>
-        </View>
+        <EmptyState
+          icon="hourglass-outline"
+          title="Loading..."
+          iconSize={64}
+        />
       </View>
     );
   }
@@ -138,105 +140,5 @@ const ChatListScreen = ({ navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
-  listContainer: {
-    flexGrow: 1,
-  },
-  chatItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ecf0f1',
-  },
-  avatarContainer: {
-    position: 'relative',
-    marginRight: 12,
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#f8f9fa',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  unreadBadge: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: '#e74c3c',
-  },
-  chatContent: {
-    flex: 1,
-  },
-  chatHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  chatTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    flex: 1,
-  },
-  timestamp: {
-    fontSize: 12,
-    color: '#95a5a6',
-  },
-  lastMessage: {
-    fontSize: 14,
-    color: '#7f8c8d',
-  },
-  unreadMessage: {
-    fontWeight: 'bold',
-    color: '#2c3e50',
-  },
-  unreadCount: {
-    backgroundColor: '#e74c3c',
-    borderRadius: 12,
-    minWidth: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 8,
-  },
-  unreadCountText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 60,
-  },
-  emptyTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  emptySubtitle: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    textAlign: 'center',
-    lineHeight: 20,
-    paddingHorizontal: 40,
-  },
-});
 
 export default ChatListScreen;

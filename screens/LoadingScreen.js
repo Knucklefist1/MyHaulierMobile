@@ -1,37 +1,16 @@
 import React from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
+import { styles } from '../styles/screens/LoadingScreenStyles';
+import { colors } from '../styles/designSystem';
 
 const LoadingScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MyHaulier</Text>
-      <ActivityIndicator size={40} color="#3498db" style={styles.loader} />
+      <ActivityIndicator size={40} color={colors.primary} style={styles.loader} />
       <Text style={styles.subtitle}>Loading...</Text>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f8f9fa',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 20,
-  },
-  loader: {
-    marginVertical: 20,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#7f8c8d',
-    fontWeight: '500',
-  },
-});
 
 export default LoadingScreen;

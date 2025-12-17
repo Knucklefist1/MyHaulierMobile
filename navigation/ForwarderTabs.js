@@ -134,11 +134,6 @@ const ProfileStack = () => (
       component={NotificationsScreen}
       options={{ title: 'Notifications' }}
     />
-  </Stack.Navigator>
-);
-
-const MapStack = () => (
-  <Stack.Navigator>
     <Stack.Screen 
       name="MapMain" 
       component={MapScreen}
@@ -158,10 +153,6 @@ const ForwarderTabs = () => {
             iconName = focused ? 'handshake' : 'handshake-outline';
           } else if (route.name === 'Find') {
             iconName = focused ? 'search' : 'search-outline';
-          } else if (route.name === 'Map') {
-            iconName = focused ? 'map' : 'map-outline';
-          } else if (route.name === 'Post') {
-            iconName = focused ? 'add-circle' : 'add-circle-outline';
           } else if (route.name === 'Analytics') {
             iconName = focused ? 'analytics' : 'analytics-outline';
           } else if (route.name === 'Chat') {
@@ -179,8 +170,6 @@ const ForwarderTabs = () => {
     >
       <Tab.Screen name="Partnerships" component={JobsStack} />
       <Tab.Screen name="Find" component={FindStack} />
-      <Tab.Screen name="Map" component={MapStack} />
-      <Tab.Screen name="Post" component={PostStack} />
       <Tab.Screen name="Analytics" component={AnalyticsStack} />
       <Tab.Screen name="Chat" component={ChatStack} />
       <Tab.Screen name="Profile" component={ProfileStack} />

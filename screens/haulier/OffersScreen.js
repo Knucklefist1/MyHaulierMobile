@@ -4,13 +4,14 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  StyleSheet,
   Alert,
   RefreshControl
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/FallbackAuthContext';
-import { colors, typography, spacing, borderRadius, shadows, textStyles, components } from '../../styles/designSystem';
+import { styles } from '../../styles/screens/OffersScreenStyles';
+import { colors } from '../../styles/designSystem';
+import { EmptyState, LoadingSpinner } from '../../components/common';
 
 const OffersScreen = ({ navigation }) => {
   const [offers, setOffers] = useState([]);
@@ -228,15 +229,9 @@ const OffersScreen = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-  const renderEmptyState = () => (
-    <View style={styles.emptyState}>
-      <Ionicons name="document-text-outline" size={64} color={colors.mediumGray} />
-      <Text style={styles.emptyTitle}>No Partnership Offers</Text>
-      <Text style={styles.emptySubtitle}>
-        Partnership opportunities from forwarders will appear here
-      </Text>
-    </View>
-  );
+  if (loading) {
+    return <LoadingSpinner message="Loading offers..." />;
+  }
 
   return (
     <View style={styles.container}>
@@ -252,114 +247,18 @@ const OffersScreen = ({ navigation }) => {
             colors={[colors.primary]}
           />
         }
-        ListEmptyComponent={!loading ? renderEmptyState : null}
+        ListEmptyComponent={() => (
+          <EmptyState
+            icon="document-text-outline"
+            title="No Partnership Offers"
+            subtitle="Partnership opportunities from forwarders will appear here"
+            iconSize={64}
+          />
+        )}
         showsVerticalScrollIndicator={false}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.lightGray,
-  },
-  listContainer: {
-    padding: spacing[4],
-  },
-  offerCard: {
-    ...components.card,
-    marginBottom: spacing[4],
-  },
-  offerHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: spacing[3],
-  },
-  forwarderInfo: {
-    flex: 1,
-  },
-  forwarderName: {
-    ...textStyles.h4,
-    marginBottom: spacing[1],
-  },
-  offerRate: {
-    ...textStyles.body,
-    color: colors.primary,
-    fontWeight: typography.weights.bold,
-  },
-  statusBadge: {
-    paddingHorizontal: spacing[2],
-    paddingVertical: spacing[1],
-    borderRadius: borderRadius.sm,
-  },
-  statusText: {
-    ...textStyles.caption,
-    color: colors.white,
-    textTransform: 'capitalize',
-  },
-  message: {
-    ...textStyles.caption,
-    color: colors.mediumGray,
-    marginBottom: spacing[3],
-  },
-  offerDetails: {
-    marginBottom: spacing[3],
-  },
-  detailRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing[1],
-  },
-  detailText: {
-    ...textStyles.caption,
-    marginLeft: spacing[2],
-    color: colors.mediumGray,
-  },
-  offerActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderTopWidth: 1,
-    borderTopColor: colors.borderGray,
-    paddingTop: spacing[3],
-  },
-  actionButton: {
-    flex: 1,
-    paddingVertical: spacing[3],
-    borderRadius: borderRadius.md,
-    alignItems: 'center',
-    marginHorizontal: spacing[1],
-  },
-  rejectButton: {
-    backgroundColor: colors.errorLight,
-  },
-  acceptButton: {
-    backgroundColor: colors.success,
-  },
-  rejectButtonText: {
-    ...textStyles.label,
-    color: colors.error,
-  },
-  acceptButtonText: {
-    ...textStyles.label,
-    color: colors.white,
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: spacing[16],
-  },
-  emptyTitle: {
-    ...textStyles.h2,
-    marginTop: spacing[4],
-    marginBottom: spacing[2],
-  },
-  emptySubtitle: {
-    ...textStyles.caption,
-    textAlign: 'center',
-  },
-});
 
 export default OffersScreen;

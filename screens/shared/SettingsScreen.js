@@ -6,13 +6,14 @@ import {
   Text,
   TouchableOpacity,
   Switch,
-  StyleSheet,
   ScrollView,
   Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/FallbackAuthContext';
 import { SettingsStorage } from '../../utils/storage';
+import { styles } from '../../styles/screens/SettingsScreenStyles';
+import { colors } from '../../styles/designSystem';
 
 const SettingsScreen = ({ navigation }) => {
   const { userProfile, updateUserProfile } = useAuth();
@@ -75,7 +76,7 @@ const SettingsScreen = ({ navigation }) => {
   const renderSettingItem = (title, subtitle, icon, onPress, rightComponent) => (
     <TouchableOpacity style={styles.settingItem} onPress={onPress}>
       <View style={styles.settingLeft}>
-        <Ionicons name={icon} size={24} color="#3498db" />
+        <Ionicons name={icon} size={24} color={colors.primary} />
         <View style={styles.settingText}>
           <Text style={styles.settingTitle}>{title}</Text>
           <Text style={styles.settingSubtitle}>{subtitle}</Text>
@@ -102,8 +103,8 @@ const SettingsScreen = ({ navigation }) => {
           <Switch
             value={settings.notifications}
             onValueChange={() => handleToggle('notifications')}
-            trackColor={{ false: '#767577', true: '#3498db' }}
-            thumbColor={settings.notifications ? '#ffffff' : '#f4f3f4'}
+            trackColor={{ false: colors.mediumGray, true: colors.primary }}
+            thumbColor={settings.notifications ? colors.white : colors.lightGray}
           />
         )}
       </View>
@@ -127,7 +128,7 @@ const SettingsScreen = ({ navigation }) => {
           `Current: ${settings.language === 'en' ? 'English' : settings.language === 'da' ? 'Danish' : 'German'}`,
           'language',
           handleLanguageChange,
-          <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
+          <Ionicons name="chevron-forward" size={20} color={colors.mediumGray} />
         )}
       </View>
 
@@ -166,7 +167,7 @@ const SettingsScreen = ({ navigation }) => {
           'Update your personal details',
           'person',
           () => navigation.navigate('Profile'),
-          <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
+          <Ionicons name="chevron-forward" size={20} color={colors.mediumGray} />
         )}
         {renderSettingItem(
           'Sign Out',
@@ -182,77 +183,11 @@ const SettingsScreen = ({ navigation }) => {
               ]
             );
           },
-          <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
+          <Ionicons name="chevron-forward" size={20} color={colors.mediumGray} />
         )}
       </View>
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
-  header: {
-    padding: 20,
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#7f8c8d',
-  },
-  section: {
-    marginTop: 20,
-    backgroundColor: '#ffffff',
-    marginHorizontal: 16,
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2c3e50',
-    padding: 16,
-    backgroundColor: '#f8f9fa',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
-  },
-  settingItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f1f2f6',
-  },
-  settingLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  settingText: {
-    marginLeft: 12,
-    flex: 1,
-  },
-  settingTitle: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#2c3e50',
-    marginBottom: 2,
-  },
-  settingSubtitle: {
-    fontSize: 14,
-    color: '#7f8c8d',
-  },
-});
 
 export default SettingsScreen;

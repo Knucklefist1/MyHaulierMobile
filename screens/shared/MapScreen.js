@@ -2,21 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   Alert,
-  Modal,
   ScrollView,
-  TextInput,
-  Switch,
-  Dimensions
+  TextInput
 } from 'react-native';
-import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
-import { colors, typography, spacing, borderRadius, shadows, textStyles, components } from '../../styles/designSystem';
-
-const { width, height } = Dimensions.get('window');
+import { colors } from '../../styles/designSystem';
+import { styles } from '../../styles/screens/MapScreenStyles';
+import { PartnershipCallout, FiltersModal, PartnershipModal } from '../../components/map';
 
 const MapScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
@@ -265,202 +261,9 @@ const MapScreen = ({ navigation }) => {
   // For debugging, let's use partnerships directly if filteredPartnerships is empty
   const displayPartnerships = filteredPartnerships.length > 0 ? filteredPartnerships : partnerships;
 
-  const renderPartnershipCallout = (partnership) => (
-    <Callout style={styles.callout}>
-      <View style={styles.calloutContent}>
-        <Text style={styles.calloutTitle}>{partnership.title}</Text>
-        <Text style={styles.calloutDescription}>{partnership.description}</Text>
-        <View style={styles.calloutDetails}>
-          <Text style={styles.calloutDetail}>
-            <Ionicons name="star" size={12} color={colors.warning} /> {partnership.rating}/5
-          </Text>
-          <Text style={styles.calloutDetail}>
-            <Ionicons name="location" size={12} color={colors.primary} /> {Math.round(partnership.distance)}km
-          </Text>
-        </View>
-        <TouchableOpacity
-          style={styles.calloutButton}
-          onPress={() => handleMarkerPress(partnership)}
-        >
-          <Text style={styles.calloutButtonText}>View Details</Text>
-        </TouchableOpacity>
-      </View>
-    </Callout>
-  );
-
-  const renderFiltersModal = () => (
-    <Modal
-      visible={showFilters}
-      animationType="slide"
-      presentationStyle="pageSheet"
-      onRequestClose={() => setShowFilters(false)}
-    >
-      <View style={styles.filtersContainer}>
-        <View style={styles.filtersHeader}>
-          <Text style={styles.filtersTitle}>Filter Partnerships</Text>
-          <TouchableOpacity onPress={() => setShowFilters(false)}>
-            <Ionicons name="close" size={24} color={colors.darkGray} />
-          </TouchableOpacity>
-        </View>
-        
-        <ScrollView style={styles.filtersContent}>
-          <View style={styles.filterSection}>
-            <Text style={styles.filterLabel}>Maximum Distance (km)</Text>
-            <TextInput
-              style={styles.filterInput}
-              value={filters.maxDistance.toString()}
-              onChangeText={(text) => setFilters({...filters, maxDistance: parseInt(text) || 500})}
-              keyboardType="numeric"
-            />
-          </View>
-          
-          <View style={styles.filterSection}>
-            <Text style={styles.filterLabel}>Minimum Rating</Text>
-            <TextInput
-              style={styles.filterInput}
-              value={filters.minRating.toString()}
-              onChangeText={(text) => setFilters({...filters, minRating: parseInt(text) || 0})}
-              keyboardType="numeric"
-            />
-          </View>
-        </ScrollView>
-        
-        <View style={styles.filtersFooter}>
-          <TouchableOpacity
-            style={styles.applyButton}
-            onPress={() => setShowFilters(false)}
-          >
-            <Text style={styles.applyButtonText}>Apply Filters</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Modal>
-  );
-
-  const renderPartnershipModal = () => (
-    <Modal
-      visible={selectedPartnership !== null}
-      animationType="slide"
-      presentationStyle="pageSheet"
-      onRequestClose={() => setSelectedPartnership(null)}
-    >
-      {selectedPartnership && (
-        <View style={styles.partnershipModal}>
-          <View style={styles.partnershipHeader}>
-            <Text style={styles.partnershipTitle}>{selectedPartnership.title}</Text>
-            <TouchableOpacity onPress={() => setSelectedPartnership(null)}>
-              <Ionicons name="close" size={24} color={colors.darkGray} />
-            </TouchableOpacity>
-          </View>
-          
-          <ScrollView style={styles.partnershipContent}>
-            <Text style={styles.partnershipDescription}>{selectedPartnership.description}</Text>
-            
-            <View style={styles.partnershipDetails}>
-              <View style={styles.detailRow}>
-                <Ionicons name="business" size={16} color={colors.primary} />
-                <Text style={styles.detailText}>{selectedPartnership.industry}</Text>
-              </View>
-              
-              <View style={styles.detailRow}>
-                <Ionicons name="star" size={16} color={colors.warning} />
-                <Text style={styles.detailText}>{selectedPartnership.rating}/5 rating</Text>
-              </View>
-              
-              <View style={styles.detailRow}>
-                <Ionicons name="location" size={16} color={colors.primary} />
-                <Text style={styles.detailText}>{Math.round(selectedPartnership.distance)}km away</Text>
-              </View>
-            </View>
-            
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Contract Details:</Text>
-              <View style={styles.detailRow}>
-                <Ionicons name="document-text" size={16} color={colors.primary} />
-                <Text style={styles.detailText}>{selectedPartnership.partnershipType}</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <Ionicons name="time" size={16} color={colors.primary} />
-                <Text style={styles.detailText}>Duration: {selectedPartnership.contractDuration}</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <Ionicons name="cash" size={16} color={colors.success} />
-                <Text style={styles.detailText}>Rate: {selectedPartnership.currentRate}</Text>
-              </View>
-            </View>
-            
-            {selectedPartnership.trucksNeeded && (
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Trucks Needed:</Text>
-                <View style={styles.trucksInfo}>
-                  <View style={styles.truckTypesContainer}>
-                    <Text style={styles.truckTypesLabel}>Types:</Text>
-                    <View style={styles.tagsContainer}>
-                      {selectedPartnership.trucksNeeded.types.map((truck, index) => (
-                        <View key={index} style={styles.tag}>
-                          <Text style={styles.tagText}>{truck}</Text>
-                        </View>
-                      ))}
-                    </View>
-                  </View>
-                  <View style={styles.quantityContainer}>
-                    <Text style={styles.quantityLabel}>Quantity:</Text>
-                    <Text style={styles.quantityValue}>{selectedPartnership.trucksNeeded.quantity}</Text>
-                  </View>
-                </View>
-                {selectedPartnership.trucksNeeded.specialRequirements.length > 0 && (
-                  <View style={styles.specialRequirementsContainer}>
-                    <Text style={styles.specialRequirementsLabel}>Special Requirements:</Text>
-                    <View style={styles.specialRequirementsList}>
-                      {selectedPartnership.trucksNeeded.specialRequirements.map((req, index) => (
-                        <Text key={index} style={styles.specialRequirementItem}>• {req}</Text>
-                      ))}
-                    </View>
-                  </View>
-                )}
-              </View>
-            )}
-            
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Operating Countries Needed:</Text>
-              <View style={styles.tagsContainer}>
-                {selectedPartnership.operatingCountries.map((country, index) => (
-                  <View key={index} style={[styles.tag, styles.countryTag]}>
-                    <Text style={[styles.tagText, styles.countryTagText]}>{country}</Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-            
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Contact Information:</Text>
-              <View style={styles.detailRow}>
-                <Ionicons name="person" size={16} color={colors.primary} />
-                <Text style={styles.detailText}>{selectedPartnership.contactPerson}</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <Ionicons name="call" size={16} color={colors.primary} />
-                <Text style={styles.detailText}>{selectedPartnership.phone}</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <Ionicons name="mail" size={16} color={colors.primary} />
-                <Text style={styles.detailText}>{selectedPartnership.email}</Text>
-              </View>
-            </View>
-          </ScrollView>
-          
-          <View style={styles.partnershipFooter}>
-            <TouchableOpacity
-              style={styles.connectButton}
-              onPress={() => handleConnect(selectedPartnership)}
-            >
-              <Text style={styles.connectButtonText}>Connect</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
-    </Modal>
-  );
+  const handleFilterChange = (key, value) => {
+    setFilters({ ...filters, [key]: value });
+  };
 
   if (errorMsg) {
     return (
@@ -499,7 +302,10 @@ const MapScreen = ({ navigation }) => {
             pinColor={getMarkerColor(partnership.type, partnership.status)}
             onPress={() => handleMarkerPress(partnership)}
           >
-            {renderPartnershipCallout(partnership)}
+            <PartnershipCallout
+              partnership={partnership}
+              onPress={handleMarkerPress}
+            />
           </Marker>
         ))}
       </MapView>
@@ -529,280 +335,21 @@ const MapScreen = ({ navigation }) => {
         </Text>
       </View>
       
-      {renderFiltersModal()}
-      {renderPartnershipModal()}
+      <FiltersModal
+        visible={showFilters}
+        onClose={() => setShowFilters(false)}
+        filters={filters}
+        onFilterChange={handleFilterChange}
+      />
+      
+      <PartnershipModal
+        partnership={selectedPartnership}
+        visible={selectedPartnership !== null}
+        onClose={() => setSelectedPartnership(null)}
+        onConnect={handleConnect}
+      />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    width: width,
-    height: height,
-  },
-  searchContainer: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    right: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  searchBar: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.white,
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    borderRadius: borderRadius.md,
-    marginRight: spacing[2],
-    ...shadows.sm,
-  },
-  searchInput: {
-    flex: 1,
-    marginLeft: spacing[2],
-    ...textStyles.body,
-  },
-  filterButton: {
-    backgroundColor: colors.primary,
-    padding: spacing[3],
-    borderRadius: borderRadius.md,
-    ...shadows.sm,
-  },
-  callout: {
-    width: 200,
-    padding: spacing[2],
-  },
-  calloutContent: {
-    alignItems: 'center',
-  },
-  calloutTitle: {
-    ...textStyles.h4,
-    marginBottom: spacing[1],
-  },
-  calloutDescription: {
-    ...textStyles.caption,
-    textAlign: 'center',
-    marginBottom: spacing[2],
-  },
-  calloutDetails: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginBottom: spacing[2],
-  },
-  calloutDetail: {
-    ...textStyles.caption,
-    color: colors.mediumGray,
-  },
-  calloutButton: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    borderRadius: borderRadius.sm,
-  },
-  calloutButtonText: {
-    ...textStyles.caption,
-    color: colors.white,
-    fontWeight: typography.weights.medium,
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: spacing[4],
-  },
-  errorText: {
-    ...textStyles.h3,
-    color: colors.error,
-    textAlign: 'center',
-    marginBottom: spacing[3],
-  },
-  retryButton: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing[4],
-    paddingVertical: spacing[3],
-    borderRadius: borderRadius.md,
-  },
-  retryButtonText: {
-    ...textStyles.button,
-    color: colors.white,
-  },
-  filtersContainer: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  filtersHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: spacing[4],
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderGray,
-  },
-  filtersTitle: {
-    ...textStyles.h3,
-  },
-  filtersContent: {
-    flex: 1,
-    padding: spacing[4],
-  },
-  filterSection: {
-    marginBottom: spacing[4],
-  },
-  filterLabel: {
-    ...textStyles.label,
-    marginBottom: spacing[2],
-  },
-  filterInput: {
-    ...components.input,
-  },
-  filtersFooter: {
-    padding: spacing[4],
-    borderTopWidth: 1,
-    borderTopColor: colors.borderGray,
-  },
-  applyButton: {
-    ...components.button.primary,
-  },
-  applyButtonText: {
-    ...textStyles.button,
-    color: colors.white,
-  },
-  partnershipModal: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  partnershipHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: spacing[4],
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderGray,
-  },
-  partnershipTitle: {
-    ...textStyles.h3,
-  },
-  partnershipContent: {
-    flex: 1,
-    padding: spacing[4],
-  },
-  partnershipDescription: {
-    ...textStyles.body,
-    marginBottom: spacing[4],
-  },
-  partnershipDetails: {
-    marginBottom: spacing[4],
-  },
-  detailRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing[2],
-  },
-  detailText: {
-    ...textStyles.body,
-    marginLeft: spacing[2],
-  },
-  section: {
-    marginBottom: spacing[4],
-  },
-  sectionTitle: {
-    ...textStyles.h4,
-    marginBottom: spacing[2],
-  },
-  tagsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  tag: {
-    backgroundColor: colors.primaryLight,
-    paddingHorizontal: spacing[2],
-    paddingVertical: spacing[1],
-    borderRadius: borderRadius.sm,
-    marginRight: spacing[2],
-    marginBottom: spacing[1],
-  },
-  tagText: {
-    ...textStyles.caption,
-    color: colors.primary,
-    fontWeight: typography.weights.medium,
-  },
-  countryTag: {
-    backgroundColor: colors.successLight,
-  },
-  countryTagText: {
-    color: colors.success,
-  },
-  partnershipFooter: {
-    padding: spacing[4],
-    borderTopWidth: 1,
-    borderTopColor: colors.borderGray,
-  },
-  connectButton: {
-    ...components.button.primary,
-  },
-  connectButtonText: {
-    ...textStyles.button,
-    color: colors.white,
-  },
-  debugContainer: {
-    position: 'absolute',
-    bottom: 100,
-    left: 20,
-    right: 20,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    padding: spacing[2],
-    borderRadius: borderRadius.sm,
-  },
-  debugText: {
-    color: colors.white,
-    fontSize: 12,
-    textAlign: 'center',
-  },
-  trucksInfo: {
-    marginBottom: spacing[2],
-  },
-  truckTypesContainer: {
-    marginBottom: spacing[2],
-  },
-  truckTypesLabel: {
-    ...textStyles.label,
-    marginBottom: spacing[1],
-  },
-  quantityContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing[2],
-  },
-  quantityLabel: {
-    ...textStyles.label,
-    marginRight: spacing[2],
-  },
-  quantityValue: {
-    ...textStyles.body,
-    fontWeight: typography.weights.medium,
-    color: colors.primary,
-  },
-  specialRequirementsContainer: {
-    marginTop: spacing[2],
-  },
-  specialRequirementsLabel: {
-    ...textStyles.label,
-    marginBottom: spacing[1],
-  },
-  specialRequirementsList: {
-    marginLeft: spacing[2],
-  },
-  specialRequirementItem: {
-    ...textStyles.caption,
-    color: colors.mediumGray,
-    marginBottom: spacing[1],
-  },
-});
 
 export default MapScreen;

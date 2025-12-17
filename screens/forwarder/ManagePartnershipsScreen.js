@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/FallbackAuthContext';
+import { styles } from '../../styles/screens/ManagePartnershipsScreenStyles';
+import { colors } from '../../styles/designSystem';
 
 const STORAGE_KEY = 'partnerships';
 
@@ -80,12 +82,12 @@ const ManagePartnershipsScreen = ({ navigation }) => {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Manage Partnerships</Text>
       <View style={styles.actions}>
-        <TouchableOpacity style={[styles.btn, { backgroundColor: '#2ecc71' }]} onPress={handleAddPartnership}>
-          <Ionicons name="add-circle" size={20} color="#fff" />
+        <TouchableOpacity style={[styles.btn, { backgroundColor: colors.success }]} onPress={handleAddPartnership}>
+          <Ionicons name="add-circle" size={20} color={colors.white} />
           <Text style={styles.btnText}>Add Partnership</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.btn, { backgroundColor: '#3498db' }]} onPress={handleAdjust}>
-          <Ionicons name="construct" size={20} color="#fff" />
+        <TouchableOpacity style={[styles.btn, { backgroundColor: colors.primary }]} onPress={handleAdjust}>
+          <Ionicons name="construct" size={20} color={colors.white} />
           <Text style={styles.btnText}>Adjust Trucks/Rate</Text>
         </TouchableOpacity>
       </View>
@@ -106,65 +108,6 @@ const ManagePartnershipsScreen = ({ navigation }) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-    padding: 16
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#2c3e50',
-    marginBottom: 12
-  },
-  actions: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 16
-  },
-  btn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 10
-  },
-  btnText: {
-    color: '#fff',
-    fontWeight: '600'
-  },
-  section: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2c3e50',
-    marginBottom: 8
-  },
-  empty: {
-    color: '#7f8c8d',
-    marginBottom: 12
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: '#3498db'
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#2c3e50',
-    marginBottom: 6
-  },
-  cardLine: {
-    color: '#34495e',
-    marginBottom: 2
-  }
-});
 
 export default ManagePartnershipsScreen;
 

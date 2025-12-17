@@ -2,18 +2,17 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   FlatList,
   TouchableOpacity,
   TextInput,
   Alert,
-  RefreshControl,
-  Modal,
-  ScrollView,
-  Switch
+  RefreshControl
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors, typography, spacing, borderRadius, shadows, textStyles, components } from '../../styles/designSystem';
+import { colors } from '../../styles/designSystem';
+import { styles } from '../../styles/screens/MatchingScreenStyles';
+import { EmptyState } from '../../components/common';
+import { MatchCard, FilterModal } from '../../components/matching';
 import matchingService from '../../services/MatchingService';
 import availabilityService from '../../services/AvailabilityService';
 
@@ -356,321 +355,22 @@ const MatchingScreen = ({ navigation, route }) => {
     }
   });
 
-  const renderFilterModal = () => (
-    <Modal
-      visible={showFilters}
-      animationType="slide"
-      presentationStyle="pageSheet"
-    >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalHeader}>
-          <TouchableOpacity onPress={() => setShowFilters(false)}>
-            <Text style={styles.modalCancel}>Cancel</Text>
-          </TouchableOpacity>
-          <Text style={styles.modalTitle}>Filters</Text>
-          <TouchableOpacity onPress={clearFilters}>
-            <Text style={styles.modalClear}>Clear All</Text>
-          </TouchableOpacity>
-        </View>
-
-        <ScrollView style={styles.modalContent}>
-          {/* Countries Filter */}
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Operating Countries</Text>
-            <View style={styles.optionsContainer}>
-              {countries.map((country, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.optionButton,
-                    filters.countries.includes(country) && styles.selectedOption
-                  ]}
-                  onPress={() => handleMultiSelectFilter('countries', country)}
-                >
-                  <Text style={[
-                    styles.optionText,
-                    filters.countries.includes(country) && styles.selectedOptionText
-                  ]}>
-                    {country}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
-          {/* Truck Types Filter */}
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Truck Types</Text>
-            <View style={styles.optionsContainer}>
-              {truckTypes.map((type, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.optionButton,
-                    filters.truckTypes.includes(type) && styles.selectedOption
-                  ]}
-                  onPress={() => handleMultiSelectFilter('truckTypes', type)}
-                >
-                  <Text style={[
-                    styles.optionText,
-                    filters.truckTypes.includes(type) && styles.selectedOptionText
-                  ]}>
-                    {type}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
-          {/* Fleet Size Filter */}
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Fleet Size</Text>
-            <View style={styles.rangeContainer}>
-              <Text style={styles.rangeLabel}>Min Trucks: {filters.minTrucks}</Text>
-              <Text style={styles.rangeLabel}>Max Trucks: {filters.maxTrucks}</Text>
-            </View>
-          </View>
-
-          {/* Rating Filter */}
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Rating</Text>
-            <View style={styles.rangeContainer}>
-              <Text style={styles.rangeLabel}>Min Rating: {filters.minRating}</Text>
-              <Text style={styles.rangeLabel}>Max Rating: {filters.maxRating}</Text>
-            </View>
-          </View>
-
-          {/* Experience Filter */}
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Experience (Years)</Text>
-            <View style={styles.rangeContainer}>
-              <Text style={styles.rangeLabel}>Min: {filters.minExperience}</Text>
-              <Text style={styles.rangeLabel}>Max: {filters.maxExperience}</Text>
-            </View>
-          </View>
-
-          {/* Availability Filter */}
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Availability</Text>
-            <View style={styles.radioContainer}>
-              {['all', 'available', 'unavailable'].map((option) => (
-                <TouchableOpacity
-                  key={option}
-                  style={[
-                    styles.radioButton,
-                    filters.availability === option && styles.selectedRadio
-                  ]}
-                  onPress={() => handleFilterChange('availability', option)}
-                >
-                  <Text style={[
-                    styles.radioText,
-                    filters.availability === option && styles.selectedRadioText
-                  ]}>
-                    {option.charAt(0).toUpperCase() + option.slice(1)}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
-          {/* Certifications Filter */}
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Certifications</Text>
-            <View style={styles.optionsContainer}>
-              {certifications.map((cert, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.optionButton,
-                    filters.certifications.includes(cert) && styles.selectedOption
-                  ]}
-                  onPress={() => handleMultiSelectFilter('certifications', cert)}
-                >
-                  <Text style={[
-                    styles.optionText,
-                    filters.certifications.includes(cert) && styles.selectedOptionText
-                  ]}>
-                    {cert}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
-          {/* Languages Filter */}
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Languages</Text>
-            <View style={styles.optionsContainer}>
-              {languages.map((lang, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.optionButton,
-                    filters.languages.includes(lang) && styles.selectedOption
-                  ]}
-                  onPress={() => handleMultiSelectFilter('languages', lang)}
-                >
-                  <Text style={[
-                    styles.optionText,
-                    filters.languages.includes(lang) && styles.selectedOptionText
-                  ]}>
-                    {lang}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
-          {/* Special Equipment Filter */}
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Special Equipment</Text>
-            <View style={styles.optionsContainer}>
-              {specialEquipment.map((equipment, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.optionButton,
-                    filters.specialEquipment.includes(equipment) && styles.selectedOption
-                  ]}
-                  onPress={() => handleMultiSelectFilter('specialEquipment', equipment)}
-                >
-                  <Text style={[
-                    styles.optionText,
-                    filters.specialEquipment.includes(equipment) && styles.selectedOptionText
-                  ]}>
-                    {equipment}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        </ScrollView>
-
-        <View style={styles.modalFooter}>
-          <TouchableOpacity style={styles.applyButton} onPress={applyFilters}>
-            <Text style={styles.applyButtonText}>Apply Filters</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Modal>
-  );
-
   const renderMatchItem = ({ item }) => (
-    <View style={styles.matchCard}>
-      <View style={styles.matchHeader}>
-        <View style={styles.haulierInfo}>
-          <Text style={styles.haulierName}>{item.haulier.name}</Text>
-          <Text style={styles.companyName}>{item.haulier.company}</Text>
-        </View>
-        <View style={styles.matchScore}>
-          <Text style={styles.scoreText}>{Math.round(item.matchScore.totalScore * 100)}%</Text>
-          <Text style={styles.scoreLabel}>Match</Text>
-        </View>
-      </View>
-
-      <View style={styles.matchDetails}>
-        <View style={styles.detailRow}>
-          <Ionicons name="star" size={16} color={colors.warning} />
-          <Text style={styles.detailText}>
-            {item.haulier.performance.rating}/5 rating
-          </Text>
-        </View>
-
-        <View style={styles.detailRow}>
-          <Ionicons name="car" size={16} color={colors.primary} />
-          <Text style={styles.detailText}>
-            {item.haulier.fleet.availableTrucks} trucks available
-            {item.haulier.availability.isAvailable ? ' (Available)' : ' (Not Available)'}
-          </Text>
-        </View>
-
-        <View style={styles.detailRow}>
-          <Ionicons name="location" size={16} color={colors.success} />
-          <Text style={styles.detailText}>
-            {item.haulier.operatingRegions.countries.join(', ')}
-          </Text>
-        </View>
-
-        <View style={styles.detailRow}>
-          <Ionicons name="cash" size={16} color={colors.primary} />
-          <Text style={styles.detailText}>
-            {item.haulier.pricing.baseRate} DKK/km
-            {item.haulier.pricing.fuelSurcharge > 0 && ` + ${(item.haulier.pricing.fuelSurcharge * 100)}% fuel surcharge`}
-          </Text>
-        </View>
-
-        {item.haulier.pricing.tollIncluded && (
-          <View style={styles.detailRow}>
-            <Ionicons name="checkmark-circle" size={16} color={colors.success} />
-            <Text style={styles.detailText}>Tolls included</Text>
-          </View>
-        )}
-      </View>
-
-      <View style={styles.rateSection}>
-        <Text style={styles.rateTitle}>Rate Information</Text>
-        <View style={styles.rateDetails}>
-          <View style={styles.rateRow}>
-            <Text style={styles.rateLabel}>Base Rate:</Text>
-            <Text style={styles.rateValue}>{item.haulier.pricing.baseRate} DKK/km</Text>
-          </View>
-          {item.haulier.pricing.fuelSurcharge > 0 && (
-            <View style={styles.rateRow}>
-              <Text style={styles.rateLabel}>Fuel Surcharge:</Text>
-              <Text style={styles.rateValue}>+{(item.haulier.pricing.fuelSurcharge * 100)}%</Text>
-            </View>
-          )}
-          <View style={styles.rateRow}>
-            <Text style={styles.rateLabel}>Tolls:</Text>
-            <Text style={styles.rateValue}>{item.haulier.pricing.tollIncluded ? 'Included' : 'Not included'}</Text>
-          </View>
-          <View style={styles.rateRow}>
-            <Text style={styles.rateLabel}>Currency:</Text>
-            <Text style={styles.rateValue}>{item.haulier.pricing.currency}</Text>
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.matchReasons}>
-        <Text style={styles.reasonsTitle}>Why this match:</Text>
-        {item.matchReasons.map((reason, index) => (
-          <Text key={index} style={styles.reasonText}>• {reason}</Text>
-        ))}
-      </View>
-
-      <View style={styles.matchActions}>
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => handleViewProfile(item.haulier)}
-        >
-          <Text style={styles.actionButtonText}>View Profile</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.actionButton, styles.offerButton]}
-          onPress={() => handleMakeOffer(item.haulier)}
-        >
-          <Text style={[styles.actionButtonText, styles.offerButtonText]}>Make Offer</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.actionButton, styles.primaryButton]}
-          onPress={() => handleContactHaulier(item.haulier)}
-        >
-          <Text style={[styles.actionButtonText, styles.primaryButtonText]}>Contact</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <MatchCard
+      match={item}
+      onViewProfile={handleViewProfile}
+      onMakeOffer={handleMakeOffer}
+      onContact={handleContactHaulier}
+    />
   );
 
   const renderEmptyState = () => (
-    <View style={styles.emptyState}>
-      <Ionicons name="search" size={64} color={colors.mediumGray} />
-      <Text style={styles.emptyTitle}>No Matches Found</Text>
-      <Text style={styles.emptySubtitle}>
-        Try adjusting your filters or search criteria
-      </Text>
-    </View>
+    <EmptyState
+      icon="search"
+      title="No Matches Found"
+      subtitle="Try adjusting your filters or search criteria"
+      iconSize={64}
+    />
   );
 
   return (
@@ -704,279 +404,27 @@ const MatchingScreen = ({ navigation, route }) => {
             colors={[colors.primary]}
           />
         }
-        ListEmptyComponent={!loading ? renderEmptyState : null}
+        ListEmptyComponent={!loading ? renderEmptyState() : null}
         showsVerticalScrollIndicator={false}
       />
 
-      {renderFilterModal()}
+      <FilterModal
+        visible={showFilters}
+        filters={filters}
+        onClose={() => setShowFilters(false)}
+        onClear={clearFilters}
+        onApply={applyFilters}
+        onFilterChange={handleFilterChange}
+        onMultiSelectFilter={handleMultiSelectFilter}
+        countries={countries}
+        truckTypes={truckTypes}
+        trailerTypes={trailerTypes}
+        certifications={certifications}
+        languages={languages}
+        specialEquipment={specialEquipment}
+      />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.lightGray,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: spacing[4],
-    backgroundColor: colors.white,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderGray,
-  },
-  searchInput: {
-    flex: 1,
-    ...components.input,
-    marginRight: spacing[3],
-  },
-  filterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    backgroundColor: colors.primaryLight,
-    borderRadius: borderRadius.md,
-  },
-  filterButtonText: {
-    ...textStyles.caption,
-    color: colors.primary,
-    marginLeft: spacing[1],
-  },
-  listContainer: {
-    padding: spacing[4],
-  },
-  matchCard: {
-    ...components.card,
-    marginBottom: spacing[4],
-  },
-  matchHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: spacing[3],
-  },
-  haulierInfo: {
-    flex: 1,
-  },
-  haulierName: {
-    ...textStyles.h3,
-    marginBottom: spacing[1],
-  },
-  companyName: {
-    ...textStyles.caption,
-  },
-  matchScore: {
-    alignItems: 'center',
-    backgroundColor: colors.primaryLight,
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    borderRadius: borderRadius.lg,
-  },
-  scoreText: {
-    fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.bold,
-    color: colors.primary,
-  },
-  scoreLabel: {
-    ...textStyles.caption,
-    color: colors.primary,
-  },
-  matchDetails: {
-    marginBottom: spacing[3],
-  },
-  detailRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing[1],
-  },
-  detailText: {
-    ...textStyles.caption,
-    marginLeft: spacing[2],
-  },
-  matchReasons: {
-    marginBottom: spacing[3],
-  },
-  reasonsTitle: {
-    ...textStyles.label,
-    marginBottom: spacing[1],
-  },
-  reasonText: {
-    ...textStyles.caption,
-    marginBottom: spacing[1],
-  },
-  rateSection: {
-    backgroundColor: colors.primaryLight,
-    borderRadius: borderRadius.md,
-    padding: spacing[3],
-    marginBottom: spacing[3],
-  },
-  rateTitle: {
-    ...textStyles.h4,
-    color: colors.primary,
-    marginBottom: spacing[2],
-  },
-  rateDetails: {
-    gap: spacing[1],
-  },
-  rateRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  rateLabel: {
-    ...textStyles.caption,
-    color: colors.darkGray,
-  },
-  rateValue: {
-    ...textStyles.caption,
-    fontWeight: typography.weights.bold,
-    color: colors.primary,
-  },
-  matchActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  actionButton: {
-    ...components.button.secondary,
-    flex: 1,
-    marginHorizontal: spacing[1],
-  },
-  primaryButton: {
-    backgroundColor: colors.primary,
-  },
-  offerButton: {
-    backgroundColor: colors.warning,
-  },
-  actionButtonText: {
-    ...textStyles.label,
-    color: colors.darkGray,
-  },
-  primaryButtonText: {
-    color: colors.white,
-  },
-  offerButtonText: {
-    color: colors.white,
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: spacing[16],
-  },
-  emptyTitle: {
-    ...textStyles.h2,
-    marginTop: spacing[4],
-    marginBottom: spacing[2],
-  },
-  emptySubtitle: {
-    ...textStyles.caption,
-    textAlign: 'center',
-  },
-  // Modal styles
-  modalContainer: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: spacing[4],
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderGray,
-  },
-  modalCancel: {
-    ...textStyles.label,
-    color: colors.primary,
-  },
-  modalTitle: {
-    ...textStyles.h3,
-  },
-  modalClear: {
-    ...textStyles.label,
-    color: colors.error,
-  },
-  modalContent: {
-    flex: 1,
-    padding: spacing[4],
-  },
-  filterSection: {
-    marginBottom: spacing[6],
-  },
-  filterTitle: {
-    ...textStyles.h4,
-    marginBottom: spacing[3],
-  },
-  optionsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  optionButton: {
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    marginRight: spacing[2],
-    marginBottom: spacing[2],
-    borderRadius: borderRadius.md,
-    borderWidth: 1,
-    borderColor: colors.borderGray,
-    backgroundColor: colors.white,
-  },
-  selectedOption: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  optionText: {
-    ...textStyles.caption,
-    color: colors.darkGray,
-  },
-  selectedOptionText: {
-    color: colors.white,
-  },
-  rangeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  rangeLabel: {
-    ...textStyles.caption,
-    color: colors.mediumGray,
-  },
-  radioContainer: {
-    flexDirection: 'row',
-  },
-  radioButton: {
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    marginRight: spacing[2],
-    borderRadius: borderRadius.md,
-    borderWidth: 1,
-    borderColor: colors.borderGray,
-    backgroundColor: colors.white,
-  },
-  selectedRadio: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  radioText: {
-    ...textStyles.caption,
-    color: colors.darkGray,
-  },
-  selectedRadioText: {
-    color: colors.white,
-  },
-  modalFooter: {
-    padding: spacing[4],
-    borderTopWidth: 1,
-    borderTopColor: colors.borderGray,
-  },
-  applyButton: {
-    ...components.button.primary,
-  },
-  applyButtonText: {
-    ...textStyles.button,
-    color: colors.white,
-  },
-});
 
 export default MatchingScreen;

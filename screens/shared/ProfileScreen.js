@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
   Alert,
   TextInput,
@@ -11,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/FallbackAuthContext';
+import { styles } from '../../styles/screens/ProfileScreenStyles';
 
 const ProfileScreen = ({ navigation }) => {
   const { currentUser, userProfile, logout, updateUserProfile } = useAuth();
@@ -174,6 +174,28 @@ const ProfileScreen = ({ navigation }) => {
           <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
         </TouchableOpacity>
 
+        {/* Map Navigation - Available for both user types */}
+        <TouchableOpacity 
+          style={styles.settingItem}
+          onPress={() => navigation.navigate('MapMain')}
+        >
+          <Ionicons name="map" size={24} color="#7f8c8d" />
+          <Text style={styles.settingText}>Partnership Map</Text>
+          <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
+        </TouchableOpacity>
+
+        {/* Availability - Only for Hauliers */}
+        {isHaulier && (
+          <TouchableOpacity 
+            style={styles.settingItem}
+            onPress={() => navigation.navigate('AvailabilityMain')}
+          >
+            <Ionicons name="calendar" size={24} color="#7f8c8d" />
+            <Text style={styles.settingText}>My Availability</Text>
+            <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
+          </TouchableOpacity>
+        )}
+
         <TouchableOpacity style={styles.settingItem}>
           <Ionicons name="shield-checkmark" size={24} color="#7f8c8d" />
           <Text style={styles.settingText}>Privacy Settings</Text>
@@ -239,136 +261,5 @@ const ProfileScreen = ({ navigation }) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
-  header: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-    paddingVertical: 30,
-    paddingHorizontal: 20,
-    marginBottom: 8,
-  },
-  avatarContainer: {
-    marginBottom: 16,
-  },
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#f8f9fa',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 4,
-  },
-  role: {
-    fontSize: 16,
-    color: '#7f8c8d',
-    marginBottom: 8,
-  },
-  email: {
-    fontSize: 14,
-    color: '#95a5a6',
-  },
-  section: {
-    backgroundColor: 'white',
-    marginBottom: 8,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 16,
-  },
-  field: {
-    marginBottom: 16,
-  },
-  fieldLabel: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 8,
-  },
-  fieldValue: {
-    fontSize: 16,
-    color: '#34495e',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 8,
-  },
-  input: {
-    fontSize: 16,
-    color: '#2c3e50',
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#e9ecef',
-    borderRadius: 8,
-  },
-  settingItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ecf0f1',
-  },
-  settingText: {
-    fontSize: 16,
-    color: '#2c3e50',
-    marginLeft: 16,
-    flex: 1,
-  },
-  buttonContainer: {
-    padding: 20,
-  },
-  button: {
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  editButton: {
-    backgroundColor: '#3498db',
-  },
-  saveButton: {
-    backgroundColor: '#27ae60',
-  },
-  cancelButton: {
-    backgroundColor: '#95a5a6',
-  },
-  logoutButton: {
-    backgroundColor: '#e74c3c',
-  },
-  disabledButton: {
-    backgroundColor: '#bdc3c7',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  cancelButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  logoutButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
 
 export default ProfileScreen;

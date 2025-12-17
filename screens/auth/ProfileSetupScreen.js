@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   Alert,
   KeyboardAvoidingView,
   Platform,
@@ -12,6 +11,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/FallbackAuthContext';
+import { styles } from '../../styles/screens/ProfileSetupScreenStyles';
+import { colors } from '../../styles/designSystem';
 
 const ProfileSetupScreen = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -66,7 +67,7 @@ const ProfileSetupScreen = ({ navigation }) => {
 
         <View style={styles.form}>
           <View style={styles.inputContainer}>
-            <Ionicons name="call-outline" size={20} color="#7f8c8d" style={styles.inputIcon} />
+            <Ionicons name="call-outline" size={20} color={colors.mediumGray} style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Phone Number"
@@ -77,7 +78,7 @@ const ProfileSetupScreen = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Ionicons name="business-outline" size={20} color="#7f8c8d" style={styles.inputIcon} />
+            <Ionicons name="business-outline" size={20} color={colors.mediumGray} style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder={isHaulier ? "Company/Transport Company" : "Company Name"}
@@ -90,7 +91,7 @@ const ProfileSetupScreen = ({ navigation }) => {
           {isHaulier && (
             <>
               <View style={styles.inputContainer}>
-                <Ionicons name="card-outline" size={20} color="#7f8c8d" style={styles.inputIcon} />
+                <Ionicons name="card-outline" size={20} color={colors.mediumGray} style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Driver License Number"
@@ -101,7 +102,7 @@ const ProfileSetupScreen = ({ navigation }) => {
               </View>
 
               <View style={styles.inputContainer}>
-                <Ionicons name="time-outline" size={20} color="#7f8c8d" style={styles.inputIcon} />
+                <Ionicons name="time-outline" size={20} color={colors.mediumGray} style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Years of Experience"
@@ -134,91 +135,5 @@ const ProfileSetupScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: 40,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#7f8c8d',
-    textAlign: 'center',
-    lineHeight: 22,
-  },
-  form: {
-    backgroundColor: 'white',
-    borderRadius: 16,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 8,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#e9ecef',
-    borderRadius: 8,
-    marginBottom: 16,
-    paddingHorizontal: 12,
-    backgroundColor: '#f8f9fa',
-  },
-  inputIcon: {
-    marginRight: 12,
-  },
-  input: {
-    flex: 1,
-    paddingVertical: 12,
-    fontSize: 16,
-    color: '#2c3e50',
-  },
-  completeButton: {
-    backgroundColor: '#27ae60',
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  disabledButton: {
-    backgroundColor: '#bdc3c7',
-  },
-  completeButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  skipButton: {
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 12,
-  },
-  skipButtonText: {
-    color: '#7f8c8d',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-});
 
 export default ProfileSetupScreen;

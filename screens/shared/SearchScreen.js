@@ -7,13 +7,15 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  StyleSheet,
   Alert,
   ScrollView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/FallbackAuthContext';
 import { OfflineStorage } from '../../utils/storage';
+import { styles } from '../../styles/screens/SearchScreenStyles';
+import { colors } from '../../styles/designSystem';
+import { EmptyState } from '../../components/common';
 
 const SearchScreen = ({ navigation }) => {
   const { userProfile } = useAuth();
@@ -160,7 +162,7 @@ const SearchScreen = ({ navigation }) => {
       style={styles.recentItem}
       onPress={() => useRecentSearch(item.query)}
     >
-      <Ionicons name="time" size={16} color="#7f8c8d" />
+      <Ionicons name="time" size={16} color={colors.mediumGray} />
       <Text style={styles.recentText}>{item.query}</Text>
     </TouchableOpacity>
   );
@@ -174,7 +176,7 @@ const SearchScreen = ({ navigation }) => {
 
       <View style={styles.searchContainer}>
         <View style={styles.searchBar}>
-          <Ionicons name="search" size={20} color="#7f8c8d" />
+          <Ionicons name="search" size={20} color={colors.mediumGray} />
           <TextInput
             style={styles.searchInput}
             placeholder="Search companies, industries, locations..."
@@ -191,7 +193,7 @@ const SearchScreen = ({ navigation }) => {
             <Ionicons 
               name={isSearching ? "hourglass" : "search"} 
               size={20} 
-              color={isSearching ? "#bdc3c7" : "#3498db"} 
+              color={isSearching ? colors.mediumGray : colors.primary} 
             />
           </TouchableOpacity>
         </View>
@@ -258,11 +260,12 @@ const SearchScreen = ({ navigation }) => {
           />
         </View>
       ) : searchQuery ? (
-        <View style={styles.emptyState}>
-          <Ionicons name="search" size={48} color="#bdc3c7" />
-          <Text style={styles.emptyText}>No results found</Text>
-          <Text style={styles.emptySubtext}>Try adjusting your search terms or filters</Text>
-        </View>
+        <EmptyState
+          icon="search"
+          title="No results found"
+          subtitle="Try adjusting your search terms or filters"
+          iconSize={48}
+        />
       ) : (
         <View style={styles.recentSearchesContainer}>
           <Text style={styles.recentTitle}>Recent Searches</Text>
@@ -281,201 +284,5 @@ const SearchScreen = ({ navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
-  header: {
-    padding: 20,
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#7f8c8d',
-  },
-  searchContainer: {
-    padding: 16,
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
-  },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f8f9fa',
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
-  searchInput: {
-    flex: 1,
-    marginLeft: 8,
-    fontSize: 16,
-    color: '#2c3e50',
-  },
-  searchButton: {
-    padding: 8,
-  },
-  filtersContainer: {
-    backgroundColor: '#ffffff',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
-  },
-  filtersTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2c3e50',
-    marginBottom: 12,
-  },
-  filterRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  filterLabel: {
-    width: 120,
-    fontSize: 14,
-    color: '#7f8c8d',
-  },
-  filterInput: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#e9ecef',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    fontSize: 14,
-    color: '#2c3e50',
-  },
-  clearFiltersButton: {
-    alignSelf: 'flex-end',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#e74c3c',
-    borderRadius: 8,
-  },
-  clearFiltersText: {
-    color: '#ffffff',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  resultsContainer: {
-    flex: 1,
-    padding: 16,
-  },
-  resultsTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2c3e50',
-    marginBottom: 12,
-  },
-  resultsList: {
-    flex: 1,
-  },
-  resultItem: {
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: '#e9ecef',
-  },
-  resultHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  resultName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2c3e50',
-    flex: 1,
-  },
-  resultLocation: {
-    fontSize: 14,
-    color: '#7f8c8d',
-  },
-  resultDescription: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    marginBottom: 8,
-  },
-  resultTags: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  resultTag: {
-    backgroundColor: '#3498db',
-    color: '#ffffff',
-    fontSize: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    marginRight: 4,
-    marginBottom: 4,
-  },
-  recentSearchesContainer: {
-    flex: 1,
-    padding: 16,
-  },
-  recentTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2c3e50',
-    marginBottom: 12,
-  },
-  recentList: {
-    flex: 1,
-  },
-  recentItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: '#ffffff',
-    borderRadius: 8,
-    marginBottom: 4,
-  },
-  recentText: {
-    marginLeft: 8,
-    fontSize: 14,
-    color: '#2c3e50',
-  },
-  noRecentText: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 40,
-  },
-  emptyText: {
-    fontSize: 18,
-    color: '#7f8c8d',
-    marginTop: 12,
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: '#95a5a6',
-    marginTop: 4,
-    textAlign: 'center',
-  },
-});
 
 export default SearchScreen;
