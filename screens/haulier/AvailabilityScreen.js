@@ -67,7 +67,6 @@ const AvailabilityScreen = ({ navigation }) => {
 
   const handleSaveAvailability = async () => {
     try {
-      // Save to AvailabilityService
       const success = await availabilityService.saveAvailability('demo-haulier-1', {
         ...availability,
         name: 'Demo Haulier',

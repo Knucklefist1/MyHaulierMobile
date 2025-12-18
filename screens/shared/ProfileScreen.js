@@ -164,7 +164,6 @@ const ProfileScreen = ({ navigation }) => {
           <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
         </TouchableOpacity>
 
-        {/* NEW FEATURE: Added for Assignment 2 - Search button */}
         <TouchableOpacity 
           style={styles.settingItem}
           onPress={() => navigation.navigate('Search')}
@@ -174,7 +173,6 @@ const ProfileScreen = ({ navigation }) => {
           <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
         </TouchableOpacity>
 
-        {/* Map Navigation - Available for both user types */}
         <TouchableOpacity 
           style={styles.settingItem}
           onPress={() => navigation.navigate('MapMain')}
@@ -184,7 +182,6 @@ const ProfileScreen = ({ navigation }) => {
           <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
         </TouchableOpacity>
 
-        {/* Availability - Only for Hauliers */}
         {isHaulier && (
           <TouchableOpacity 
             style={styles.settingItem}

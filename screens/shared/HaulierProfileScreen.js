@@ -29,7 +29,6 @@ const HaulierProfileScreen = ({ navigation, route }) => {
         { 
           text: 'Message', 
           onPress: () => {
-            // Navigate to the Chat tab and then to the conversation
             navigation.getParent()?.navigate('Chat', {
               screen: 'ChatConversation',
               params: {

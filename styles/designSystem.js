@@ -4,24 +4,20 @@
 
 // Farvepalette - Primære farver, status-farver og neutrale farver
 export const colors = {
-  // Primary Colors
-  primary: '#1E3A8A',        // Deep blue
-  primaryHover: '#1E40AF',   // Darker blue
-  skyBlue: '#3B82F6',        // Bright blue
+  primary: '#1E3A8A',
+  primaryHover: '#1E40AF',
+  skyBlue: '#3B82F6',
   
-  // Status Colors
-  success: '#10B981',        // Green
-  warning: '#F59E0B',        // Orange
-  error: '#EF4444',          // Red
+  success: '#10B981',
+  warning: '#F59E0B',
+  error: '#EF4444',
   
-  // Neutral Colors
-  darkGray: '#1F2937',       // Primary text
-  mediumGray: '#6B7280',     // Secondary text
-  lightGray: '#F3F4F6',     // Background
-  borderGray: '#E5E7EB',    // Borders
+  darkGray: '#1F2937',
+  mediumGray: '#6B7280',
+  lightGray: '#F3F4F6',
+  borderGray: '#E5E7EB',
   white: '#FFFFFF',
   
-  // Light variants
   successLight: '#ECFDF5',
   warningLight: '#FEF3C7',
   errorLight: '#FEF2F2',
@@ -104,7 +100,6 @@ export const shadows = {
 
 // Komponent-styles - Genbrugelige style-definitioner for buttons, cards, inputs osv.
 export const components = {
-  // Card styles
   card: {
     backgroundColor: colors.white,
     borderRadius: borderRadius.lg,
@@ -112,7 +107,6 @@ export const components = {
     ...shadows.md,
   },
   
-  // Button styles
   button: {
     primary: {
       backgroundColor: colors.primary,
@@ -121,7 +115,7 @@ export const components = {
       borderRadius: borderRadius.lg,
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: 44, // Touch-friendly
+      minHeight: 44,
     },
     secondary: {
       backgroundColor: colors.white,
@@ -145,7 +139,6 @@ export const components = {
     }
   },
   
-  // Input styles
   input: {
     backgroundColor: colors.white,
     borderWidth: 1,
@@ -158,7 +151,6 @@ export const components = {
     minHeight: 44,
   },
   
-  // Tab bar styles
   tabBar: {
     backgroundColor: colors.white,
     borderTopWidth: 1,
@@ -168,7 +160,6 @@ export const components = {
     height: 60,
   },
   
-  // Header styles
   header: {
     backgroundColor: colors.white,
     borderBottomWidth: 1,
@@ -244,7 +235,6 @@ export const layout = {
   }
 };
 
-// Role-specific colors
 export const roleColors = {
   haulier: {
     primary: colors.primary,

@@ -24,7 +24,6 @@ const OfferDetailsScreen = ({ navigation, route }) => {
           text: 'Accept',
           onPress: () => {
             setLoading(true);
-            // Simulate API call
             setTimeout(() => {
               setLoading(false);
               Alert.alert(
@@ -54,7 +53,6 @@ const OfferDetailsScreen = ({ navigation, route }) => {
           text: 'Reject',
           onPress: () => {
             setLoading(true);
-            // Simulate API call
             setTimeout(() => {
               setLoading(false);
               Alert.alert(

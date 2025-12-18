@@ -18,7 +18,6 @@ const ApplicationsScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    // Mock data for haulier's connection requests and partnerships
     const mockConnections = [
       {
         id: '1',
@@ -77,7 +76,6 @@ const ApplicationsScreen = ({ navigation }) => {
       }
     ];
 
-    // Simulate loading delay
     setTimeout(() => {
       setConnections(mockConnections);
       setLoading(false);
@@ -86,15 +84,13 @@ const ApplicationsScreen = ({ navigation }) => {
 
   const onRefresh = () => {
     setRefreshing(true);
-    // Simulate fetching new data
     setTimeout(() => {
-      setConnections(mockConnections); // In a real app, this would fetch from Firebase
+      setConnections(mockConnections);
       setRefreshing(false);
     }, 1000);
   };
 
   const handleViewForwarderProfile = (forwarderId) => {
-    // In a real app, fetch forwarder profile by ID
     const forwarder = {
       uid: forwarderId,
       name: 'TechCorp Denmark',
@@ -117,7 +113,6 @@ const ApplicationsScreen = ({ navigation }) => {
         'Priority booking'
       ]
     };
-    // Navigate to forwarder profile screen
     navigation.navigate('ForwarderProfile', { forwarder });
   };
 

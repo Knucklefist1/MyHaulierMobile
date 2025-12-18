@@ -20,7 +20,6 @@ const ApplicationsScreen = ({ navigation }) => {
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    // Mock applications data for now (Firebase disabled due to auth issues)
     const mockApplications = [];
     setApplications(mockApplications);
     setLoading(false);
@@ -32,7 +31,6 @@ const ApplicationsScreen = ({ navigation }) => {
   };
 
   const handleApplicationAction = async (applicationId, action) => {
-    // Mock function - Firebase disabled
     Alert.alert(
       'Success',
       `Application ${action === 'accepted' ? 'accepted' : 'rejected'} successfully`

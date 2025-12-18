@@ -16,9 +16,8 @@ const ChatListScreen = ({ navigation }) => {
   const { currentUser, userProfile } = useAuth();
 
   useEffect(() => {
-    if (!currentUser?.uid) return; // Wait for currentUser to be available
+    if (!currentUser?.uid) return;
     
-    // Mock chats data for now (Firebase disabled due to auth issues)
     const mockChats = [
       {
         id: '1',
@@ -27,7 +26,7 @@ const ChatListScreen = ({ navigation }) => {
         lastMessage: {
           content: 'Thank you for accepting the furniture delivery job!',
           senderId: 'forwarder-1',
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
+          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000)
         },
         unreadCount: {
           [currentUser.uid]: 0
@@ -40,7 +39,7 @@ const ChatListScreen = ({ navigation }) => {
         lastMessage: {
           content: 'When can you start the electronics transport?',
           senderId: 'forwarder-2',
-          timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) // 1 day ago
+          timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
         },
         unreadCount: {
           [currentUser.uid]: 1
@@ -52,7 +51,7 @@ const ChatListScreen = ({ navigation }) => {
   }, [currentUser?.uid]);
 
   const renderChatItem = ({ item }) => {
-    if (!currentUser?.uid) return null; // Don't render if no currentUser
+    if (!currentUser?.uid) return null;
     
     const otherParticipant = item.participants.find(id => id !== currentUser.uid);
     const isUnread = item.unreadCount && item.unreadCount[currentUser.uid] > 0;
@@ -114,7 +113,6 @@ const ChatListScreen = ({ navigation }) => {
     />
   );
 
-  // Show loading state if currentUser is not available yet
   if (!currentUser?.uid) {
     return (
       <View style={styles.container}>

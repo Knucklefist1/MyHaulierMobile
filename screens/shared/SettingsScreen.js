@@ -1,5 +1,3 @@
-// NEW FEATURE: Settings Screen - Added for Assignment 2
-// This screen allows users to configure app settings and preferences
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -25,12 +23,10 @@ const SettingsScreen = ({ navigation }) => {
     locationTracking: true
   });
 
-  // Load settings from AsyncStorage on component mount
   useEffect(() => {
     loadSettings();
   }, []);
 
-  // NEW FEATURE: Load settings from AsyncStorage instead of hardcoded values
   const loadSettings = async () => {
     try {
       const savedSettings = await SettingsStorage.getSettings();
@@ -40,7 +36,6 @@ const SettingsScreen = ({ navigation }) => {
     }
   };
 
-  // NEW FEATURE: Save settings to AsyncStorage
   const saveSettings = async (newSettings) => {
     try {
       await SettingsStorage.saveSettings(newSettings);

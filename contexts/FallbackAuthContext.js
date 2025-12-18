@@ -14,14 +14,11 @@ export const AuthProvider = ({ children }) => {
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Mock sign up function
   const signup = async (email, password, userData) => {
     setLoading(true);
     try {
-      // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Mock user creation
       const mockUser = {
         uid: 'mock-user-' + Date.now(),
         email: email,
@@ -54,14 +51,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Mock sign in function
   const signin = async (email, password) => {
     setLoading(true);
     try {
-      // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Check for demo accounts
       const isForwarder = email === 'forwarder@example.com';
       const isHaulier = email === 'haulier@example.com';
       
@@ -74,7 +68,6 @@ export const AuthProvider = ({ children }) => {
       const company = isForwarder ? 'Demo Freight Forwarder' : 'Demo Transport Company';
       const licenseNumber = isForwarder ? 'FF123456789' : 'DL123456789';
       
-      // Mock user login
       const mockUser = {
         uid: 'mock-user-' + Date.now(),
         email: email,
@@ -94,7 +87,6 @@ export const AuthProvider = ({ children }) => {
         isVerified: true,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        // Add haulier-specific fields
         fleet: {
           totalTrucks: 0,
           availableTrucks: 0,
@@ -151,13 +143,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Mock sign out function
   const logout = async () => {
     setCurrentUser(null);
     setUserProfile(null);
   };
 
-  // Mock update user profile
   const updateUserProfile = async (updates) => {
     if (userProfile) {
       const updatedProfile = { ...userProfile, ...updates };
@@ -165,13 +155,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Mock get user profile
   const getUserProfile = async (uid) => {
     return userProfile;
   };
 
   useEffect(() => {
-    // Simulate loading
     setLoading(true);
     setTimeout(() => {
       setLoading(false);

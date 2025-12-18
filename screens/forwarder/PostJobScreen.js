@@ -64,7 +64,6 @@ const PostJobScreen = ({ navigation }) => {
 
     setLoading(true);
     try {
-      // In a real app, this would save to Firebase
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       Alert.alert(

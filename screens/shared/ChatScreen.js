@@ -22,7 +22,6 @@ const ChatScreen = ({ route, navigation }) => {
   const [authLoading, setAuthLoading] = useState(true);
   const flatListRef = useRef(null);
 
-  // Handle authentication loading
   useEffect(() => {
     if (currentUser !== undefined) {
       setAuthLoading(false);
@@ -32,7 +31,6 @@ const ChatScreen = ({ route, navigation }) => {
   useEffect(() => {
     navigation.setOptions({ title: chatTitle });
     
-    // Mock messages data for now (Firebase disabled due to auth issues)
     const mockMessages = [
       {
         id: '1',
@@ -40,7 +38,7 @@ const ChatScreen = ({ route, navigation }) => {
         senderId: otherParticipant,
         content: 'Hello! Thank you for your interest in the transport job.',
         type: 'text',
-        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
+        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
       },
       {
         id: '2',
@@ -48,7 +46,7 @@ const ChatScreen = ({ route, navigation }) => {
         senderId: currentUser?.uid || 'current-user',
         content: 'Hi! I have 5 years of experience in transport.',
         type: 'text',
-        timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString() // 1 hour ago
+        timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
       }
     ];
     
@@ -56,13 +54,11 @@ const ChatScreen = ({ route, navigation }) => {
   }, [chatId, currentUser]);
 
   const markMessagesAsRead = async () => {
-    // Mock function - no real implementation needed
   };
 
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
     
-    // Check if user is authenticated
     if (!currentUser || !currentUser.uid) {
       Alert.alert('Error', 'You must be signed in to send messages');
       return;
@@ -70,7 +66,6 @@ const ChatScreen = ({ route, navigation }) => {
 
     setLoading(true);
     try {
-      // Mock message sending (Firebase disabled due to auth issues)
       const newMsg = {
         id: Date.now().toString(),
         chatId,
@@ -103,12 +98,10 @@ const ChatScreen = ({ route, navigation }) => {
     />
   );
 
-  // Show loading while authentication is being checked
   if (authLoading) {
     return <LoadingSpinner message="Loading..." />;
   }
 
-  // Show error if not authenticated
   if (!currentUser) {
     return (
       <View style={styles.container}>

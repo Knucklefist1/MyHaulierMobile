@@ -44,7 +44,6 @@ const CreateOfferScreen = ({ navigation, route }) => {
 
     setLoading(true);
     try {
-      // Simulate creating an offer
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       const offer = {

@@ -31,13 +31,12 @@ const MapScreen = ({ navigation }) => {
   });
   const mapRef = useRef(null);
 
-  // Mock freight forwarder partnership opportunities for hauliers
   const mockPartnerships = [
     {
       id: '1',
       title: 'TechCorp Denmark',
       description: 'Electronics transport partnership - seeking reliable hauliers',
-      coordinate: { latitude: 55.6761, longitude: 12.5683 }, // Copenhagen
+      coordinate: { latitude: 55.6761, longitude: 12.5683 },
       type: 'forwarder',
       industry: 'Electronics',
       partnershipType: 'Long-term Contract',
@@ -61,7 +60,7 @@ const MapScreen = ({ navigation }) => {
       id: '2',
       title: 'Nordic Furniture',
       description: 'Furniture transport partnership - dedicated routes',
-      coordinate: { latitude: 55.4038, longitude: 10.4024 }, // Odense
+      coordinate: { latitude: 55.4038, longitude: 10.4024 },
       type: 'forwarder',
       industry: 'Furniture',
       partnershipType: 'Dedicated Routes',
@@ -85,7 +84,7 @@ const MapScreen = ({ navigation }) => {
       id: '3',
       title: 'Scandinavian Logistics',
       description: 'International logistics partnership - cross-border transport',
-      coordinate: { latitude: 56.1572, longitude: 10.2107 }, // Aarhus
+      coordinate: { latitude: 56.1572, longitude: 10.2107 },
       type: 'forwarder',
       industry: 'Logistics',
       partnershipType: 'International Routes',
@@ -109,7 +108,7 @@ const MapScreen = ({ navigation }) => {
       id: '4',
       title: 'Danish Food Distribution',
       description: 'Food transport partnership - temperature controlled',
-      coordinate: { latitude: 55.6050, longitude: 13.0038 }, // Malmö
+      coordinate: { latitude: 55.6050, longitude: 13.0038 },
       type: 'forwarder',
       industry: 'Food & Beverage',
       partnershipType: 'Temperature Controlled',
@@ -133,7 +132,7 @@ const MapScreen = ({ navigation }) => {
       id: '5',
       title: 'Nordic Construction',
       description: 'Construction materials transport - heavy loads',
-      coordinate: { latitude: 55.6761, longitude: 12.5683 }, // Copenhagen
+      coordinate: { latitude: 55.6761, longitude: 12.5683 },
       type: 'forwarder',
       industry: 'Construction',
       partnershipType: 'Heavy Transport',
@@ -161,7 +160,6 @@ const MapScreen = ({ navigation }) => {
     setPartnerships(mockPartnerships);
   }, []);
 
-  // Update partnerships when location changes
   useEffect(() => {
     if (location) {
       const updatedPartnerships = mockPartnerships.map(partnership => ({
@@ -194,7 +192,7 @@ const MapScreen = ({ navigation }) => {
   };
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Earth's radius in kilometers
+    const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
     const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -258,7 +256,6 @@ const MapScreen = ({ navigation }) => {
   
   console.log('Total partnerships:', partnerships.length, 'Filtered:', filteredPartnerships.length);
   
-  // For debugging, let's use partnerships directly if filteredPartnerships is empty
   const displayPartnerships = filteredPartnerships.length > 0 ? filteredPartnerships : partnerships;
 
   const handleFilterChange = (key, value) => {
@@ -276,7 +273,6 @@ const MapScreen = ({ navigation }) => {
     );
   }
 
-  // Default region for Denmark/Scandinavia
   const defaultRegion = {
     latitude: 55.6761,
     longitude: 12.5683,

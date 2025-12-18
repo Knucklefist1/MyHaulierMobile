@@ -26,7 +26,6 @@ const MatchingScreen = ({ navigation, route }) => {
   const [sortBy, setSortBy] = useState('score');
   const [showFilters, setShowFilters] = useState(false);
   
-  // Filter states
   const [filters, setFilters] = useState({
     countries: [],
     truckTypes: [],
@@ -78,7 +77,6 @@ const MatchingScreen = ({ navigation, route }) => {
   const loadMatches = async () => {
     setLoading(true);
     try {
-      // Mock job requirements
       const jobRequirements = {
         jobId: jobId || 'job-1',
         title: 'Find Haulier Partners',
@@ -120,10 +118,8 @@ const MatchingScreen = ({ navigation, route }) => {
         }
       };
 
-      // Get real haulier availability data
       const haulierProfiles = await availabilityService.getAvailableHauliers();
 
-      // Add some mock data for demo purposes if no real data exists
       if (haulierProfiles.length === 0) {
         haulierProfiles.push(
           {
@@ -225,7 +221,6 @@ const MatchingScreen = ({ navigation, route }) => {
         );
       }
 
-      // Find matches
       const matchResults = matchingService.findMatches(jobRequirements, haulierProfiles);
       setMatches(matchResults);
     } catch (error) {
@@ -278,7 +273,6 @@ const MatchingScreen = ({ navigation, route }) => {
         {
           text: 'Create Offer',
           onPress: () => {
-            // Navigate to offer creation screen
             navigation.navigate('CreateOffer', { 
               haulier,
               haulierId: haulier.uid 

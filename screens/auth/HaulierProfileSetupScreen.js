@@ -136,7 +136,6 @@ const HaulierProfileSetupScreen = ({ navigation, route }) => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      // In a real app, this would save to Firebase
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       Alert.alert(

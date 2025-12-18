@@ -14,7 +14,6 @@ import ProfileScreen from '../screens/shared/ProfileScreen';
 import OfferDetailsScreen from '../screens/haulier/OfferDetailsScreen';
 import ChatScreen from '../screens/shared/ChatScreen';
 import MapScreen from '../screens/shared/MapScreen';
-// NEW FEATURE: Added for Assignment 2 - New screens for better user experience
 import SettingsScreen from '../screens/shared/SettingsScreen';
 import NotificationsScreen from '../screens/shared/NotificationsScreen';
 import SearchScreen from '../screens/shared/SearchScreen';
@@ -79,7 +78,6 @@ const ProfileStack = () => (
       component={ProfileScreen}
       options={{ title: 'Profile' }}
     />
-    {/* NEW FEATURE: Added for Assignment 2 - New screens accessible from Profile */}
     <Stack.Screen 
       name="Settings" 
       component={SettingsScreen}

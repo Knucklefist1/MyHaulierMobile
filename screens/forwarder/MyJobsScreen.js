@@ -17,7 +17,6 @@ const MyJobsScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    // Mock data for forwarder's haulier partnerships
     const mockPartnerships = [
       {
         id: '1',
@@ -87,7 +86,6 @@ const MyJobsScreen = ({ navigation }) => {
       }
     ];
 
-    // Simulate loading delay
     setTimeout(() => {
       setPartnerships(mockPartnerships);
       setLoading(false);
@@ -96,15 +94,13 @@ const MyJobsScreen = ({ navigation }) => {
 
   const onRefresh = () => {
     setRefreshing(true);
-    // Simulate fetching new data
     setTimeout(() => {
-      setPartnerships(mockPartnerships); // In a real app, this would fetch from Firebase
+      setPartnerships(mockPartnerships);
       setRefreshing(false);
     }, 1000);
   };
 
   const handleViewHaulierProfile = (haulierId) => {
-    // In a real app, fetch haulier profile by ID
     const haulier = {
       uid: haulierId,
       name: 'Lars Andersen',

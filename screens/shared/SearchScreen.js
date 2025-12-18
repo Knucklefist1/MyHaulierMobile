@@ -1,5 +1,3 @@
-// NEW FEATURE: Search Screen - Added for Assignment 2
-// This screen provides advanced search functionality using mobile capabilities
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -30,23 +28,21 @@ const SearchScreen = ({ navigation }) => {
     companySize: ''
   });
 
-  // NEW FEATURE: Load recent searches from AsyncStorage
   useEffect(() => {
     loadRecentSearches();
   }, []);
 
   const loadRecentSearches = async () => {
     try {
-      const savedSearches = await OfflineStorage.getChats(); // Reusing storage key
+      const savedSearches = await OfflineStorage.getChats();
       if (savedSearches && Array.isArray(savedSearches)) {
-        setRecentSearches(savedSearches.slice(0, 5)); // Keep only last 5 searches
+        setRecentSearches(savedSearches.slice(0, 5));
       }
     } catch (error) {
       console.error('Error loading recent searches:', error);
     }
   };
 
-  // NEW FEATURE: Save search to AsyncStorage
   const saveSearch = async (query) => {
     try {
       const newSearch = {
@@ -63,7 +59,6 @@ const SearchScreen = ({ navigation }) => {
     }
   };
 
-  // NEW FEATURE: Advanced search with filters
   const performSearch = async () => {
     if (!searchQuery.trim()) {
       Alert.alert('Search Required', 'Please enter a search term');
@@ -73,13 +68,10 @@ const SearchScreen = ({ navigation }) => {
     setIsSearching(true);
     
     try {
-      // Save search to recent searches
       await saveSearch(searchQuery);
       
-      // Load all forwarders from AsyncStorage
       const allForwarders = await OfflineStorage.getJobs();
       
-      // Apply search filters
       const filteredResults = allForwarders.filter(forwarder => {
         const matchesQuery = forwarder.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            forwarder.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -110,7 +102,6 @@ const SearchScreen = ({ navigation }) => {
     }
   };
 
-  // NEW FEATURE: Clear search filters
   const clearFilters = () => {
     setSearchFilters({
       location: '',
@@ -120,7 +111,6 @@ const SearchScreen = ({ navigation }) => {
     });
   };
 
-  // NEW FEATURE: Use recent search
   const useRecentSearch = (query) => {
     setSearchQuery(query);
     performSearch();

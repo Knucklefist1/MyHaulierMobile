@@ -26,7 +26,6 @@ const OffersScreen = ({ navigation }) => {
   const loadOffers = async () => {
     setLoading(true);
     try {
-      // Mock offers data
       const mockOffers = [
         {
           id: 'offer-1',
@@ -111,7 +110,6 @@ const OffersScreen = ({ navigation }) => {
         {
           text: 'Accept',
           onPress: () => {
-            // Update offer status
             setOffers(prev => prev.map(o => 
               o.id === offer.id ? { ...o, status: 'accepted' } : o
             ));
@@ -131,7 +129,6 @@ const OffersScreen = ({ navigation }) => {
         {
           text: 'Reject',
           onPress: () => {
-            // Update offer status
             setOffers(prev => prev.map(o => 
               o.id === offer.id ? { ...o, status: 'rejected' } : o
             ));

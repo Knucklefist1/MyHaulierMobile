@@ -1,5 +1,3 @@
-// NEW FEATURE: Notifications Screen - Added for Assignment 2
-// This screen allows users to view and manage their notifications
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -18,17 +16,14 @@ import { EmptyState } from '../../components/common';
 const NotificationsScreen = ({ navigation }) => {
   const { userProfile } = useAuth();
   const [notifications, setNotifications] = useState([]);
-  const [filter, setFilter] = useState('all'); // all, unread, read
+  const [filter, setFilter] = useState('all');
 
-  // NEW FEATURE: Load notifications from AsyncStorage instead of hardcoded data
   useEffect(() => {
     loadNotifications();
   }, []);
 
   const loadNotifications = async () => {
     try {
-      // For now, we'll create mock notifications and save them to AsyncStorage
-      // In a real app, these would come from a server
       const mockNotifications = [
         {
           id: '1',
@@ -68,7 +63,6 @@ const NotificationsScreen = ({ navigation }) => {
         }
       ];
 
-      // Save to AsyncStorage
       await OfflineStorage.saveChats(mockNotifications);
       setNotifications(mockNotifications);
     } catch (error) {
@@ -76,7 +70,6 @@ const NotificationsScreen = ({ navigation }) => {
     }
   };
 
-  // NEW FEATURE: Mark notification as read using AsyncStorage
   const markAsRead = async (notificationId) => {
     try {
       const updatedNotifications = notifications.map(notification =>
@@ -92,7 +85,6 @@ const NotificationsScreen = ({ navigation }) => {
     }
   };
 
-  // NEW FEATURE: Mark all notifications as read
   const markAllAsRead = async () => {
     try {
       const updatedNotifications = notifications.map(notification => ({
@@ -109,7 +101,6 @@ const NotificationsScreen = ({ navigation }) => {
     }
   };
 
-  // NEW FEATURE: Delete notification
   const deleteNotification = async (notificationId) => {
     try {
       const updatedNotifications = notifications.filter(

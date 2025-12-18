@@ -10,7 +10,6 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../styles/designSystem';
 import { styles } from '../../styles/screens/JobsScreenStyles';
-// NEW FEATURE: Added for Assignment 2 - AsyncStorage for data persistence
 import { OfflineStorage } from '../../utils/storage';
 
 const JobsScreen = ({ navigation }) => {
@@ -18,20 +17,17 @@ const JobsScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  // NEW FEATURE: Load data from AsyncStorage instead of hardcoded values
   useEffect(() => {
     loadForwarders();
   }, []);
 
   const loadForwarders = async () => {
     try {
-      // Try to load from AsyncStorage first
       const savedForwarders = await OfflineStorage.getJobs();
       
       if (savedForwarders && savedForwarders.length > 0) {
         setForwarders(savedForwarders);
       } else {
-        // If no saved data, load mock data and save it
         const mockForwarders = [
       {
         id: '1',
@@ -125,7 +121,6 @@ const JobsScreen = ({ navigation }) => {
       }
         ];
 
-        // Save mock data to AsyncStorage for future use
         await OfflineStorage.saveJobs(mockForwarders);
         setForwarders(mockForwarders);
       }
@@ -137,7 +132,6 @@ const JobsScreen = ({ navigation }) => {
     }
   };
 
-  // NEW FEATURE: Refresh data from AsyncStorage
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -158,7 +152,6 @@ const JobsScreen = ({ navigation }) => {
         {
           text: 'Connect',
           onPress: () => {
-            // In a real app, this would initiate a connection request
             Alert.alert('Success', 'Connection request sent! The forwarder will review your profile.');
           }
         }
