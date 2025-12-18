@@ -8,7 +8,7 @@ Link til videogennemgang: https://www.youtube.com/watch?v=jbcl1KRHV2U
 
 ## Hvad er der i denne version?
 
-Vi har fokuseret på at få de grundlæggende flows til at virke uden at skulle have en fuld backend kørende. Det betyder at alt gemmes lokalt på enheden via AsyncStorage. Det fungerer fint til at teste UI og brugerflow, men vi ved at vi skal have Firebase sat op på et tidspunkt.
+Vi har fokuseret på at få de grundlæggende flows til at virke uden at skulle have en fuld backend kørende. 
 
 ### Nye features
 - Indstillinger og notifikationer (gemmes lokalt)
