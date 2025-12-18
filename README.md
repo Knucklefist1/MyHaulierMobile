@@ -10,7 +10,7 @@ Link til videogennemgang: https://www.youtube.com/watch?v=jbcl1KRHV2U
 
 Vi har fokuseret på at få de grundlæggende flows til at virke uden at skulle have en fuld backend kørende. 
 
-### Nye features
+### features
 - Indstillinger og notifikationer (gemmes lokalt)
 - Analytics-skærm med overblik over partnerskaber og nøgletal
 - Manage Partnerships hvor man kan oprette og justere partnerskaber
