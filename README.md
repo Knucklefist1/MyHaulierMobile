@@ -1,136 +1,123 @@
 # MyHaulier Mobile
 
-En React Native/Expo mobilapp der forbinder vognmænd og speditører. Denne aflevering fokuserer på lagring via AsyncStorage, et simpelt analyse‑overblik og en letvægts chat‑UI (mock) i et professionelt B2B‑design.
+En React Native app bygget med Expo, der skal hjælpe vognmænd og speditører med at finde hinanden og administrere deres samarbejde. Appen er stadig i udvikling, men der er en fungerende prototype med lokal datalagring via AsyncStorage.
 
-## 📱 Demovideo
+## Demo
 
-Valdemar: https://youtu.be/ZPyvKncEhJ8 
+Valdemar: https://youtu.be/ZPyvKncEhJ8  
 Rasmus: https://www.youtube.com/watch?v=-r4uQmlC5rY
 
-## 🆕 Opgave 2: Nye ting i denne iteration
+## Hvad er der i denne version?
 
-### Nye skærme og funktioner
-- Indstillinger og Notifikationer (gemmes i AsyncStorage)
-- Analytics med virksomhedsoverblik (aftalte trucks, gennemsnitsrate m.m.)
-- Manage Partnerships: to knapper i Analytics‑delen, der opretter/justerer partnerskaber (gemmes i AsyncStorage)
-- Forbedret navigation (stack/tab) og bedre brugerflow
+Vi har fokuseret på at få de grundlæggende flows til at virke uden at skulle have en fuld backend kørende. Det betyder at alt gemmes lokalt på enheden via AsyncStorage. Det fungerer fint til at teste UI og brugerflow, men vi ved at vi skal have Firebase sat op på et tidspunkt.
 
-### Tekniske forbedringer
-- Kerneindstillinger og partnerskaber gemmes i AsyncStorage
-- Strammere struktur på skærme/komponenter
-- Fjernet ubrugte Firebase‑dele, så appen kører uden ekstern backend. Det er dog målet at få etableret firebase 
+### Nye features
+- Indstillinger og notifikationer (gemmes lokalt)
+- Analytics-skærm med overblik over partnerskaber og nøgletal
+- Manage Partnerships hvor man kan oprette og justere partnerskaber
+- Bedre navigation med tabs og stacks der faktisk giver mening
+- Chat-UI (mock data for nu)
 
-## 🎨 Designsystem
+### Tekniske ændringer
+- AsyncStorage bruges til at gemme profil, indstillinger og partnerships
+- Ryddet op i strukturen så det er lettere at finde rundt
+- Fjernet en del Firebase-kode der ikke blev brugt, så appen kan køre uden backend
 
-Appen følger et B2B‑design, der matcher MyHaulier:
+## Design
 
-### Farver
-- Primær: Deep blue (#1E3A8A)
-- Sekundær: Rød (#EF4444)
-- Status: Grøn, Orange, Rød
-- Neutrale gråtoner til tekst/baggrunde
+Vi har prøvet at holde det professionelt og B2B-agtigt, så det matcher MyHaulier's brand. Det betyder primært blå farver (#1E3A8A), rød til vigtige handlinger (#EF4444), og en del gråtoner til tekst og baggrunde. Vi bruger Inter som skrifttype, og komponenterne er bygget op omkring kort, knapper og formularer der følger samme designprincipper.
 
-### Typografi
-- Inter, responsive størrelser, vægte 400–700
-
-### Komponenter
-- Kort, knapper (primary/secondary/ghost), formularer med fokus‑tilstande, tabs/stacks
-
-## 🚛 Funktioner
+## Hvad kan appen?
 
 ### For vognmænd
-- Se jobs (mock), ansøg (mock), profil, kort
+- Se tilgængelige jobs (mock data lige nu)
+- Ansøge på jobs
+- Administrere profil og tilgængelighed
+- Se kort med jobs og partnerskaber
 
 ### For speditører
-- Postings (mock), gennemse ansøgninger (mock), analytics‑overblik
+- Oprette jobopslag
+- Gennemse ansøgninger
+- Se analytics med overblik over partnerskaber og nøgletal
+- Administrere partnerships
 
-### Fælles
-- Lokal auth‑mock (FallbackAuthContext)
-- Chat‑UI med mock‑data
-- Offline‑venlig via AsyncStorage
-- Responsivt og B2B‑orienteret UI
+### Fælles funktioner
+- Chat-UI (mock data)
+- Lokal authentication (FallbackAuthContext)
+- Indstillinger og notifikationer
+- Alt gemmes lokalt, så det virker offline
 
-## 🛠 Teknologistak
+## Teknologier
 
-- Frontend: React Native (Expo)
-- Navigation: React Navigation v6
-- Persistens: AsyncStorage
-- State: React Context API
+- React Native med Expo
+- React Navigation v6 til navigation
+- AsyncStorage til lokal datalagring
+- React Context API til state management
+- React Native Maps til kortvisning
 
-## 📦 Installation
+## Sådan kommer du i gang
 
-Forudsætninger:
-- Node.js (v16+)
-- Expo CLI (`npm install -g @expo/cli`)
+Du skal have Node.js (v16 eller nyere) og Expo CLI installeret.
 
-1) Klon og installer
 ```bash
+# Klon repoet
 git clone https://github.com/Knucklefist1/MyHaulierMobile/
 cd MyHaulierMobile
+
+# Installer dependencies
 npm install
-```
 
-2) Data (AsyncStorage)
-Denne build bruger kun AsyncStorage (ingen ekstern backend).
-Moduler:
-- `utils/storage.js` (profil, token, indstillinger)
-- `screens/forwarder/AnalyticsScreen.js` (læser `partnerships`)
-- `screens/forwarder/ManagePartnershipsScreen.js` (opretter/justerer og gemmer `partnerships`)
-
-3) Kør appen
-```bash
 # Start udviklingsserveren
 npx expo start
-
-# Kør på iOS‑simulator
-npx expo start --ios
-
-# Kør på Android‑emulator
-npx expo start --android
 ```
 
-## 💾 Data (lokal schema)
-AsyncStorage‑nøgler:
-- `user_profile`: serialiseret mock‑profil
-- `app_settings`: indstillinger
-- `partnerships`: objekt‑map, fx `{ ps_123: { forwarderId, status, trucksNeeded: { quantity }, currentRate, ... } }`
+Fra der kan du vælge at køre på iOS simulator (`i`), Android emulator (`a`), eller scanne QR-koden med Expo Go appen på din telefon.
 
-## 📂 Struktur (uddrag)
+## Hvordan data gemmes
 
-```
-navigation/ForwarderTabs.js
-screens/forwarder/AnalyticsScreen.js
-screens/forwarder/ManagePartnershipsScreen.js
-screens/shared/MapScreen.js
-utils/storage.js
-styles/
-```
+Alt gemmes lokalt i AsyncStorage. Der er tre hovednøgler vi bruger:
 
-## 👥 Ansvarsfordeling
+- `user_profile` - Brugerens profil
+- `app_settings` - App-indstillinger
+- `partnerships` - Partnerships mellem forwarders og hauliers, gemmes som et objekt hvor hver partnership har en unik ID
 
-- Valdemar Andersen
-  - Implementerede ChatScreen
-  - Opdaterede OffersScreen, 
-  - Integration af AsyncStorage i AvailabilityScreen
-  - README-opdatering
-  - Implementering af kamerafunktion til profilbillede
+Hvis du vil se hvordan det bruges, kan du kigge i `utils/storage.js` og i de forskellige screens der gemmer/læser data.
 
-- Rasmus Pilemand
-  - Udviklede Find Hauliers-udvidelsen med “Match %” og filterfunktion,
-  - Refaktorerede navigation
-  - Opsatte testbuild
-  - Dokumentation af tænke-højt-test.
+## Projektstruktur
 
-## 🧪 Udviklingskørsel
+Det meste af koden ligger i `screens/` og `components/`. Navigation er sat op i `navigation/`, og vi har en `styles/` mappe med stylesheets for hver skærm. Services ligger i `services/` og hjælpefunktioner i `utils/`.
+
+Vigtige filer:
+- `navigation/ForwarderTabs.js` og `navigation/HaulierTabs.js` - Tab navigation for de to roller
+- `screens/forwarder/AnalyticsScreen.js` - Analytics med partnerships
+- `screens/forwarder/ManagePartnershipsScreen.js` - Opret/rediger partnerships
+- `utils/storage.js` - AsyncStorage wrapper funktioner
+
+## Hvem har lavet hvad?
+
+**Valdemar Andersen**
+- ChatScreen implementering
+- OffersScreen opdateringer
+- AsyncStorage integration i AvailabilityScreen
+- Kamerafunktion til profilbillede
+- README
+
+**Rasmus Pilemand**
+- Find Hauliers med "Match %" og filtre
+- Navigation refactoring
+- Test build setup
+- Dokumentation af tænke-højt-test
+
+## Kørsel
+
 ```bash
+# Standard
+npx expo start
+
+# Med tunnel (hvis du har problemer med netværk)
 npx expo start --tunnel
 
-eller
-
+# Direkte til simulator/emulator
 npx expo start --ios
-
-eller
-
 npx expo start --android
 ```
-
