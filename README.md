@@ -2,10 +2,9 @@
 
 En React Native app bygget med Expo, der skal hjælpe vognmænd og speditører med at finde hinanden og administrere deres samarbejde. Appen er stadig i udvikling, men der er en fungerende prototype med lokal datalagring via AsyncStorage.
 
-## Demo
+## Demovideo
 
-Valdemar: https://youtu.be/ZPyvKncEhJ8  
-Rasmus: https://www.youtube.com/watch?v=-r4uQmlC5rY
+Link til videogennemgang: https://www.youtube.com/watch?v=jbcl1KRHV2U
 
 ## Hvad er der i denne version?
 
@@ -68,7 +67,7 @@ cd MyHaulierMobile
 npm install
 
 # Start udviklingsserveren
-npx expo start
+npx expo start 
 ```
 
 Fra der kan du vælge at køre på iOS simulator (`i`), Android emulator (`a`), eller scanne QR-koden med Expo Go appen på din telefon.
@@ -93,20 +92,6 @@ Vigtige filer:
 - `screens/forwarder/ManagePartnershipsScreen.js` - Opret/rediger partnerships
 - `utils/storage.js` - AsyncStorage wrapper funktioner
 
-## Hvem har lavet hvad?
-
-**Valdemar Andersen**
-- ChatScreen implementering
-- OffersScreen opdateringer
-- AsyncStorage integration i AvailabilityScreen
-- Kamerafunktion til profilbillede
-- README
-
-**Rasmus Pilemand**
-- Find Hauliers med "Match %" og filtre
-- Navigation refactoring
-- Test build setup
-- Dokumentation af tænke-højt-test
 
 ## Kørsel
 
